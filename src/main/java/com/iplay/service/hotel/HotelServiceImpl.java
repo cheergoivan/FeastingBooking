@@ -14,7 +14,7 @@ import com.iplay.dto.hotel.SimplifiedHotelDTO;
 import com.iplay.entity.hotel.AddressDO;
 import com.iplay.entity.hotel.HotelDO;
 import com.iplay.service.storage.StorageService;
-import com.iplay.service.storage.StorageStrategy;
+import com.iplay.service.storage.naming.StorageNamingStrategy;
 import com.iplay.vo.hotel.PostHotelVO;
 import com.iplay.web.resource.ResourcesUriBuilder;
 
@@ -27,7 +27,7 @@ public class HotelServiceImpl implements HotelService {
 	private StorageService storageService;
 
 	@Autowired
-	private StorageStrategy storageStrategy;
+	private StorageNamingStrategy storageNamingStrategy;
 
 	@Autowired
 	private HotelDAO hotelDAO;
@@ -41,7 +41,7 @@ public class HotelServiceImpl implements HotelService {
 			return new SimplifiedHotelDTO(hotelDO.getId(), hotelDO.getName(),
 					new double[]{hotelDO.getMinimumPrice(), hotelDO.getMaximumPrice()},
 					new int[]{hotelDO.getMinimumTables(), hotelDO.getMaximunTables()},
-					0, ResourcesUriBuilder.buildtUri(storageStrategy.
+					0, ResourcesUriBuilder.buildtUri(storageNamingStrategy.
 					generateResourceName(HOTEL_PICTURES_PREFIX, hotelDO.getId(), 0)));
 		}).collect(Collectors.toList());
 		return hotels;
@@ -57,7 +57,7 @@ public class HotelServiceImpl implements HotelService {
 		HotelDO savedHotel = hotelDAO.save(hotelDO);
 		int hotelId = savedHotel.getId();
 		for (int i = 0; i < pictures.length; i++) {
-			storageService.store(pictures[i], storageStrategy.
+			storageService.store(pictures[i], storageNamingStrategy.
 					generateResourceName(HOTEL_PICTURES_PREFIX, hotelId, i));
 		}
 		return hotelId;
