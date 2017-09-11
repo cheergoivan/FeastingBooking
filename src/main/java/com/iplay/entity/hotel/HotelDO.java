@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -16,15 +17,35 @@ public class HotelDO {
 	@GeneratedValue
 	private int id;
 	private String name;
-	private String address;
 	private String description;
+	@OneToOne
+	@JoinColumn(name = "address_id")
+	private AddressDO address;
 	private String contact;
 	private String telephone;
 	private String email;
 	private int numOfPictures;
+	private int minimumTables;
+	private int maximunTables;
+	private double minimumPrice;
+	private double maximumPrice;
+	private double rating;
 	@OneToMany
 	@JoinColumn(name = "hotel_id")
 	private List<BanquetHallDO> banquetHalls;
+	
+	public HotelDO() {}
+
+	public HotelDO(String name, String description, AddressDO address, String contact, String telephone, String email, int numOfPictures) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.address = address;
+		this.contact = contact;
+		this.telephone = telephone;
+		this.email = email;
+		this.numOfPictures = numOfPictures;
+	}
 
 	public int getId() {
 		return id;
@@ -42,11 +63,11 @@ public class HotelDO {
 		this.name = name;
 	}
 
-	public String getAddress() {
+	public AddressDO getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(AddressDO address) {
 		this.address = address;
 	}
 
@@ -96,5 +117,45 @@ public class HotelDO {
 
 	public void setBanquetHalls(List<BanquetHallDO> banquetHalls) {
 		this.banquetHalls = banquetHalls;
+	}
+
+	public int getMinimumTables() {
+		return minimumTables;
+	}
+
+	public void setMinimumTables(int minimumTables) {
+		this.minimumTables = minimumTables;
+	}
+
+	public int getMaximunTables() {
+		return maximunTables;
+	}
+
+	public void setMaximunTables(int maximunTables) {
+		this.maximunTables = maximunTables;
+	}
+
+	public double getMinimumPrice() {
+		return minimumPrice;
+	}
+
+	public void setMinimumPrice(double minimumPrice) {
+		this.minimumPrice = minimumPrice;
+	}
+
+	public double getMaximumPrice() {
+		return maximumPrice;
+	}
+
+	public void setMaximumPrice(double maximumPrice) {
+		this.maximumPrice = maximumPrice;
+	}
+
+	public double getRating() {
+		return rating;
+	}
+
+	public void setRating(double rating) {
+		this.rating = rating;
 	}
 }
