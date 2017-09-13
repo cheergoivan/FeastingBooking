@@ -19,11 +19,14 @@ public class AuthServiceImpl implements AuthService{
 	
 	@Override
 	public Optional<UserDO> authenticate(String principal, String password) {
-		List<UserDO> users = userDAO.findByPrincipalAndPassword(principal, encoder.encode(password));
-		UserDO user = null;
-		if(users.size()>0)
-			user = users.get(0);
-		return Optional.ofNullable(user);
+		List<UserDO> users = userDAO.findByPrincipal(principal);
+		if(users.size()>0){
+			for(UserDO user:users){
+				if(encoder.matches(password, user.getPassword()))
+					return Optional.ofNullable(user); 
+			}
+		}
+		return Optional.ofNullable(null);
 	}
 	
 }

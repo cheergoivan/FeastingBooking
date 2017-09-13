@@ -8,8 +8,8 @@ import com.iplay.entity.user.UserDO;
 
 public interface UserDAO extends CrudRepository<UserDO,Integer>{
 	
-	@Query("SELECT u from #{#entityName} u WHERE (u.username = ?1 OR u.email = ?1) AND u.password = ?2")
-	List<UserDO> findByPrincipalAndPassword(String principal, String password);
+	@Query("SELECT u from #{#entityName} u WHERE u.username = ?1 OR u.email = ?1")
+	List<UserDO> findByPrincipal(String principal);
 	
 	UserDO findOneByUsername(String username);
 	

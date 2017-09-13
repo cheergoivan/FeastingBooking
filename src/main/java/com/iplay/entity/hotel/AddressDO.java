@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class AddressDO {
 	@Id
 	@GeneratedValue
-	private String id;
+	private int id;
 	private String city;
 	private String district;
 	private String street;
@@ -26,10 +26,10 @@ public class AddressDO {
 		this.street = street;
 	}
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getCity() {

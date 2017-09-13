@@ -103,4 +103,10 @@ public class UserDO implements UserDetails {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "UserDO [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", role="
+				+ role + "]";
+	}
 }

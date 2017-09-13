@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService{
 	public Optional<UserDO> createOrdinaryUser(String email, String username, String password) {
 		UserDO user = null;
 		try{
-			user = userDAO.save(new UserDO(username, email, encoder.encode(password), Role.USER));
+			user = userDAO.save(new UserDO(username, encoder.encode(password), email, Role.USER));
 		}catch(DataIntegrityViolationException e){
 			LOGGER.error(e.getMessage());
 		}
@@ -41,5 +41,16 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public boolean isEmailOccupied(String email) {
 		return userDAO.findOneByEmail(email)!=null;
+	}
+
+	@Override
+	public Optional<UserDO> createAdministrator(String username, String password) {
+		UserDO user = null;
+		try{
+			user = userDAO.save(new UserDO(username, encoder.encode(password), username+"@FeastBooking.com", Role.ADMIN));
+		}catch(DataIntegrityViolationException e){
+			LOGGER.error(e.getMessage());
+		}
+		return Optional.ofNullable(user);
 	}
 }
