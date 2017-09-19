@@ -3,6 +3,7 @@ package com.iplay.service.hotel;
 import java.util.List;
 
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
+import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostHotelVO;
 
 public interface HotelService {
@@ -14,4 +15,9 @@ public interface HotelService {
 	List<SimplifiedHotelDTO> listHotel(int pageNumber, int pageSize);
 	
 	int saveHotel(PostHotelVO hotel);
+	
+	int addBanquetHall(PostBanquetHallVO baquetHallVO, int hotelId);
+	
+	
+	
 }

@@ -1,3 +1,5 @@
+/upload-dir
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 

@@ -1,7 +1,9 @@
 package com.iplay.entity.hotel;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,7 +20,7 @@ public class HotelDO {
 	private int id;
 	private String name;
 	private String description;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id")
 	private AddressDO address;
 	private String contact;
@@ -30,7 +32,7 @@ public class HotelDO {
 	private double minimumPrice;
 	private double maximumPrice;
 	private double rating;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "hotel_id")
 	private List<BanquetHallDO> banquetHalls;
 	
@@ -45,6 +47,7 @@ public class HotelDO {
 		this.telephone = telephone;
 		this.email = email;
 		this.numOfPictures = numOfPictures;
+		this.banquetHalls = new ArrayList<>();
 	}
 
 	public int getId() {

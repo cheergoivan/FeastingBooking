@@ -7,9 +7,15 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 public class PostHotelVO {
+	private int id = -1;
 	@NotBlank(message="hotel name can't be blank")
 	private String name;
-	private AddressVO address;
+	@NotBlank(message="city of address can't be blank")
+	private String cityOfAddress;
+	@NotBlank(message="district of address can't be blank")
+	private String districtOfAddress;
+	@NotBlank(message="street of address can't be blank")
+	private String streetOfAddress;
 	@NotBlank(message="hotel description can't be blank")
 	private String description;
 	@NotBlank(message="hotel contact can't be blank")
@@ -28,11 +34,23 @@ public class PostHotelVO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public AddressVO getAddress() {
-		return address;
+	public String getCityOfAddress() {
+		return cityOfAddress;
 	}
-	public void setAddress(AddressVO address) {
-		this.address = address;
+	public void setCityOfAddress(String cityOfAddress) {
+		this.cityOfAddress = cityOfAddress;
+	}
+	public String getDistrictOfAddress() {
+		return districtOfAddress;
+	}
+	public void setDistrictOfAddress(String districtOfAddress) {
+		this.districtOfAddress = districtOfAddress;
+	}
+	public String getStreetOfAddress() {
+		return streetOfAddress;
+	}
+	public void setStreetOfAddress(String streetOfAddress) {
+		this.streetOfAddress = streetOfAddress;
 	}
 	public String getDescription() {
 		return description;
@@ -63,5 +81,11 @@ public class PostHotelVO {
 	}
 	public void setFiles(MultipartFile[] files) {
 		this.files = files;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 }

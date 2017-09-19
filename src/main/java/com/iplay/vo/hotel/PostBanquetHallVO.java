@@ -1,152 +1,111 @@
-package com.iplay.entity.hotel;
+package com.iplay.vo.hotel;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-@Entity
-@Table(name = "banquet_hall")
-public class BanquetHallDO {
-	@Id
-	@GeneratedValue
-	private int id;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.web.multipart.MultipartFile;
+
+public class PostBanquetHallVO {
+	@NotBlank(message="The name of the banquet hall can't be blank")
 	private String name;
+	@NotNull(message="The area of the banquet hall can't be blank")
 	private double area;
+	@NotNull(message="The minimumTables of the banquet hall can't be blank")
 	private int minimumTables;
+	@NotNull(message="The maximumTables of the banquet hall can't be blank")
 	private int maximumTables;
+	@NotNull(message="The minimumPrice of the banquet hall can't be blank")
 	private double minimumPrice;
+	@NotNull(message="The height of the banquet hall can't be blank")
 	private double height;
+	@NotBlank(message="The columns of the banquet hall can't be blank")
 	private String columns;
+	@NotBlank(message="The shape of the banquet hall can't be blank")
 	private String shape;
+	@NotBlank(message="The actualArea of the banquet hall can't be blank")
 	private String actualArea;
+	@NotBlank(message="The colorOfTablecloth of the banquet hall can't be blank")
 	private String colorOfTablecloth;
+
 	private String extraInfo;
-	private int numOfPictures;
 	
-	public BanquetHallDO(){}
-
-	public BanquetHallDO(String name, double area, int minimumTables, int maximumTables, double minimumPrice,
-			double height, String columns, String shape, String actualArea, String colorOfTablecloth, String extraInfo,
-			int numOfPictures) {
-		super();
-		this.name = name;
-		this.area = area;
-		this.minimumTables = minimumTables;
-		this.maximumTables = maximumTables;
-		this.minimumPrice = minimumPrice;
-		this.height = height;
-		this.columns = columns;
-		this.shape = shape;
-		this.actualArea = actualArea;
-		this.colorOfTablecloth = colorOfTablecloth;
-		this.extraInfo = extraInfo;
-		this.numOfPictures = numOfPictures;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	@NotEmpty(message="Pictures can not be empty")
+	@Size(min=1,message="The quantity of pictures must be at least 1")
+	private MultipartFile[] files;
+	
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public double getArea() {
 		return area;
 	}
-
 	public void setArea(double area) {
 		this.area = area;
 	}
-
 	public int getMinimumTables() {
 		return minimumTables;
 	}
-
 	public void setMinimumTables(int minimumTables) {
 		this.minimumTables = minimumTables;
 	}
-
 	public int getMaximumTables() {
 		return maximumTables;
 	}
-
 	public void setMaximumTables(int maximumTables) {
 		this.maximumTables = maximumTables;
 	}
-
 	public double getMinimumPrice() {
 		return minimumPrice;
 	}
-
 	public void setMinimumPrice(double minimumPrice) {
 		this.minimumPrice = minimumPrice;
 	}
-
-	public int getNumOfPictures() {
-		return numOfPictures;
-	}
-
-	public void setNumOfPictures(int numOfPictures) {
-		this.numOfPictures = numOfPictures;
-	}
-
 	public double getHeight() {
 		return height;
 	}
-
 	public void setHeight(double height) {
 		this.height = height;
 	}
-
 	public String getColumns() {
 		return columns;
 	}
-
 	public void setColumns(String columns) {
 		this.columns = columns;
 	}
-
 	public String getShape() {
 		return shape;
 	}
-
 	public void setShape(String shape) {
 		this.shape = shape;
 	}
-
 	public String getActualArea() {
 		return actualArea;
 	}
-
 	public void setActualArea(String actualArea) {
 		this.actualArea = actualArea;
 	}
-
 	public String getColorOfTablecloth() {
 		return colorOfTablecloth;
 	}
-
 	public void setColorOfTablecloth(String colorOfTablecloth) {
 		this.colorOfTablecloth = colorOfTablecloth;
 	}
-
-
 	public String getExtraInfo() {
 		return extraInfo;
 	}
-
 	public void setExtraInfo(String extraInfo) {
 		this.extraInfo = extraInfo;
+	}
+	public MultipartFile[] getFiles() {
+		return files;
+	}
+	public void setFiles(MultipartFile[] files) {
+		this.files = files;
 	}
 	
 }
