@@ -50,4 +50,8 @@ public class AddressDO {
 	public void setStreet(String street) {
 		this.street = street;
 	}
+	
+	public String formatAsString(){
+		return city+" "+district +" "+street;
+	}
 }

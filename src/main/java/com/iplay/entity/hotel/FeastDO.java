@@ -11,14 +11,16 @@ public class FeastDO {
 	@Id
 	@GeneratedValue
 	private int id;
+	private String name;
 	private double price;
 	private String courses;
 	private int numOfPictures;
 	
 	public FeastDO(){}
 	
-	public FeastDO(double price, String courses, int numOfPictures) {
+	public FeastDO(String name, double price, String courses, int numOfPictures) {
 		super();
+		this.name = name;
 		this.price = price;
 		this.courses = courses;
 		this.numOfPictures = numOfPictures;
@@ -47,5 +49,13 @@ public class FeastDO {
 	}
 	public void setNumOfPictures(int numOfPictures) {
 		this.numOfPictures = numOfPictures;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

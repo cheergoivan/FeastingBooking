@@ -31,10 +31,13 @@ public class HotelDO {
 	private int maximunTables;
 	private double minimumPrice;
 	private double maximumPrice;
-	private double rating;
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "hotel_id")
 	private List<BanquetHallDO> banquetHalls;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "hotel_id")
+	private List<FeastDO> feasts;
 	
 	public HotelDO() {}
 
@@ -48,6 +51,7 @@ public class HotelDO {
 		this.email = email;
 		this.numOfPictures = numOfPictures;
 		this.banquetHalls = new ArrayList<>();
+		this.feasts = new ArrayList<>();
 	}
 
 	public int getId() {
@@ -154,11 +158,12 @@ public class HotelDO {
 		this.maximumPrice = maximumPrice;
 	}
 
-	public double getRating() {
-		return rating;
+
+	public List<FeastDO> getFeasts() {
+		return feasts;
 	}
 
-	public void setRating(double rating) {
-		this.rating = rating;
+	public void setFeasts(List<FeastDO> feasts) {
+		this.feasts = feasts;
 	}
 }
