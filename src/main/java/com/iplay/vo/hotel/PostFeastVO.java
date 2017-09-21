@@ -1,10 +1,8 @@
 package com.iplay.vo.hotel;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 public class PostFeastVO {
@@ -15,9 +13,9 @@ public class PostFeastVO {
 	private double price;
 	@NotBlank(message="The courses the banquet hall can't be blank")
 	private String courses;
-	@NotEmpty(message="Pictures can not be empty")
-	@Size(min=1,message="The quantity of pictures must be at least 1")
-	private MultipartFile[] files;
+	//@NotEmpty(message="Pictures can not be empty")
+	//@Size(min=1,message="The quantity of pictures must be at least 1")
+	private MultipartFile[] files = new MultipartFile[0];
 	public int getId() {
 		return id;
 	}
