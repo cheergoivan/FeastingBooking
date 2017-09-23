@@ -61,9 +61,16 @@ public class AuthController {
     	return new JwtResponseDTO(token);
     }
     
-    @ApiOperation(notes="根据邮箱获得一个动态密码", value = "")
+    @ApiOperation(notes="根据邮箱获得一个动态密码，动态密码默认2分钟内有效。此API仅在测试时开放。", value = "")
     @GetMapping("/api/auth/totp") 
-    public void createTOTP(@ApiParam("邮箱地址")@RequestParam String email){
+    public String createTOTP(@ApiParam("邮箱地址")@RequestParam String email){
+    	String totp = authenticator.generateTotpUsingBase64Decoder(email);
+    	return totp;
+    }
+    
+    @ApiOperation(notes="请求获得验证码， 此操作会向指定邮箱发送验证码", value = "")
+    @GetMapping("/api/auth/applyForRegistrationEmail") 
+    public void createTOTPAndSendEmail(@ApiParam("邮箱地址")@RequestParam String email){
     	String totp = authenticator.generateTotpUsingBase64Decoder(email);
     	mailer.sendMail(mailConfigurationProperties.getSender(), email, mailConfigurationProperties.registrationEmail.getSubject()
     			,mailConfigurationProperties.registrationEmail.getContent()
