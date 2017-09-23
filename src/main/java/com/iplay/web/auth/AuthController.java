@@ -58,7 +58,7 @@ public class AuthController {
     @Autowired
     private Mailer mailer;
 
-    @ApiOperation(notes="根据用户名密码返回一个token，以后每次请求受保护的API时添加一个header项：Authorization:Bearer token", value = "")
+    @ApiOperation(notes="根据用户名（或邮箱）和密码返回一个token，以后每次请求受保护的API时添加一个header项：Authorization:Bearer token", value = "")
     @PostMapping("/api/auth/token")
     public JwtResponseDTO createAuthenticationToken(@ApiParam("用户名密码实体对象")@Valid@RequestBody AuthenticationVO param) throws AuthenticationException{
     	String username = param.getUsername(),password=param.getPassword();
