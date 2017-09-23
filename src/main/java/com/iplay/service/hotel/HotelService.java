@@ -18,6 +18,8 @@ public interface HotelService {
 	
 	int saveHotel(PostHotelVO hotel);
 	
+	boolean deleteHotel(int id);
+	
 	int addBanquetHall(PostBanquetHallVO baquetHallVO, int hotelId);
 	
 	int addFeast(PostFeastVO feastVO, int hotelId);
