@@ -13,7 +13,7 @@ public class MailConfigurationProperties {
 
 	public class RegistrationEmail {
 		private String subject = "FeastBooking 注冊郵件";
-		private String content = "您的驗證碼為：{totp} 此驗證碼{totp-expiration-time}内有效";
+		private String content = "您的驗證碼為：{totp}  此驗證碼1分鐘内有效。";
 
 		public String getSubject() {
 			return subject;

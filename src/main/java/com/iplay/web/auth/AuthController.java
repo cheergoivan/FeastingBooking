@@ -15,17 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.iplay.component.mailer.Mailer;
+import com.iplay.component.mailer.AbstractMailer;
 import com.iplay.component.totp.TotpAuthenticator;
 import com.iplay.configuration.mail.MailConfigurationProperties;
 import com.iplay.configuration.security.jwtAuthentication.JwtFactory;
 import com.iplay.configuration.security.jwtAuthentication.auth.UserContext;
-import com.iplay.configuration.totp.TotpConfigurationProperties;
 import com.iplay.dto.auth.JwtResponseDTO;
 import com.iplay.dto.auth.TotpVerificationResponseDTO;
 import com.iplay.entity.user.UserDO;
 import com.iplay.service.auth.AuthService;
-import com.iplay.service.user.UserService;
 import com.iplay.vo.auth.AuthenticationVO;
 import com.iplay.vo.auth.TotpVerificationRequestVO;
 
@@ -42,10 +40,6 @@ public class AuthController {
     @Autowired
     private JwtFactory factory;
     
-    @SuppressWarnings("unused")
-	@Autowired
-    private UserService userService;
-    
     @Autowired
     private TotpAuthenticator authenticator;
     
@@ -53,10 +47,7 @@ public class AuthController {
     private MailConfigurationProperties mailConfigurationProperties;
     
     @Autowired
-    private TotpConfigurationProperties totpConfigurationProperties;
-    
-    @Autowired
-    private Mailer mailer;
+    private AbstractMailer mailer;
 
     @ApiOperation(notes="根据用户名（或邮箱）和密码返回一个token，以后每次请求受保护的API时添加一个header项：Authorization:Bearer token", value = "")
     @PostMapping("/api/auth/token")
@@ -73,18 +64,13 @@ public class AuthController {
     @ApiOperation(notes="根据邮箱获得一个动态密码", value = "")
     @GetMapping("/api/auth/totp") 
     public void createTOTP(@ApiParam("邮箱地址")@RequestParam String email){
-    	long totpExpirationTime = totpConfigurationProperties.getTimeWindowSize()*
-    			(totpConfigurationProperties.getAllowedFutureValidationWindows()
-    					+totpConfigurationProperties.getAllowedPastValidationWindows());
-    	String totpExpirationTimeString = (totpExpirationTime%60==0?
-				(totpExpirationTime/60+"分鐘"):(totpExpirationTime+"秒"));
     	String totp = authenticator.generateTotpUsingBase64Decoder(email);
     	mailer.sendMail(mailConfigurationProperties.getSender(), email, mailConfigurationProperties.registrationEmail.getSubject()
     			,mailConfigurationProperties.registrationEmail.getContent()
-    			.replace("{totp}", totp).replace("{totp-expiration-time}", totpExpirationTimeString));
+    			.replace("{totp}", totp));
     }
     
-    @ApiOperation(notes="针对用户输入的动态密码进行校验,动态密码1分钟内有效", value = "")
+    @ApiOperation(notes="针对用户输入的动态密码进行校验,动态密码默认2分钟内有效", value = "")
     @PostMapping("/api/auth/totp") 
     public TotpVerificationResponseDTO verify(@ApiParam("邮箱和动态密码")@Valid@RequestBody TotpVerificationRequestVO request){
     	String email = request.getEmail(),totp = request.getTotp();
