@@ -44,7 +44,7 @@ public class HotelController {
 		return hotelService.saveHotel(postHotelVO);
 	}
 	
-	@ApiOperation(notes="分页展示酒店",value="")
+	@ApiOperation(notes="分页展示酒店hahahhahhah",value="")
     @GetMapping
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
 	public List<SimplifiedHotelDTO>  listHotelsForUser(@ApiParam("从0开始的页码")@RequestParam int page){
