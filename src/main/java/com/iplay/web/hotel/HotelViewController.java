@@ -10,7 +10,7 @@ public class HotelViewController {
 	@Value("${iplay.view.templateFolder}")
 	private String rootFolder;
 	
-	@GetMapping("/hotels")
+	@GetMapping("/FeastBooking/hotels")
 	public String indexView() {
 		return rootFolder + "index.html";
 	}
