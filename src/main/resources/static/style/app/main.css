@@ -1,0 +1,266 @@
+/*user agent*/
+body {
+  height: 100vh;
+  overflow: hidden;
+  background-color: #f3f3f3;
+}
+a:hover {
+  cursor: pointer;
+}
+span {
+  padding: 6px;
+}
+ul {
+  list-style: none;
+}
+/*bootstrap*/
+.navbar {
+  height: 50px;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: #fff;
+}
+.navbar .nav > li > a {
+  color: #999999;
+}
+.navbar .nav > li > a.active {
+  color: #333;
+}
+.navbar .nav > li > a:hover {
+  background-color: #fff;
+  color: #175199;
+}
+.table {
+  border-top: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  margin-bottom: 0;
+}
+.table-pagination {
+  text-align: center;
+}
+.row {
+  padding: 10px;
+}
+.col {
+  padding: 8px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.control-label {
+  min-width: 100px;
+  font-size: 16px;
+  padding: 6px 0;
+}
+.btn {
+  background-image: none;
+}
+/*global*/
+main.main {
+  height: calc(100vh - 50px);
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+main > .content {
+  min-height: 500px;
+  width: 70%;
+  margin: 20px auto;
+  background-color: #fff;
+}
+.table-container > .table-control {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+.table-container > .table-control > .btn-group > .btn {
+  background-image: none;
+}
+.table-container > .table-body {
+  padding: 0 20px;
+}
+.table-container > .table-body thead {
+  background-color: #ebebeb;
+}
+.table-container > .table-body tbody > tr:nth-child(2n-1) {
+  background-color: #fbfbfb;
+}
+.table-container > .table-body tbody > tr:nth-child(2n) {
+  background-color: #eee;
+}
+.table-container > .table-body tbody > tr:hover {
+  background-color: #ebebeb;
+  cursor: pointer;
+}
+.btn-row {
+  text-align: right;
+}
+/*directives*/
+.checkbox-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.checkbox-wrapper > .checkbox-view {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  color: #333;
+  border: 1.3px solid #cccccc;
+}
+.checkbox-wrapper > .checkbox-view:hover {
+  cursor: pointer;
+}
+.checkbox-wrapper > .checkbox-view.selected:before {
+  content: "\2713";
+  position: absolute;
+  top: 0;
+  left: 3px;
+  font-size: 13px;
+  font-weight: 800;
+}
+.image-gallery {
+  max-width: 50%;
+}
+.image-gallery .image-gallery-item-wrapper {
+  position: relative;
+}
+.image-gallery .image-gallery-item-wrapper .image-gallery-hidder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  font-size: 200px;
+  opacity: 0.3;
+}
+.image-gallery .image-gallery-item-wrapper:hover .image-gallery-hidder {
+  z-index: 1;
+  background-color: #fbfbfb;
+  opacity: 0.3;
+  cursor: pointer;
+}
+.image-gallery .image-gallery-item-wrapper img {
+  z-index: 0;
+  max-width: 100%;
+  max-height: 100%;
+}
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.image-list > .image-container-wrapper {
+  width: 250px;
+  height: 250px;
+  padding: 5px;
+  display: inline-block;
+}
+.image-list > .image-container-wrapper > .image-container {
+  width: 240px;
+  height: 240px;
+  padding: 5px;
+  border: 1px solid #ebebeb;
+  background-color: transparent;
+}
+.image-list > .image-container-wrapper > .image-container > .image-container-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #fbfbfb;
+  text-align: center;
+}
+.image-list > .image-container-wrapper > .image-container > .image-container-content .image-container-control {
+  background-color: transparent;
+  text-align: right;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.image-list > .image-container-wrapper > .image-container > .image-container-content .image-container-control > .image-zoom {
+  display: inline-block;
+}
+.image-list > .image-container-wrapper > .image-container > .image-container-content .image-container-control > .image-remove {
+  display: inline-block;
+}
+.image-list > .image-container-wrapper > .image-container > .image-container-content img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.image-list > .image-container-wrapper > .image-container > .image-container-content span {
+  max-width: 100%;
+  max-height: 100%;
+}
+.image-list > .image-container-wrapper > .image-container > .image-container-content > .image-plus-wrapper {
+  width: 100%;
+}
+.image-list > .image-container-wrapper > .image-container > .image-container-content > .image-plus-wrapper .glyphicon-plus {
+  font-size: 80px;
+}
+/*hotel detail*/
+.hotel-name-wrapper {
+  padding: 20px;
+}
+.hotel-detail-container {
+  padding: 0 20px;
+}
+.banquet-hall-container {
+  display: flex;
+}
+.banquet-hall-container > .banquet-hall-detail {
+  padding: 20px;
+}
+.banquet-hall-container > .banquet-hall-list {
+  padding: 20px;
+  flex: 0 0 250px;
+}
+.banquet-hall-container > .banquet-hall-list ul {
+  padding-left: 0;
+}
+.banquet-hall-container > .banquet-hall-list .banquet-hall-item-wrapper {
+  padding: 6px;
+  margin-bottom: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background-color: #fbfbfb;
+  text-align: center;
+  position: relative;
+}
+.banquet-hall-container > .banquet-hall-list .banquet-hall-item-wrapper:hover {
+  background-color: #eee;
+  color: #175199;
+  cursor: pointer;
+}
+.banquet-hall-container > .banquet-hall-list .banquet-hall-item-wrapper .remove-banquet-wrapper,
+.banquet-hall-container > .banquet-hall-list .banquet-hall-item-wrapper .add-banquet-wrapper {
+  position: absolute;
+  width: 20px;
+  top: 2px;
+  right: 10px;
+  font-size: 20px;
+  font-weight: 400;
+}
+.banquet-hall-container > .banquet-hall-detail {
+  flex: 1 1 auto;
+}
+/*signin*/
+.signin-board {
+  width: 400px;
+  padding: 100px 20px 80px;
+  margin: 20vh auto 0 auto;
+  border-radius: 4px;
+  box-shadow: 3px 3px 10px 3px #888;
+  background-color: white;
+}
+.signin-board > .btn-row {
+  text-align: center;
+}
+.signin-board > .btn-row > .btn {
+  width: 100px;
+}
