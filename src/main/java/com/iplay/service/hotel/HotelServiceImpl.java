@@ -18,6 +18,7 @@ import com.iplay.dao.hotel.HotelRatingDAO;
 import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedBanquetHallDTO;
 import com.iplay.dto.hotel.SimplifiedFeastDTO;
+import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
 import com.iplay.entity.hotel.AddressDO;
 import com.iplay.entity.hotel.BanquetHallDO;
@@ -59,6 +60,17 @@ public class HotelServiceImpl implements HotelService {
 							.generateResourceName(PictureNamingPrefix.HOTEL_PICTURES_PREFIX, hotelDO.getId(), 0)));
 		}).collect(Collectors.toList());
 		return hotels;
+	}
+
+	@Override
+	public List<SimplifiedHotelAdminDTO> listHotel() {
+		// TODO Auto-generated method stub
+		Iterable<HotelDO> hotels = hotelDAO.findAll();
+		List<SimplifiedHotelAdminDTO> hotelList = new LinkedList<SimplifiedHotelAdminDTO>();
+		for(HotelDO hotel : hotels) {
+			hotelList.add(new SimplifiedHotelAdminDTO(hotel.getId(), hotel.getName(), hotel.getContact(), hotel.getTelephone(), hotel.getEmail(), hotel.getAddress().formatAsString()));
+		}
+		return hotelList;
 	}
 
 	@Override
