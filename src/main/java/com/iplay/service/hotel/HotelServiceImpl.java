@@ -72,10 +72,12 @@ public class HotelServiceImpl implements HotelService {
 		}
 		return hotelList;
 	}
-
+	
 	@Override
 	public int saveHotel(PostHotelVO hotel) {
 		MultipartFile[] pictures = hotel.getFiles();
+		if(pictures==null)
+			pictures = new MultipartFile[0];
 		AddressDO addressDO = new AddressDO(hotel.getCityOfAddress(), hotel.getDistrictOfAddress(),
 				hotel.getStreetOfAddress());
 		HotelDO hotelDO = new HotelDO(hotel.getName(), hotel.getDescription(), addressDO, hotel.getContact(),
@@ -83,7 +85,15 @@ public class HotelServiceImpl implements HotelService {
 		boolean isCreated = true;
 		if (hotel.getId() != -1) {
 			isCreated = false;
-			hotelDO.setId(hotel.getId());
+			if(hotel.getFiles()==null){
+				HotelDO findedHotel = hotelDAO.findOne(hotel.getId());
+				if(findedHotel != null){
+					hotelDO.setNumOfPictures(findedHotel.getNumOfPictures());
+					hotelDO.setId(hotel.getId());
+				}else{
+					return -1;
+				}
+			}
 		}
 		HotelDO savedHotel = hotelDAO.save(hotelDO);
 		int hotelId = savedHotel.getId();

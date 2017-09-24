@@ -11,11 +11,11 @@ public class BanquetHallDTO {
 	private String shape;
 	private String actualArea;
 	private String colorOfTablecloth;
-	private String[] extraInfo;
+	private String[] extraInfos;
 	private String[] pictureUrls;
 	
 	public BanquetHallDTO(int id, String name, double area, int[] tableRange, double minimumPrice, double height,
-			String columns, String shape, String actualArea, String colorOfTablecloth, String[] extraInfo,
+			String columns, String shape, String actualArea, String colorOfTablecloth, String[] extraInfos,
 			String[] pictureUrls) {
 		super();
 		this.id = id;
@@ -28,10 +28,12 @@ public class BanquetHallDTO {
 		this.shape = shape;
 		this.actualArea = actualArea;
 		this.colorOfTablecloth = colorOfTablecloth;
-		this.extraInfo = extraInfo;
+		this.extraInfos = extraInfos;
 		this.pictureUrls = pictureUrls;
 	}
 	
+	public BanquetHallDTO() {}
+
 	public int getId() {
 		return id;
 	}
@@ -92,11 +94,11 @@ public class BanquetHallDTO {
 	public void setColorOfTablecloth(String colorOfTablecloth) {
 		this.colorOfTablecloth = colorOfTablecloth;
 	}
-	public String[] getExtraInfo() {
-		return extraInfo;
+	public String[] getExtraInfos() {
+		return extraInfos;
 	}
-	public void setExtraInfo(String[] extraInfo) {
-		this.extraInfo = extraInfo;
+	public void setExtraInfos(String[] extraInfos) {
+		this.extraInfos = extraInfos;
 	}
 	public String[] getPictureUrls() {
 		return pictureUrls;

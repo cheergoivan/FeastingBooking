@@ -20,6 +20,7 @@ import com.iplay.dto.hotel.SimplifiedHotelDTO;
 import com.iplay.service.hotel.HotelService;
 import com.iplay.vo.hotel.PostHotelVO;
 import com.iplay.web.configuration.PaginationConfig;
+import com.iplay.web.exception.ResourceNotFoundException;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -30,7 +31,7 @@ public class HotelController {
 	@Autowired
 	private HotelService hotelService;
 	
-	@ApiOperation(notes = "管理員新增一個酒店", value = "")
+	@ApiOperation(notes = "管理員新增一個酒店，返回酒店id", value = "")
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public int addHotel(@Valid @ApiParam("酒店实体，属性包括：name, cityOfAddress, districtOfAddress,"
@@ -49,7 +50,7 @@ public class HotelController {
 	@ApiOperation(notes = "管理員删除一个酒店，id为必填项", value = "")
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public boolean deleteHotel(@PathVariable int id){
+	public boolean deleteHotel(@ApiParam("酒店id")@PathVariable int id){
 		return hotelService.deleteHotel(id);
 	}
 	
@@ -63,9 +64,10 @@ public class HotelController {
 	@ApiOperation(notes="根据酒店Id获得酒店详细信息",value="")
     @GetMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
-	public HotelDTO  findHotelById(@PathVariable int id){
-		return hotelService.findHotelById(id);
+	public HotelDTO  findHotelById(@ApiParam("酒店id")@PathVariable int id){
+		HotelDTO hotel = hotelService.findHotelById(id);
+		if(hotel==null)
+			throw new ResourceNotFoundException("Hotel with id: "+id+"doesn't exist");
+		return hotel;
 	}
-	
-	
 }

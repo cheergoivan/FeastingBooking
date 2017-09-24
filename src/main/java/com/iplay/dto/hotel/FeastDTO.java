@@ -5,15 +5,15 @@ public class FeastDTO {
 	private String name;
 	private double price;
 	private String[] courses;
-	private String pictureUrls;
+	private String[] pictureUrls;
 	
-	public FeastDTO(int id, String name, double price, String[] courses, String pictureUrls) {
+	public FeastDTO(int id, String name, double price, String[] courses, String[] pictures) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.courses = courses;
-		this.pictureUrls = pictureUrls;
+		this.pictureUrls = pictures;
 	}
 	public int getId() {
 		return id;
@@ -39,10 +39,10 @@ public class FeastDTO {
 	public void setCourses(String[] courses) {
 		this.courses = courses;
 	}
-	public String getPictureUrls() {
+	public String[] getPictureUrls() {
 		return pictureUrls;
 	}
-	public void setPictureUrls(String pictureUrls) {
+	public void setPictureUrls(String[] pictureUrls) {
 		this.pictureUrls = pictureUrls;
 	}
 }

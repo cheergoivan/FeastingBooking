@@ -32,7 +32,7 @@ public class PostBanquetHallVO {
 	
 	//@NotEmpty(message="Pictures can not be empty")
 	//@Size(min=1,message="The quantity of pictures must be at least 1")
-	private MultipartFile[] files = new MultipartFile[0];
+	private MultipartFile[] files;
 	
 	public String getName() {
 		return name;

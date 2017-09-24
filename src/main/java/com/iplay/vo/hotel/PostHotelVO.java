@@ -24,7 +24,7 @@ public class PostHotelVO {
 	
 	//@NotEmpty(message="Photos can not be empty")
 	//@Size(min=1,max=9,message="The quantity of photos must be in the range of 1 and 9")
-	private MultipartFile[] files = new MultipartFile[0];
+	private MultipartFile[] files;
 	
 	public String getName() {
 		return name;
