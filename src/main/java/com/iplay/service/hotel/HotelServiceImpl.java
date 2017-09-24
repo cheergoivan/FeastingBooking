@@ -99,10 +99,10 @@ public class HotelServiceImpl implements HotelService {
 
 	@Override
 	@Transactional
-	public int addBanquetHall(PostBanquetHallVO baquetHallVO, int hotelId) {
+	public int addBanquetHall(PostBanquetHallVO banquetHallVO, int hotelId) {
 		BanquetHallDO banquetHallDO = new BanquetHallDO();
-		BeanUtils.copyProperties(baquetHallVO, banquetHallDO);
-		MultipartFile[] pictures = baquetHallVO.getFiles();
+		BeanUtils.copyProperties(banquetHallVO, banquetHallDO);
+		MultipartFile[] pictures = banquetHallVO.getFiles();
 		banquetHallDO.setNumOfPictures(pictures.length);
 		HotelDO hotel = hotelDAO.findOne(hotelId);
 		List<BanquetHallDO> bhs = new LinkedList<>();

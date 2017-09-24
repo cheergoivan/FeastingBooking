@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
 public class PostBanquetHallVO {
+	private int id = -1;
 	@NotBlank(message="The name of the banquet hall can't be blank")
 	private String name;
 	@NotNull(message="The area of the banquet hall can't be blank")
@@ -105,5 +106,10 @@ public class PostBanquetHallVO {
 	public void setFiles(MultipartFile[] files) {
 		this.files = files;
 	}
-	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 }
