@@ -9,27 +9,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iplay.service.hotel.HotelService;
-import com.iplay.vo.hotel.PostBanquetHallVO;
+import com.iplay.vo.hotel.PostFeastVO;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 @RestController
-@RequestMapping("/api/banquet_halls")
-public class BanquetHallController {
+@RequestMapping("/api/feasts")
+public class FeastController {
 	@Autowired
 	private HotelService hotelService;
 	
-	@ApiOperation(notes = "管理員新增一個宴会厅", value = "")
+	@ApiOperation(notes = "管理員新增一個宴席", value = "")
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public int addBanquetHall(@Valid @ApiParam("酒店id")int hotelId, @Valid 
-			@ApiParam("宴会厅实体，属性包括：name, area, minimumTables, maximumTables, minimumPrice, height, columns(String), "
-					+ "shape(String), actualArea(String), colorOfTablecloth, extraInfo(String), files")
-	PostBanquetHallVO banquetHallVO){
-		return hotelService.addBanquetHall(banquetHallVO, hotelId);
+	public int addFeast(@Valid @ApiParam("酒店id")int hotelId, @Valid 
+			@ApiParam("宴席实体，属性包括：name, price, courses(String), files")PostFeastVO feastVO){
+		return hotelService.addFeast(feastVO, hotelId);
 	}
-	
-	
 	
 }

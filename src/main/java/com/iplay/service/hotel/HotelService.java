@@ -20,7 +20,7 @@ public interface HotelService {
 	
 	boolean deleteHotel(int id);
 	
-	int addBanquetHall(PostBanquetHallVO baquetHallVO, int hotelId);
+	int addBanquetHall(PostBanquetHallVO banquetHallVO, int hotelId);
 	
 	int addFeast(PostFeastVO feastVO, int hotelId);
 	
