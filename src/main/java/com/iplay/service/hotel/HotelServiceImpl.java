@@ -170,4 +170,10 @@ public class HotelServiceImpl implements HotelService {
 		return rating.getTimes()==0? 5.0:rating.getTotalScore()/rating.getTimes();
 	}
 
+	@Override
+	public boolean deleteHotel(int id) {
+		hotelDAO.delete(id);
+		return true;
+	}
+
 }

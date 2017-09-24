@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
 import com.iplay.service.hotel.HotelService;
 import com.iplay.vo.hotel.PostHotelVO;
@@ -44,6 +46,13 @@ public class HotelController {
 		return hotelService.saveHotel(postHotelVO);
 	}
 	
+	@ApiOperation(notes = "管理員删除一个酒店，id为必填项", value = "")
+	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public boolean deleteHotel(@PathVariable int id){
+		return hotelService.deleteHotel(id);
+	}
+	
 	@ApiOperation(notes="分页展示酒店",value="")
     @GetMapping
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
@@ -54,8 +63,8 @@ public class HotelController {
 	@ApiOperation(notes="根据酒店Id获得酒店详细信息",value="")
     @GetMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
-	public List<SimplifiedHotelDTO>  findHotelById(@PathVariable int id){
-		return hotelService.listHotel(id, PaginationConfig.HOTELS_PER_PAGE_FOR_ORDINARY_USER);
+	public HotelDTO  findHotelById(@PathVariable int id){
+		return hotelService.findHotelById(id);
 	}
 	
 	
