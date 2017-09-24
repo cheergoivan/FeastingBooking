@@ -1,4 +1,4 @@
-angular.module('controllers', ['controller.hotel'])
+angular.module('controllers', ['controller.hotel', 'controller.account'])
 /*
 .controller('mainCtrl', ['$rootScope', function($rootScope) {
     $rootScope.state = 'order-detail';

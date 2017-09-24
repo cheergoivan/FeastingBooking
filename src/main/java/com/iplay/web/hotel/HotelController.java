@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iplay.dto.hotel.HotelDTO;
+import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
 import com.iplay.service.hotel.HotelService;
 import com.iplay.vo.hotel.PostHotelVO;
@@ -58,6 +59,13 @@ public class HotelController {
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
 	public List<SimplifiedHotelDTO>  listHotelsForUser(@ApiParam("从0开始的页码")@RequestParam int page){
 		return hotelService.listHotel(page, PaginationConfig.HOTELS_PER_PAGE_FOR_ORDINARY_USER);
+	}
+	
+	@ApiOperation(notes="管理員獲取酒店列表",value="")
+	@GetMapping("/all")
+	@PreAuthorize("hasRole('ADMIN')")
+	public List<SimplifiedHotelAdminDTO> listHotelsForAdmin() {
+		return hotelService.listHotel();
 	}
 	
 	@ApiOperation(notes="根据酒店Id获得酒店详细信息",value="")
