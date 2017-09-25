@@ -18,6 +18,8 @@ public class HotelRatingDO {
 		this.totalScore = totalScore;
 		this.times = times;
 	}
+	
+	public HotelRatingDO(){}
 
 	public int getId() {
 		return id;
