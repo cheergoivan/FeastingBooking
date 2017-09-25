@@ -115,6 +115,8 @@ public class HotelServiceImpl implements HotelService {
 		MultipartFile[] pictures = banquetHallVO.getFiles();
 		banquetHallDO.setNumOfPictures(pictures.length);
 		HotelDO hotel = hotelDAO.findOne(hotelId);
+		if(hotel==null)
+			return -1;
 		List<BanquetHallDO> bhs = new LinkedList<>();
 		bhs.add(banquetHallDO);
 		hotel.setBanquetHalls(bhs);
@@ -123,16 +125,18 @@ public class HotelServiceImpl implements HotelService {
 			storageService.store(pictures[i], storageNamingStrategy
 					.generateResourceName(PictureNamingPrefix.BANQUET_HALL_PICTURES_PREFIX, hotelId, i));
 		}
-		return banquetHallDO.getId();
+		return bhs.get(0).getId();
 	}
 
 	@Override
 	public int addFeast(PostFeastVO feastVO, int hotelId) {
 		FeastDO feastDO = new FeastDO();
-		BeanUtils.copyProperties(feastVO, feastDO);
+		BeanUtils.copyProperties(feastVO, feastDO, "id");
 		MultipartFile[] pictures = feastVO.getFiles();
 		feastDO.setNumOfPictures(pictures.length);
 		HotelDO hotel = hotelDAO.findOne(hotelId);
+		if(hotel==null)
+			return -1;
 		List<FeastDO> feasts = new LinkedList<>();
 		feasts.add(feastDO);
 		hotel.setFeasts(feasts);
@@ -141,7 +145,7 @@ public class HotelServiceImpl implements HotelService {
 			storageService.store(pictures[i],
 					storageNamingStrategy.generateResourceName(PictureNamingPrefix.FEAST_PICTURES_PREFIX, hotelId, i));
 		}
-		return feastDO.getId();
+		return feasts.get(0).getId();
 	}
 
 	@Override

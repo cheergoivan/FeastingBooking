@@ -7,14 +7,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iplay.dto.hotel.FeastDTO;
 import com.iplay.service.hotel.FeastService;
-import com.iplay.service.hotel.HotelService;
 import com.iplay.vo.hotel.PostFeastVO;
 import com.iplay.web.exception.ResourceNotFoundException;
 
@@ -25,18 +23,7 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping("/api/feasts")
 public class FeastController {
 	@Autowired
-	private HotelService hotelService;
-	
-	@Autowired
 	private FeastService feastService;
-	
-	@ApiOperation(notes = "管理員新增一個宴席，返回宴席id", value = "")
-	@PostMapping
-	@PreAuthorize("hasRole('ADMIN')")
-	public int addFeast(@Valid @ApiParam("酒店id")int hotelId, @Valid 
-			@ApiParam("宴席实体，属性包括：name, price, courses(String，菜肴使用;连接), files")PostFeastVO feastVO){
-		return hotelService.addFeast(feastVO, hotelId);
-	}
 	
 	@ApiOperation(notes="根据宴席Id获得宴席详细信息",value="")
     @GetMapping("/{id}")
@@ -44,7 +31,7 @@ public class FeastController {
 	public FeastDTO findFeastById(@ApiParam("宴席id")@PathVariable int id){
 		FeastDTO feast = feastService.findFeastById(id);
 		if(feast==null)
-			throw new ResourceNotFoundException("Feast with id: "+id+"doesn't exist");
+			throw new ResourceNotFoundException("Feast with id: "+id+" doesn't exist");
 		return feast;
 	}
 	
@@ -62,7 +49,4 @@ public class FeastController {
 	public boolean deleteFeast(@ApiParam("宴席id")@PathVariable int id){
 		return feastService.deleteFeast(id); 
 	}
-	
-	
-	
 }
