@@ -36,10 +36,11 @@ public class FeastController {
 	}
 	
 	@ApiOperation(notes="管理员修改一个宴席",value="")
-    @PutMapping
+    @PutMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public int updateFeast( @Valid 
-			@ApiParam("宴席实体，属性包括：id(必需项), name, price, courses(String), files(非必需)")PostFeastVO feastVO){
+	public int updateFeast(@ApiParam("宴席id")@PathVariable int id, @Valid 
+			@ApiParam("宴席实体，属性包括：name, price, courses(String), files(非必需)")PostFeastVO feastVO){
+		feastVO.setId(id);
 		return feastService.updateFeast(feastVO); 
 	}
 	

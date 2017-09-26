@@ -111,7 +111,7 @@ public class HotelServiceImpl implements HotelService {
 	@Transactional
 	public int addBanquetHall(PostBanquetHallVO banquetHallVO, int hotelId) {
 		BanquetHallDO banquetHallDO = new BanquetHallDO();
-		BeanUtils.copyProperties(banquetHallVO, banquetHallDO);
+		BeanUtils.copyProperties(banquetHallVO, banquetHallDO, "id");
 		MultipartFile[] pictures = banquetHallVO.getFiles();
 		banquetHallDO.setNumOfPictures(pictures.length);
 		HotelDO hotel = hotelDAO.findOne(hotelId);

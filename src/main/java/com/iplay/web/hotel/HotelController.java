@@ -39,14 +39,16 @@ public class HotelController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public int addHotel(@Valid @ApiParam("酒店实体，属性包括：name, cityOfAddress, districtOfAddress,"
 			+ "streetOfAddress, description, contact, telephone, email, files") PostHotelVO postHotelVO){
+		postHotelVO.setId(-1);
 		return hotelService.saveHotel(postHotelVO);
 	}
 	
 	@ApiOperation(notes = "管理員更新一個酒店，id为必填项", value = "")
-	@PutMapping
+	@PutMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public int updateHotel(@Valid @ApiParam("酒店实体，属性包括：id(必须项), name, cityOfAddress, districtOfAddress,"
+	public int updateHotel(@ApiParam("酒店id")@PathVariable int id, @Valid @ApiParam("酒店实体，属性包括：name, cityOfAddress, districtOfAddress,"
 			+ "streetOfAddress, description, contact, telephone, email, files(非必需)") PostHotelVO postHotelVO){
+		postHotelVO.setId(id);
 		return hotelService.saveHotel(postHotelVO);
 	}
 	

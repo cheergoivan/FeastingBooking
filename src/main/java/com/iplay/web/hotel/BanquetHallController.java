@@ -36,12 +36,13 @@ public class BanquetHallController {
 	}
 	
 	@ApiOperation(notes="管理员修改一个宴会厅，返回宴会厅id",value="")
-    @PutMapping
+    @PutMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public int updateBanquetHall(@ApiParam("酒店id")int hotelId, @Valid 
-			@ApiParam("宴会厅实体，属性包括：id(必须项), name, area, minimumTables, maximumTables, minimumPrice, height, columns(String), "
+	public int updateBanquetHall(@ApiParam("宴会厅id")@PathVariable int id, @ApiParam("酒店id")int hotelId, @Valid 
+			@ApiParam("宴会厅实体，属性包括： name, area, minimumTables, maximumTables, minimumPrice, height, columns(String), "
 					+ "shape(String), actualArea(String), colorOfTablecloth, extraInfo(String), files(非必需)")
 	PostBanquetHallVO banquetHallVO){
+		banquetHallVO.setId(id);
 		return banquetHallService.updateBanquetHall(banquetHallVO);
 	}
 	
