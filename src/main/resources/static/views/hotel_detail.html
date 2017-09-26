@@ -1,0 +1,15 @@
+<div>
+	<div class="hotel-name-wrapper">
+		<h1>{{::data.hotelDetail.name}}</h1>
+	</div>
+	<div class="hotel-detail-container">
+		<ul class="hotel-detail-menu">
+			<li class="hotel-detail-menu-item" ng-click="goto('info', hotelId)">基本信息</li>
+			<li class="hotel-detail-menu-item" ng-click="goto('banquet', hotelId)">宴會廳信息</li>
+			<li class="hotel-detail-menu-item" ng-click="goto('discount', hotelId)">優惠信息</li>
+			<li class="hotel-detail-menu-item" ng-click="goto('order', hotelId)">訂單信息</li>
+			<li class="hotel-detail-menu-item" ng-click="goto('comment', hotelId)">酒店評價</li>
+		</ul>
+		<div class="hotel-detail-content" ui-view="content"></div>
+	</div>
+</div>

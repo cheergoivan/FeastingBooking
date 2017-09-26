@@ -1,10 +1,45 @@
-angular.module('services', [])
+angular.module('services', ['ui.bootstrap'])
 .service('constants', [function() {
 	return {
-		apiPrefix: '/api'
+		apiPrefix: '/api',
+		authTokenName: 'FeastBookingAuthToken'
 	}
 }])
-.service('api', ['$http', '$q', 'constants', function($http, $q, constants) {
+.service('alertManager', ['$rootScope', '$timeout', function($rootScope, $timeout) {
+	var timeout = 5000;
+	function addAlert(level, message) {
+		if(!level)
+			level = "warning";
+		switch(level.toLowerCase()) {
+			case "success": level = "success";break;
+			case "warning": level = "warning";break;
+			case "danger": level = "danger";break;
+			default: level = "warning"
+		}
+		if(message) {
+			var notification = {
+				level: level,
+				message: message
+			};
+			$rootScope.alerts.push(notification);
+			if(level !== 'danger') {
+				$timeout(function() {
+					$rootScope.alerts.splice($rootScope.alerts.indexOf(notification), 1);
+				}, timeout);
+			}
+		} else {
+			console.log("No alert message!");
+		}
+	}
+	function removeAlert(index) {
+		$rootScope.alerts.splice(index, 1);
+	}
+	return {
+		addAlert: addAlert,
+		removeAlert: removeAlert
+	}
+}])
+.service('apiService', ['$http', '$q', '$window', 'constants', function($http, $q, $window, constants) {
 	function promiseFactory(method, url, headers, data) {
 		var defered = $q.defer();
 		if(!method) {
@@ -19,6 +54,10 @@ angular.module('services', [])
 			}
 		}
 		headers = headers || {};
+		var token = $window.localStorage[constants.authTokenName];
+		if(!token)
+			alert("No token.");
+		headers["Authorization"] = token 
 		$http({ method: method, url: url, headers: headers, data: data}).then(function(response) {
 			defered.resolve(response.data);
 		}, function(response) {
@@ -27,17 +66,49 @@ angular.module('services', [])
 		return defered.promise;
 	}
 	var urlPrefix = constants.apiPrefix;
-	//account api
+	// account api
 	function signin(account) {
 		return promiseFactory('POST', `${urlPrefix}/auth/token`, null, account);
 	}
-	//hotel api
+	// hotel api
 	function getHotelList() {
 		return promiseFactory('GET', `${urlPrefix}/hotels/all`);
     }
+	function createHotel(hotel) {
+		return promiseFactory('POST', `${urlPrefix}/hotels`, null, hotel);
+	}
 
     return {
     	signin: signin,
-        getHotelList: getHotelList
-    }
+        getHotelList: getHotelList,
+        createHotel: createHotel
+    };
+}])
+.service('modals', ['$uibModal', function($uibModal) {
+	function messageModal(title, message) {
+		var modalInstance = $uibModal.open({
+			template: '<div class="modal-container">'
+						+ '<header class="modal-header">'
+							+ '<h3>{{::title}}<span class="modal-cross" ng-click="cancel()"><span></h3>'
+						+ '</header>'
+						+ '<div class="modal-body"></div>'
+						+ '<footer class="modal-footer">'
+							+ '<button class="btn btn-primary" ng-click="confirm()">確認</button>'
+							+ '<button class="btn btn-default" ng-click="cancel()">取消</button>'
+						+ '</footer>'
+					+ '</div>',
+			controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
+				$socpe.title = title;
+				$scope.message = message;
+				$scope.confirm = function() {
+					$uibModalInstance.close();
+				};
+				$scope.cancel = function() {
+					$uibModalInstance.dismiss();
+				};
+			}],
+			windowClass: "modal-window"
+		});
+		return modalInstance.result;
+	}
 }])

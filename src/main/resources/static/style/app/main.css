@@ -3,6 +3,7 @@ body {
   height: 100vh;
   overflow: hidden;
   background-color: #f3f3f3;
+  position: relative;
 }
 a:hover {
   cursor: pointer;
@@ -56,6 +57,18 @@ ul {
   background-image: none;
 }
 /*global*/
+.alert-container {
+  position: absolute;
+  z-index: 9999;
+  top: 0px;
+  left: 20px;
+  width: 100%;
+}
+.alert-container > .alert {
+  width: 500px;
+  margin: 10px auto 0;
+  text-align: center;
+}
 main.main {
   height: calc(100vh - 50px);
   position: absolute;
@@ -65,9 +78,10 @@ main.main {
   overflow-x: hidden;
   overflow-y: scroll;
 }
-main > .content {
+main .content {
   min-height: 500px;
   width: 70%;
+  padding: 20px;
   margin: 20px auto;
   background-color: #fff;
 }
@@ -96,7 +110,32 @@ main > .content {
   cursor: pointer;
 }
 .btn-row {
+  padding-right: 30px;
   text-align: right;
+}
+/*modal*/
+.modal-window {
+  width: 800px;
+  margin: 20px  auto;
+}
+.modal-cross,
+.modal-plus {
+  float: right;
+}
+.modal-cross:before,
+.modal-plus:before {
+  display: block;
+}
+.modal-cross:hover,
+.modal-plus:hover {
+  cursor: pointer;
+  color: #ebebeb;
+}
+.modal-cross:before {
+  content: '\2716';
+}
+.modal-plus:before {
+  content: '\271A';
 }
 /*directives*/
 .checkbox-wrapper {
@@ -202,6 +241,21 @@ main > .content {
 }
 .image-list > .image-container-wrapper > .image-container > .image-container-content > .image-plus-wrapper .glyphicon-plus {
   font-size: 80px;
+}
+.range-container {
+  display: flex;
+  justify-content: space-between;
+}
+.range-container .range {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.address-container {
+  display: flex;
+  justify-content: space-between;
+}
+.address-container input {
+  margin-right: 20px;
 }
 /*hotel detail*/
 .hotel-name-wrapper {
