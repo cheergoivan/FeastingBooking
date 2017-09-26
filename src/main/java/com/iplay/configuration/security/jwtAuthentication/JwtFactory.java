@@ -61,6 +61,9 @@ public class JwtFactory {
 		Claims claims= getClaimsFromToken(token);
 		JwtPayload payload = new JwtPayload();
 		payload.setSubject(claims.getSubject());
+		if(claims.get(JwtPayload.CLAIM_KEY_ROLE)==null||claims.get(JwtPayload.CLAIM_KEY_USERID)==null){
+            throw new BadCredentialsException("Invalid token!");
+		}
 		payload.setRole(Role.valueOf((String) claims.get(JwtPayload.CLAIM_KEY_ROLE)));
 		payload.setUserId(toLong(claims.get(JwtPayload.CLAIM_KEY_USERID)));
 		return payload;
