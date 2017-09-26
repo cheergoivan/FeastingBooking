@@ -2,7 +2,7 @@
 	<div class="table-container">
 		<div class="table-control">
 			<div class="btn-group" role="group">
-				<button class="btn btn-default" type="button">添加酒店</button>
+				<button class="btn btn-default" type="button" ng-click="data.addHotel()">添加酒店</button>
 				<button class="btn btn-default" type="button">刪除酒店</button>
 			</div>
 			<div class="search-control">
@@ -19,6 +19,7 @@
 						<td>酒樓名稱</td>
 						<td>聯係人</td>
 						<td>聯係電話</td>
+						<td>郵箱</td>
 						<td>地址</td>
 					</tr>
 				</thead>
@@ -27,11 +28,12 @@
 						ng-repeat="hotel in data.hotelList | filter: data.search | limitTo: data.countPerPage: data.startIndex"
 						ng-click="data.enterHotelDetail(hotel.id)">
 						<td><nice-checkbox nice-model="hotel.$$selected"></nice-checkbox></td>
-						<td>{{hotel.id}}</td>
-						<td><a href="#">{{hotel.name}}</a></td>
-						<td>{{hotel.contactPerson}}</td>
-						<td>{{hotel.phone}}</td>
-						<td>{{hotel.address}}</td>
+						<td>{{::hotel.id}}</td>
+						<td><a href="#">{{::hotel.name}}</a></td>
+						<td>{{::hotel.contact}}</td>
+						<td>{{::hotel.telephone}}</td>
+						<td>{{::hotel.email}}</td>
+						<td>{{::hotel.address}}</td>
 					</tr>
 				</tbody>
 			</table>

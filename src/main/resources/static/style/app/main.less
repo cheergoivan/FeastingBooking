@@ -15,6 +15,7 @@ body {
     height: 100vh;
     overflow: hidden;
     background-color: @body-bg;
+    position: relative;
 }
 a {
     &:hover {
@@ -74,6 +75,18 @@ ul {
     background-image: none;
 }
 /*global*/
+.alert-container {
+    position: absolute;
+    z-index: 9999;
+    top: 0px;
+    left: 20px;
+    width: 100%;
+    >.alert {
+        width: 500px;
+        margin: 10px auto 0;
+        text-align: center;
+    }
+}
 main {
     &.main {
         height: calc(~'100vh -'@nav-height);
@@ -84,9 +97,10 @@ main {
         overflow-x: hidden;
         overflow-y: scroll;
     }
-    >.content {
+    .content {
         min-height: 500px;
         width: 70%;
+        padding: 20px;
         margin: 20px auto;
         background-color: @content-bg; 
     }
@@ -125,7 +139,33 @@ main {
     }
 }
 .btn-row {
+    padding-right: 30px;
     text-align: right;
+}
+/*modal*/
+.modal-window {
+    width: 800px;
+    margin: 20px  auto;
+}
+.modal-cross, .modal-plus {
+    &:before {
+        display: block;
+    }
+    &:hover {
+        cursor: pointer;
+        color: @dark-theme-gray;
+    }
+    float: right;
+}
+.modal-cross {
+    &:before {
+        content: '\2716';
+    }
+}
+.modal-plus {
+    &:before {
+        content: '\271A';
+    }
 }
 /*directives*/
 .checkbox-wrapper {
@@ -234,6 +274,21 @@ main {
                 }
             }
         }
+    }
+}
+.range-container {
+    display: flex;
+    justify-content: space-between;
+    .range {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+.address-container {
+    display: flex;
+    justify-content: space-between;
+    input {
+        margin-right: 20px;
     }
 }
 /*hotel detail*/

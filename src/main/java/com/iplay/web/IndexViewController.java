@@ -14,4 +14,9 @@ public class IndexViewController {
 	public String index() {
 		return templateFolder + "feastBookingIndex.html";
 	}
+	
+	@GetMapping("/FeastBooking/*")
+	public String feastBooking() {
+		return templateFolder + "index.html";
+	}
 }

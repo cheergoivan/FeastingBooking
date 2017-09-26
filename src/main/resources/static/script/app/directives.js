@@ -143,3 +143,42 @@ angular.module('directives', [])
         }
     }
 })
+.directive('labelRange', function() {
+	return {
+		restrict: 'AE',
+		replace: true,
+		template: '<div class="label-range-container">'
+					+ '<label class="control-label">{{::label}}</label>'
+					+ '<div class="range-container">'
+						+ '<input type="number" ng-model="from" class="form-control">'
+						+ '<span class="range">~</span>'
+						+ '<input type="number" ng-model="to" class="form-control">'
+					+ '</div>'
+				+ '</div>',
+		scope: {
+			from: '=',
+			to: '=',
+			label: '@'
+		}
+	}
+})
+.directive('labelAddress', function() {
+	return {
+		restrict: 'AE',
+		replace: true,
+		template: '<div class="label-address">'
+					+ '<label class="control-label">{{::label}}</label>'
+					+ '<div class="address-container">'
+						+ '<input type="text" ng-model="city" class="form-control" placeholder="市">'
+						+ '<input type="text" ng-model="district" class="form-control" placeholder="區">'
+						+ '<input type="text" ng-model="street" class="form-control" placeholder="街道">'
+					+ '</div>'
+                + '</div>',
+        scope: {
+            city: '=',
+            district: '=',
+            street: '=',
+            label: '@'
+        }
+	}
+})
