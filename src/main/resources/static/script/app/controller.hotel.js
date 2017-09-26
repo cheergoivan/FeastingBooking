@@ -31,24 +31,29 @@ angular.module('controller.hotel', ['services', 'ui.router'])
         	
         };
     }])
-    .controller('hotelCtrl', ['$state', '$scope', 'hotelId', function($state, $scope, hotelId) {
-        $scope.hotelId = hotelId;
-    	$scope.goto = function(state, params) {
+    .controller('hotelCtrl', ['$state', '$scope', 'apiService', 'hotelId', 'alertManager', function($state, $scope, apiService, hotelId, alertManager) {
+    	$scope.data = {};
+        function initHotelDetail() {
+        	apiService.getHotelDetail(hotelId).then(function(response) {
+        		$scope.data.hotelDetail = response;
+        	}, function(response) {
+        		alertManager.alert(response);
+        	})
+        }
+        initHotelDetail();
+        $scope.data.state = $state.current.url;
+    	$scope.data.goto = function(state, params) {
             var fullState = "FeastBooking.hotel." + state;
-    		if(fullState.toLowerCase() !== $state.current.toLowerCase()) {
+    		if(fullState.toLowerCase() !== $state.current.name.toLowerCase()) {
                 $state.go(fullState, params);
             }
     	};
     }])
-    .controller('hotelDetailCtrl', ['$scope', 'api', 'hotelId', function($scope, api, hotelId) {
+    .controller('hotelDetailCtrl', ['$scope', 'apiService', 'hotelId', 'alertManager',  function($scope, apiService, hotelId, alertManager) {
     	$scope.data = {};
         $scope.data.hotelId = hotelId;
-        $scope.data.hotelDetail = api.getHotelDetail(0);
-        $scope.data.onMethod = function(id) {
-            alert(id);
-        }
     }])
-    .controller('hotelCreateCtrl', ['$scope', 'apiService', function($scope, apiService) {
+    .controller('hotelCreateCtrl', ['$scope', '$state', 'apiService', 'alertManager', function($scope, $state, apiService, alertManager) {
     	$scope.data = {};
         $scope.data.createHotel = function() {
         	var hotel = {
@@ -65,6 +70,7 @@ angular.module('controller.hotel', ['services', 'ui.router'])
             	$state.go("FeastBooking.hotel.info", {hotelId: response});
             }, function(response) {
             	console.log(response);
+            	alertManager.addAlert('danger', response);
             });
         };
     }])

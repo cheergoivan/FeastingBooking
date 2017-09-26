@@ -40,7 +40,7 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 		},
 		resolve: {
 			hotelId: ['$stateParams', function($stateParams) {
-				return $stateParams.id;
+				return parseInt($stateParams.hotelId, 10);
 			}]
 		}
 	}, {

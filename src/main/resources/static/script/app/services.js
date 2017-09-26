@@ -77,11 +77,16 @@ angular.module('services', ['ui.bootstrap'])
 	function createHotel(hotel) {
 		return promiseFactory('POST', `${urlPrefix}/hotels`, null, hotel);
 	}
+	
+	function getHotelDetail(hotelId) {
+		return promiseFactory('GET', `${urlPrefix}/hotels/${hotelId}`);
+	}
 
     return {
     	signin: signin,
         getHotelList: getHotelList,
-        createHotel: createHotel
+        createHotel: createHotel,
+        getHotelDetail: getHotelDetail
     };
 }])
 .service('modals', ['$uibModal', function($uibModal) {
