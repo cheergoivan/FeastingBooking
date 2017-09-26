@@ -44,7 +44,7 @@ public class HotelController {
 	}
 	
 	@ApiOperation(notes = "管理員更新一個酒店，id为必填项", value = "")
-	@PutMapping("/{id}")
+	@PostMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public int updateHotel(@ApiParam("酒店id")@PathVariable int id, @Valid @ApiParam("酒店实体，属性包括：name, cityOfAddress, districtOfAddress,"
 			+ "streetOfAddress, description, contact, telephone, email, files(非必需)") PostHotelVO postHotelVO){

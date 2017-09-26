@@ -7,11 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class PostFeastVO {
 	private int id = -1;
-	@NotBlank(message="The name of the banquet hall can't be blank")
+	@NotBlank(message="The name of the feast can't be blank")
 	private String name;
-	@NotNull(message="The price of the banquet hall can't be blank")
+	@NotNull(message="The price of the feast can't be blank")
 	private double price;
-	@NotBlank(message="The courses the banquet hall can't be blank")
+	@NotBlank(message="The courses the feast can't be blank")
 	private String courses;
 	//@NotEmpty(message="Pictures can not be empty")
 	//@Size(min=1,message="The quantity of pictures must be at least 1")

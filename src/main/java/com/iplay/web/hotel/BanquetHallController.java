@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +36,7 @@ public class BanquetHallController {
 	}
 	
 	@ApiOperation(notes="管理员修改一个宴会厅，返回宴会厅id",value="")
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public int updateBanquetHall(@ApiParam("宴会厅id")@PathVariable int id, @ApiParam("酒店id")int hotelId, @Valid 
 			@ApiParam("宴会厅实体，属性包括： name, area, minimumTables, maximumTables, minimumPrice, height, columns(String), "
