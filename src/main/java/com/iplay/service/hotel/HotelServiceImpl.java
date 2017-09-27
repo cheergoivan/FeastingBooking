@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iplay.dao.hotel.HotelDAO;
 import com.iplay.dao.hotel.HotelRatingDAO;
+import com.iplay.dto.hotel.AddressDTO;
 import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedBanquetHallDTO;
 import com.iplay.dto.hotel.SimplifiedFeastDTO;
@@ -169,10 +170,10 @@ public class HotelServiceImpl implements HotelService {
 			pictures[i] = ResourcesUriBuilder.buildtUri(storageNamingStrategy.generateResourceName(
 					PictureNamingPrefix.HOTEL_PICTURES_PREFIX, hotel.getId(), i));
 		}
-		
+		AddressDTO address = new AddressDTO();
+		BeanUtils.copyProperties(hotel.getAddress(), address);
 		return new HotelDTO(hotel.getId(), hotel.getName(), hotel.getDescription(), 
-				hotel.getAddress().formatAsString(),
-				hotel.getContact(), hotel.getTelephone(), hotel.getEmail(),
+				address,hotel.getContact(), hotel.getTelephone(), hotel.getEmail(),
 				new int[]{hotel.getMinimumTables(), hotel.getMaximunTables()},
 				new double[]{hotel.getMinimumPrice(), hotel.getMaximumPrice()},
 				getHotelRating(hotel.getId()), banquetHalls, feasts, pictures);
@@ -181,6 +182,10 @@ public class HotelServiceImpl implements HotelService {
 	@Override
 	public double getHotelRating(int id) {
 		HotelRatingDO rating = hotelRatingDAO.findOne(id);
+		if(rating==null){
+			hotelRatingDAO.save(new HotelRatingDO(id, 0.0, 0));
+			return 5.0;
+		}
 		return rating.getTimes()==0? 5.0:rating.getTotalScore()/rating.getTimes();
 	}
 

@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,11 +36,11 @@ public class FeastController {
 	}
 	
 	@ApiOperation(notes="管理员修改一个宴席",value="")
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public int updateFeast(@ApiParam("宴席id")@PathVariable int id, @Valid 
-			@ApiParam("宴席实体，属性包括：name, price, courses(String), files(非必需)")PostFeastVO feastVO){
-		feastVO.setId(id);
+			@ApiParam("宴席实体，属性包括：name, price, courses(String，菜肴使用;连接), files")PostFeastVO feastVO){
+		feastVO.setId(-1);
 		return feastService.updateFeast(feastVO); 
 	}
 	

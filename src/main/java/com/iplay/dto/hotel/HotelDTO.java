@@ -6,7 +6,7 @@ public class HotelDTO {
 	private int id;
 	private String name;
 	private String description;
-	private String address;
+	private AddressDTO address;
 	private String contact;
 	private String telephone;
 	private String email;
@@ -17,7 +17,7 @@ public class HotelDTO {
 	private List<SimplifiedFeastDTO> feasts;
 	private String[] pictureUrls;
 	
-	public HotelDTO(int id, String name, String description, String address, String contact, String telephone,
+	public HotelDTO(int id, String name, String description, AddressDTO address, String contact, String telephone,
 			String email, int[] tableRange, double[] priceRange, double rating,
 			List<SimplifiedBanquetHallDTO> banquetHalls, List<SimplifiedFeastDTO> feasts, String[] pictureUrls) {
 		super();
@@ -59,12 +59,12 @@ public class HotelDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public String getAddress() {
+	
+	public AddressDTO getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(AddressDTO address) {
 		this.address = address;
 	}
 
