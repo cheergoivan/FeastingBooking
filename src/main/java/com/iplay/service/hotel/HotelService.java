@@ -30,4 +30,8 @@ public interface HotelService {
 	HotelDTO findHotelById(int id);
 	
 	double getHotelRating(int id);
+	
+	boolean updateHotelRating(int userId, int hotelId, double score);
+	
+	boolean hasUserRatedHotel(int userId, int hotelId);
 }

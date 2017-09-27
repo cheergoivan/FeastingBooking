@@ -65,7 +65,7 @@ public class JwtFactory {
             throw new BadCredentialsException("Invalid token!");
 		}
 		payload.setRole(Role.valueOf((String) claims.get(JwtPayload.CLAIM_KEY_ROLE)));
-		payload.setUserId(toLong(claims.get(JwtPayload.CLAIM_KEY_USERID)));
+		payload.setUserId((Integer)(claims.get(JwtPayload.CLAIM_KEY_USERID)));
 		return payload;
 	}
 	
@@ -89,10 +89,4 @@ public class JwtFactory {
 		return new Date(System.currentTimeMillis() + jwtProp.getTokenExpirationTime() * 60 * 1000);
 	}
 	
-	private long toLong(Object o){
-		if(o instanceof Long){
-			return (Long)o;
-		}
-		return ((Integer)o).longValue();
-	}
 }

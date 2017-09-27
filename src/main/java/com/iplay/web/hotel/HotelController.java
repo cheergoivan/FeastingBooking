@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iplay.configuration.security.jwtAuthentication.auth.UserContext;
 import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
@@ -104,6 +106,29 @@ public class HotelController {
 		if(id == -1)
 			throw new ResourceNotFoundException("Hotel with id:"+hotelId+" doesn't exist");
 		return id;
+	}
+	
+	@ApiOperation(notes="用户对酒店进行打分",value="")
+    @PostMapping("/{id}/rating")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
+	public boolean postRating(@ApiParam("酒店id")@PathVariable("id") int hotelId, 
+			@ApiParam("评分") double score, @AuthenticationPrincipal UserContext context){
+		return hotelService.updateHotelRating(context.getUserId(), hotelId, score);
+	}
+	
+	@ApiOperation(notes="用户获得酒店评分",value="")
+    @GetMapping("/{id}/rating")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
+	public double postRating(@ApiParam("酒店id")@PathVariable("id") int hotelId){
+		return hotelService.getHotelRating(hotelId);
+	}
+	
+	@ApiOperation(notes="判断当前用户是否能够给酒店打分",value="")
+    @GetMapping("/{id}/rateable")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
+	public boolean hasUserRatedHotel(@ApiParam("酒店id")@PathVariable("id") int hotelId,
+			@AuthenticationPrincipal UserContext context){
+		return hotelService.hasUserRatedHotel(context.getUserId(), hotelId);
 	}
 	
 }

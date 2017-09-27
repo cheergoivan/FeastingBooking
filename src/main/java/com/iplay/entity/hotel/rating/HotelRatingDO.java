@@ -1,4 +1,4 @@
-package com.iplay.entity.hotel;
+package com.iplay.entity.hotel.rating;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -3,7 +3,7 @@ package com.iplay.configuration.security.jwtAuthentication.auth;
 import com.iplay.entity.user.Role;
 
 public class UserContext {
-	private long userId;
+	private int userId;
 	
 	private String username;
 	
@@ -11,18 +11,18 @@ public class UserContext {
 	
 	public UserContext(){} 
 	
-	public UserContext(long userId, String username, Role role) {
+	public UserContext(int userId, String username, Role role) {
 		super();
 		this.userId = userId;
 		this.username = username;
 		this.role = role;
 	}
 
-	public long getUserId() {
+	public int getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 
