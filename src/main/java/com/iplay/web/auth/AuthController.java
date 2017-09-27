@@ -49,7 +49,7 @@ public class AuthController {
     @Autowired
     private AbstractMailer mailer;
 
-    @ApiOperation(notes="根据用户名（或邮箱）和密码返回一个token，以后每次请求受保护的API时添加一个header项：Authorization:Bearer token", value = "")
+    @ApiOperation(notes="根据用户名（或邮箱）和密码返回role（ADMIN，USER，MANAGER）和token，以后每次请求受保护的API时添加一个header项：Authorization:Bearer token", value = "")
     @PostMapping("/api/auth/token")
     public JwtResponseDTO createAuthenticationToken(@ApiParam("用户名密码实体对象")@Valid@RequestBody AuthenticationVO param) throws AuthenticationException{
     	String username = param.getUsername(),password=param.getPassword();
@@ -58,7 +58,7 @@ public class AuthController {
     	UserDO user = optionalUser.get();
     	UserContext context = new UserContext(user.getId(), user.getUsername(), user.getRole());
     	String token = factory.generateToken(context);
-    	return new JwtResponseDTO(token);
+    	return new JwtResponseDTO(user.getRole().toString(), token);
     }
     
     @ApiOperation(notes="根据邮箱获得一个动态密码，动态密码默认2分钟内有效。此API仅在测试时开放。", value = "")
