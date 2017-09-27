@@ -1,1 +1,22 @@
-hotel_detail
+<form class="form">
+	<div class="row">
+		<label-plain-text class="col col-md-6" model="data.hotelDetail.id"
+			label="ID"></label-plain-text>
+		<label-input-text class="col col-md-6" model="data.hotelDetail.name"
+			label="酒店名"></label-input-text>
+		<label-address class="col col-md-6"
+			city="data.hotelDetail.city" district="data.hotelDetail.district" street="data.hotelDetail.street" label="地址"></label-address>
+		<label-input-text class="col col-md-6"
+			model="data.hotelDetail.contactPerson" label="聯係人"></label-input-text>
+		<label-input-text class="col col-md-6" model="data.hotelDetail.telephone"
+			label="聯係電話"></label-input-text>
+		<label-input-text class="col col-md-6" model="data.hotelDetail.email" label="郵箱"></label-input-text>
+		<label-textarea class="col col-md-6"
+			model="data.hotelDetail.description" label="描述"></label-textarea>
+		
+	</div>
+	<div class="row btn-row">
+		<button class="btn btn-primary">保存</button>
+		<button class="btn btn-default">取消</button>
+	</div>
+</form>

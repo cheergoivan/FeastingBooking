@@ -285,10 +285,11 @@ main .content {
   height: 3px;
   background-color: #175199;
   position: absolute;
-  bottom: 0;
+  bottom: -3px;
+  left: 0;
 }
 .hotel-name-wrapper {
-  padding: 20px;
+  padding: 0 40px;
 }
 .hotel-detail-container {
   padding: 0 20px;

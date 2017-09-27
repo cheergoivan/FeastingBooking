@@ -182,3 +182,32 @@ angular.module('directives', [])
         }
 	}
 })
+.directive('labelNumberRange', function() {
+	return {
+		restrict: 'AE',
+		replace: true,
+		template: '<div class="label-number-range">'
+					+ '<label class="control-label"></label>'
+					+ '<div class="number-range-container">'
+						+ '<input type="number" ng-model="from" class="form-control">'
+						+ '<input type="number" ng-model="to" class="form-control">'
+					+ '</div>'
+				+ '</div>',
+		scope: {
+			from: '=',
+			to: '=',
+			min: '@',
+			max: '@'，
+			step: '@',
+			label: '@'
+		},
+		link: function(elem, scope) {
+			scope.min = parseFloat(scope.min) || 0;
+			scope.max = parseFloat(scope.max) || 99999999;
+			if(scope.min < scope.max) {
+				
+			}
+			scope.step = parseFloat(scope)
+		}
+	}
+})

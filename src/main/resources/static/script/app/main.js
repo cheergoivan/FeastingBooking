@@ -34,8 +34,8 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 		abstract: true,
 		views: {
 			'main@FeastBooking': {
-				templateUrl: "partialView/hotel",
-				controller: "hotelCtrl"
+				templateUrl: "partialView/hotelDetail",
+				controller: "hotelDetailCtrl"
 			}
 		},
 		resolve: {
@@ -57,10 +57,8 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 		url: "/info",
 		views: {
 			'content@FeastBooking.hotel': {
-				template: '<div>{{id}}</div>',
-				controller: ['$scope', '$stateParams', function($scope, $stateParams) {
-					$scope.id = $stateParams.hotelId;
-				}]
+				templateUrl: 'partialView/hotelDetailInfo',
+				controller: "hotelDetailInfoCtrl"
 			}
 		}
 	}];
