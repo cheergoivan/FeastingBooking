@@ -119,18 +119,7 @@ public class HotelController {
 	@ApiOperation(notes="用户获得酒店评分",value="")
     @GetMapping("/{id}/rating")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
-	public double postRating(@ApiParam("酒店id")@PathVariable("id") int hotelId){
+	public double getRating(@ApiParam("酒店id")@PathVariable("id") int hotelId){
 		return hotelService.getHotelRating(hotelId);
 	}
-	
-	/*
-	@ApiOperation(notes="判断当前用户是否能够给酒店打分",value="")
-    @GetMapping("/{id}/hasRated")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
-	public boolean hasUserRatedHotel(@ApiParam("酒店id")@PathVariable("id") int hotelId,
-			@AuthenticationPrincipal UserContext context){
-		return hotelService.hasUserRatedHotel(context.getUserId(), hotelId);
-	}
-	*/
-	
 }
