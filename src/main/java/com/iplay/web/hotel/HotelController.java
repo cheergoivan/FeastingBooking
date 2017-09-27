@@ -123,12 +123,14 @@ public class HotelController {
 		return hotelService.getHotelRating(hotelId);
 	}
 	
+	/*
 	@ApiOperation(notes="判断当前用户是否能够给酒店打分",value="")
-    @GetMapping("/{id}/rateable")
+    @GetMapping("/{id}/hasRated")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
 	public boolean hasUserRatedHotel(@ApiParam("酒店id")@PathVariable("id") int hotelId,
 			@AuthenticationPrincipal UserContext context){
 		return hotelService.hasUserRatedHotel(context.getUserId(), hotelId);
 	}
+	*/
 	
 }
