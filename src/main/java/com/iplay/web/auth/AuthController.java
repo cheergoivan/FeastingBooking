@@ -20,8 +20,9 @@ import com.iplay.component.totp.TotpAuthenticator;
 import com.iplay.configuration.mail.MailConfigurationProperties;
 import com.iplay.configuration.security.jwtAuthentication.JwtFactory;
 import com.iplay.configuration.security.jwtAuthentication.auth.UserContext;
-import com.iplay.dto.auth.JwtResponseDTO;
+import com.iplay.dto.auth.AuthResponseDTO;
 import com.iplay.dto.auth.TotpVerificationResponseDTO;
+import com.iplay.dto.auth.UserDTO;
 import com.iplay.entity.user.UserDO;
 import com.iplay.service.auth.AuthService;
 import com.iplay.vo.auth.AuthenticationVO;
@@ -49,16 +50,16 @@ public class AuthController {
     @Autowired
     private AbstractMailer mailer;
 
-    @ApiOperation(notes="根据用户名（或邮箱）和密码返回role（ADMIN，USER，MANAGER）和token，以后每次请求受保护的API时添加一个header项：Authorization:Bearer token", value = "")
+    @ApiOperation(notes="根据用户名（或邮箱）和密码返回user：id，role（ADMIN，USER，MANAGER）和token，以后每次请求受保护的API时添加一个header项：Authorization:Bearer token", value = "")
     @PostMapping("/api/auth/token")
-    public JwtResponseDTO createAuthenticationToken(@ApiParam("用户名密码实体对象")@Valid@RequestBody AuthenticationVO param) throws AuthenticationException{
+    public AuthResponseDTO createAuthenticationToken(@ApiParam("用户名密码实体对象")@Valid@RequestBody AuthenticationVO param) throws AuthenticationException{
     	String username = param.getUsername(),password=param.getPassword();
     	Optional<UserDO> optionalUser = authService.authenticate(username,password);
     	optionalUser.orElseThrow(()->new BadCredentialsException("Authentication Failed. Username or Password not valid."));
     	UserDO user = optionalUser.get();
     	UserContext context = new UserContext(user.getId(), user.getUsername(), user.getRole());
     	String token = factory.generateToken(context);
-    	return new JwtResponseDTO(user.getRole().toString(), token);
+    	return new AuthResponseDTO(new UserDTO(user.getId(), user.getRole().toString()), token);
     }
     
     @ApiOperation(notes="根据邮箱获得一个动态密码，动态密码默认2分钟内有效。此API仅在测试时开放。", value = "")
