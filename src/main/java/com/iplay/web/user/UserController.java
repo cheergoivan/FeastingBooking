@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -18,6 +19,7 @@ import com.iplay.configuration.security.jwtAuthentication.web.TokenExtractor;
 import com.iplay.dto.ApiResponse;
 import com.iplay.dto.ApiResponseMessage;
 import com.iplay.dto.auth.RegistrationResponseDTO;
+import com.iplay.dto.auth.UserDTO;
 import com.iplay.entity.user.Role;
 import com.iplay.entity.user.UserDO;
 import com.iplay.service.user.UserService;
@@ -56,6 +58,23 @@ public class UserController {
 		return ApiResponse.createSuccessApiResponse(
 				new RegistrationResponseDTO(optionalUser.get().getId(), factory.generateToken(context)));
 	}
+	
+	@ApiOperation(notes = "管理员创建新的管理员用户", value = "")
+	@PostMapping("/admin")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ApiResponse<?> createAdmin(@ApiParam("用户名密码实体对象") @Valid @RequestBody AuthenticationVO param){
+		String username = param.getUsername(), password = param.getPassword();
+		UsernamePredicate predicate = new UsernamePredicate();
+		if (!predicate.test(username))
+			return ApiResponse.createFailApiResponse(ApiResponseMessage.AUTH_USERNAME_INVALID);
+		Optional<UserDO> optionalUser = null;
+		if (userService.isUsernameOccupied(username)
+				|| !(optionalUser = userService.createAdministrator(username, password)).isPresent())
+			return ApiResponse.createFailApiResponse(ApiResponseMessage.AUTH_USERNAME_OCCUPIED);
+		UserDO createdUser = optionalUser.get();
+		return ApiResponse.createSuccessApiResponse(new UserDTO(createdUser.getId(), createdUser.getRole().toString()));
+	}
+	
 
 	private class UsernamePredicate implements Predicate<String> {
 		@Override
