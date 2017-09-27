@@ -25,7 +25,7 @@ public class HotelViewController {
 		return rootFolder + "hotel_list.html";
 	}
 	
-	@GetMapping("/partialView/hotel")
+	@GetMapping("/partialView/hotelDetail")
 	public String hotelPartialView() {
 		return rootFolder + "hotel_detail.html";
 	}
@@ -35,7 +35,7 @@ public class HotelViewController {
 		return rootFolder + "create_hotel.html";
 	}
 	
-	@GetMapping("/partialView/hotelDetail")
+	@GetMapping("/partialView/hotelDetailInfo")
 	public String hotelDetailPartialView() {
 		return rootFolder + "hotel_detail_info.html";
 	}

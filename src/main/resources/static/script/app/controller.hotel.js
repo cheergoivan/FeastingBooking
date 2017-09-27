@@ -31,7 +31,7 @@ angular.module('controller.hotel', ['services', 'ui.router'])
         	
         };
     }])
-    .controller('hotelCtrl', ['$state', '$scope', 'apiService', 'hotelId', 'alertManager', function($state, $scope, apiService, hotelId, alertManager) {
+    .controller('hotelDetailCtrl', ['$state', '$scope', 'apiService', 'hotelId', 'alertManager', function($state, $scope, apiService, hotelId, alertManager) {
     	$scope.data = {};
         function initHotelDetail() {
         	apiService.getHotelDetail(hotelId).then(function(response) {
@@ -41,7 +41,7 @@ angular.module('controller.hotel', ['services', 'ui.router'])
         	})
         }
         initHotelDetail();
-        $scope.data.state = $state.current.url;
+        $scope.data.state = $state.current.url.substring(1).toLowerCase();
     	$scope.data.goto = function(state, params) {
             var fullState = "FeastBooking.hotel." + state;
     		if(fullState.toLowerCase() !== $state.current.name.toLowerCase()) {
@@ -49,7 +49,7 @@ angular.module('controller.hotel', ['services', 'ui.router'])
             }
     	};
     }])
-    .controller('hotelDetailCtrl', ['$scope', 'apiService', 'hotelId', 'alertManager',  function($scope, apiService, hotelId, alertManager) {
+    .controller('hotelDetailInfoCtrl', ['$scope', 'apiService', 'hotelId', 'alertManager',  function($scope, apiService, hotelId, alertManager) {
     	$scope.data = {};
         $scope.data.hotelId = hotelId;
     }])

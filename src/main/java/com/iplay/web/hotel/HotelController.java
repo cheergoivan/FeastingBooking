@@ -107,5 +107,4 @@ public class HotelController {
 		return id;
 	}
 	
-	
 }
