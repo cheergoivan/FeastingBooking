@@ -142,6 +142,9 @@ public class HotelController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String[]  savePictures(@ApiParam("酒店id")@PathVariable("id") int hotelId, 
 			@ApiParam("文件名集合")@Valid PostFilesVO postFilesVO){
-		return hotelService.savePictures(hotelId, postFilesVO);
+		String[] uris = hotelService.savePictures(hotelId, postFilesVO);
+		if(uris==null)
+			throw new ResourceNotFoundException("Hotel with id:"+hotelId+" doesn't exist");
+		return uris;
 	}
 }
