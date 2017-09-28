@@ -257,6 +257,19 @@ main .content {
 .address-container input {
   margin-right: 20px;
 }
+.address-container input:last-child {
+  margin-right: 0;
+}
+.number-range-container {
+  display: flex;
+  justify-content: space-between;
+}
+.number-range-container input {
+  margin-right: 20px;
+}
+.number-range-container input:last-child {
+  margin-right: 0;
+}
 /*hotel detail*/
 .hotel-detail-menu {
   display: flex;
@@ -299,6 +312,10 @@ main .content {
 }
 .banquet-hall-container > .banquet-hall-detail {
   padding: 20px;
+}
+.banquet-hall-container > .banquet-hall-detail.no-banquet-detail {
+  text-align: center;
+  margin: 80px;
 }
 .banquet-hall-container > .banquet-hall-list {
   padding: 20px;

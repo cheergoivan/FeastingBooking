@@ -289,6 +289,19 @@ main {
     justify-content: space-between;
     input {
         margin-right: 20px;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+.number-range-container {
+    display: flex;
+    justify-content: space-between;
+    input {
+        margin-right: 20px;
+        &:last-child {
+            margin-right: 0;
+        }
     }
 }
 /*hotel detail*/
@@ -337,6 +350,10 @@ main {
     display: flex;
     >.banquet-hall-detail {
         padding: 20px;
+    }
+    >.banquet-hall-detail.no-banquet-detail {
+        text-align: center;
+        margin: 80px;
     }
     >.banquet-hall-list {
         padding: 20px;

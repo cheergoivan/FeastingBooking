@@ -1,4 +1,4 @@
-angular.module('controller.hotel', ['services', 'ui.router'])
+angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     .controller('hotelListCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'modals', function ($scope, $state, apiService, alertManager, modals) {
         function initHotelList() {
         	apiService.getHotelList().then(function(response) {
@@ -31,16 +31,9 @@ angular.module('controller.hotel', ['services', 'ui.router'])
         	
         };
     }])
-    .controller('hotelDetailCtrl', ['$state', '$scope', 'apiService', 'hotelId', 'alertManager', function($state, $scope, apiService, hotelId, alertManager) {
+    .controller('hotelDetailCtrl', ['$state', '$scope', 'apiService', 'hotelDetail', 'alertManager', function($state, $scope, apiService, hotelDetail, alertManager) {
     	$scope.data = {};
-        function initHotelDetail() {
-        	apiService.getHotelDetail(hotelId).then(function(response) {
-        		$scope.data.hotelDetail = response;
-        	}, function(response) {
-        		alertManager.alert(response);
-        	})
-        }
-        initHotelDetail();
+    	$scope.data.hotelDetail = hotelDetail;
         $scope.data.state = $state.current.url.substring(1).toLowerCase();
     	$scope.data.goto = function(state, params) {
             var fullState = "FeastBooking.hotel." + state;
@@ -49,9 +42,45 @@ angular.module('controller.hotel', ['services', 'ui.router'])
             }
     	};
     }])
-    .controller('hotelDetailInfoCtrl', ['$scope', 'apiService', 'hotelId', 'alertManager',  function($scope, apiService, hotelId, alertManager) {
+    .controller('hotelDetailInfoCtrl', ['$scope', 'apiService', 'hotelDetail', 'alertManager', 'Upload', function($scope, apiService, hotelDetail, alertManager, Upload) {
+    	$scope.data = { hotelDetail : angular.copy(hotelDetail) };
+    	function hotelDTO2hotelPO(dto) {
+    		var po = angular.copy(dto);
+    		po.cityOfAddress = dto.address.city;
+    		po.districtOfAddress = dto.address.district;
+    		po.streetOfAddress = dto.address.street;
+    		delete po.address;
+    		return po;
+    	};
+    	$scope.data.updateHotelDetail = function() {
+    		var detail = hotelDTO2hotelPO($scope.data.hotelDetail);
+    		apiService.updateHotelDetail(detail).then(function() {
+    			alertManager.addAlert("success", "成功更新酒店信息。");
+    			hotelDetail = $scope.data.hotelDetail;
+    		}, function(response) {
+    			alertManager.addAlert('danger', response);
+    		});
+    	};
+    	$scope.data.updateHotelDetailWithImages = function(images) {
+    		var detail = hotelDTO2hotelPO($scope.data.hotelDetail);
+    		detail.files = images;
+    		apiService.updateHotelDetailWithImage(detail).then(function() {
+    			alertManager.addAlert("success", "成功更新酒店信息。");
+    			hotelDetail = $scope.data.hotelDetail;
+    		}, function(response) {
+    			alertManager.addAlert('danger', response);
+    		})
+    	};
+    	$scope.data.revertChange = function() {
+    		$scope.data.hotelDetail = hotelDetail;
+    	};
+    }])
+    .controller('hotelDetailBanquetCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'hotelDetail', function($scope, $state, apiService, alertManager, hotelDetail) {
     	$scope.data = {};
-        $scope.data.hotelId = hotelId;
+    	$scope.data.hotelDetail = hotelDetail;
+    	$scope.data.addNewBanquet = function() {
+    		$state.go('FeastBooking.hotel.newBanquet', $scope.data.hotelDetail.id);
+    	};
     }])
     .controller('hotelCreateCtrl', ['$scope', '$state', 'apiService', 'alertManager', function($scope, $state, apiService, alertManager) {
     	$scope.data = {};
@@ -67,7 +96,7 @@ angular.module('controller.hotel', ['services', 'ui.router'])
         		description: $scope.data.description
         	}
             apiService.createHotel(hotel).then(function(response) {
-            	$state.go("FeastBooking.hotel.info", {hotelId: response});
+            	$state.go("FeastBooking.hotel.info", { hotelId: response});
             }, function(response) {
             	console.log(response);
             	alertManager.addAlert('danger', response);

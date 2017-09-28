@@ -39,8 +39,9 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 			}
 		},
 		resolve: {
-			hotelId: ['$stateParams', function($stateParams) {
-				return parseInt($stateParams.hotelId, 10);
+			apiService: 'apiService',
+			hotelDetail: ['$stateParams', 'apiService', function($stateParams, apiService) {
+				return apiService.getHotelDetail(parseInt($stateParams.hotelId, 10));
 			}]
 		}
 	}, {
@@ -59,6 +60,24 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 			'content@FeastBooking.hotel': {
 				templateUrl: 'partialView/hotelDetailInfo',
 				controller: "hotelDetailInfoCtrl"
+			}
+		}
+	}, {
+		name: "FeastBooking.hotel.banquet",
+		url: "/banquet",
+		views: {
+			'content@FeastBooking.hotel': {
+				templateUrl: "partialView/hotelDetailBanquet",
+				controller: "hotelDetailBanquetCtrl"
+			}
+		}
+	}, {
+		name: "FeastBooking.hotel.newBanquet",
+		url: "/newBanquet",
+		views: {
+			'content@FeastBooking.hotel': {
+				templateUrl: "",
+				controller: ""
 			}
 		}
 	}];
