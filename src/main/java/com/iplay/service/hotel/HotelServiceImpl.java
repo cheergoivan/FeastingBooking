@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.iplay.dao.hotel.HotelDAO;
-import com.iplay.dao.hotel.HotelRatingDAO;
+import com.iplay.dao.hotel.rating.HotelRatingDAO;
+import com.iplay.dao.hotel.rating.HotelRatingRecordDAO;
 import com.iplay.dto.hotel.AddressDTO;
 import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedBanquetHallDTO;
@@ -25,7 +26,8 @@ import com.iplay.entity.hotel.AddressDO;
 import com.iplay.entity.hotel.BanquetHallDO;
 import com.iplay.entity.hotel.FeastDO;
 import com.iplay.entity.hotel.HotelDO;
-import com.iplay.entity.hotel.HotelRatingDO;
+import com.iplay.entity.hotel.rating.HotelRatingDO;
+import com.iplay.entity.hotel.rating.HotelRatingRecordDO;
 import com.iplay.service.storage.StorageService;
 import com.iplay.service.storage.naming.StorageNamingStrategy;
 import com.iplay.vo.hotel.PostBanquetHallVO;
@@ -47,6 +49,9 @@ public class HotelServiceImpl implements HotelService {
 
 	@Autowired
 	private HotelRatingDAO hotelRatingDAO;
+	
+	@Autowired
+	private HotelRatingRecordDAO hotelRatingRecordDAO;
 
 	@Override
 	public List<SimplifiedHotelDTO> listHotel(int pageNumber, int pageSize) {
@@ -195,4 +200,22 @@ public class HotelServiceImpl implements HotelService {
 		return true;
 	}
 
+	@Override
+	@Transactional
+	public boolean updateHotelRating(int userId, int hotelId, double score) {
+		if(hasUserRatedHotel(userId, hotelId)){
+			return false;
+		}
+		hotelRatingRecordDAO.save(new HotelRatingRecordDO(userId, hotelId));
+		hotelRatingDAO.updateScore(score, hotelId);
+		return true;
+	}
+
+	@Override
+	public boolean hasUserRatedHotel(int userId, int hotelId) {
+		if(hotelRatingRecordDAO.findByUserIdAndHotelId(userId, hotelId)!=null){
+			return false;
+		}
+		return true;
+	}
 }

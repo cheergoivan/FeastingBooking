@@ -8,7 +8,7 @@ public class JwtPayload {
 	public static final String CLAIM_KEY_ROLE = "role";
 
 	private String subject;
-	private Long userId;
+	private int userId;
 	private Role role;
 	
 	public String getSubject() {
@@ -17,10 +17,10 @@ public class JwtPayload {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	public Long getUserId() {
+	public int getUserId() {
 		return userId;
 	}
-	public void setUserId(Long userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 	public Role getRole() {
