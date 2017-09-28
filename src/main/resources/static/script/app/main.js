@@ -39,8 +39,9 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 			}
 		},
 		resolve: {
-			hotelId: ['$stateParams', function($stateParams) {
-				return parseInt($stateParams.hotelId, 10);
+			apiService: 'apiService',
+			hotelDetail: ['$stateParams', 'apiService', function($stateParams, apiService) {
+				return apiService.getHotelDetail(parseInt($stateParams.hotelId, 10));
 			}]
 		}
 	}, {

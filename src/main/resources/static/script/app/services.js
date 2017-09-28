@@ -1,4 +1,4 @@
-angular.module('services', ['ui.bootstrap'])
+angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
 .service('constants', [function() {
 	return {
 		apiPrefix: '/api',
@@ -39,7 +39,7 @@ angular.module('services', ['ui.bootstrap'])
 		removeAlert: removeAlert
 	}
 }])
-.service('apiService', ['$http', '$q', '$window', 'constants', function($http, $q, $window, constants) {
+.service('apiService', ['$http', '$q', '$window', 'constants', 'Upload', function($http, $q, $window, constants, Upload) {
 	function promiseFactory(method, url, headers, data) {
 		var defered = $q.defer();
 		if(!method) {
@@ -65,6 +65,12 @@ angular.module('services', ['ui.bootstrap'])
 		});
 		return defered.promise;
 	}
+	function fileUploadFactory(url, data) {
+		return Upload.upload({
+			url: url,
+			data: data
+		});
+	}
 	var urlPrefix = constants.apiPrefix;
 	// account api
 	function signin(account) {
@@ -77,16 +83,24 @@ angular.module('services', ['ui.bootstrap'])
 	function createHotel(hotel) {
 		return promiseFactory('POST', `${urlPrefix}/hotels`, null, hotel);
 	}
-	
 	function getHotelDetail(hotelId) {
 		return promiseFactory('GET', `${urlPrefix}/hotels/${hotelId}`);
 	}
-
+	function updateHotelDetail(hotelDetail) {
+		var hotelId = hotelDetail.id;
+		return promiseFactory('POST', `${urlPrefix}/hotels/${hotelId}`, null, hotelDetail);
+	}
+	function updateHotelDetailWithImage(hotelDetail) {
+		var hotelId = hotelDetail.id;
+		return fileUploadFactory(`${urlPrefix}/hotels/${hotelId}`, hotelDetail);
+	}
     return {
     	signin: signin,
         getHotelList: getHotelList,
         createHotel: createHotel,
-        getHotelDetail: getHotelDetail
+        getHotelDetail: getHotelDetail,
+        updateHotelDetail: updateHotelDetail,
+        updateHotelDetailWithImage: updateHotelDetailWithImage
     };
 }])
 .service('modals', ['$uibModal', function($uibModal) {
