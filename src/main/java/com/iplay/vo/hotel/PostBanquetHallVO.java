@@ -3,7 +3,6 @@ package com.iplay.vo.hotel;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.web.multipart.MultipartFile;
 
 public class PostBanquetHallVO {
 	private int id = -1;
@@ -29,10 +28,6 @@ public class PostBanquetHallVO {
 	private String colorOfTablecloth;
 
 	private String extraInfo;
-	
-	//@NotEmpty(message="Pictures can not be empty")
-	//@Size(min=1,message="The quantity of pictures must be at least 1")
-	private MultipartFile[] files;
 	
 	public String getName() {
 		return name;
@@ -99,12 +94,6 @@ public class PostBanquetHallVO {
 	}
 	public void setExtraInfo(String extraInfo) {
 		this.extraInfo = extraInfo;
-	}
-	public MultipartFile[] getFiles() {
-		return files;
-	}
-	public void setFiles(MultipartFile[] files) {
-		this.files = files;
 	}
 	public int getId() {
 		return id;

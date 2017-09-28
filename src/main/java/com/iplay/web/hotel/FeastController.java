@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iplay.dto.hotel.FeastDTO;
 import com.iplay.service.hotel.FeastService;
+import com.iplay.vo.hotel.FileDeletionVO;
 import com.iplay.vo.hotel.PostFeastVO;
+import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.web.exception.ResourceNotFoundException;
 
 import io.swagger.annotations.ApiOperation;
@@ -35,19 +38,44 @@ public class FeastController {
 		return feast;
 	}
 	
-	@ApiOperation(notes="管理员修改一个宴席",value="")
+	@ApiOperation(notes="管理员修改一个宴席，返回宴席id",value="")
     @PostMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public int updateFeast(@ApiParam("宴席id")@PathVariable int id, @Valid 
 			@ApiParam("宴席实体，属性包括：name, price, courses(String，菜肴使用;连接), files")PostFeastVO feastVO){
-		feastVO.setId(-1);
-		return feastService.updateFeast(feastVO); 
+		feastVO.setId(id);
+		int rs = feastService.updateFeast(feastVO); 
+		if(rs == -1)
+			throw new ResourceNotFoundException("Feast with id: "+id+" doesn't exist");
+		return id;
 	}
 	
-	@ApiOperation(notes="管理员删除一个宴席",value="")
+	@ApiOperation(notes="管理员删除一个宴席，返回boolean",value="")
     @DeleteMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteFeast(@ApiParam("宴席id")@PathVariable int id){
 		return feastService.deleteFeast(id); 
+	}
+	
+	@ApiOperation(notes="管理员删除一个宴席，返回boolean",value="")
+    @DeleteMapping("/{id}/pictures")
+	@PreAuthorize("hasRole('ADMIN')")
+	public boolean[] deleteFeast(@ApiParam("宴席id")@PathVariable int id,
+			@Valid@RequestBody@ApiParam("文件名集合") FileDeletionVO fileDeletionVO){
+		boolean[] rs = feastService.deletePictures(id, fileDeletionVO);
+		if(rs == null)
+			throw new ResourceNotFoundException("Feast with id: "+id+" doesn't exist");
+		return rs; 
+	}
+	
+	@ApiOperation(notes="管理员增加宴席图片，返回所有增加的图片uri",value="")
+    @PostMapping("/{id}/pictures")
+	@PreAuthorize("hasRole('ADMIN')")
+	public String[] savePictures(@ApiParam("宴席id")@PathVariable int id,
+			@ApiParam("MultipartFile[] files")@Valid PostFilesVO postFilesVO){
+		String[] uris = feastService.addPictures(id, postFilesVO);
+		if(uris == null)
+			throw new ResourceNotFoundException("Feast with id: "+id+" doesn't exist");
+		return uris;
 	}
 }

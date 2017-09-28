@@ -3,7 +3,6 @@ package com.iplay.vo.hotel;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.web.multipart.MultipartFile;
 
 public class PostFeastVO {
 	private int id = -1;
@@ -13,9 +12,7 @@ public class PostFeastVO {
 	private double price;
 	@NotBlank(message="The courses the feast can't be blank")
 	private String courses;
-	//@NotEmpty(message="Pictures can not be empty")
-	//@Size(min=1,message="The quantity of pictures must be at least 1")
-	private MultipartFile[] files;
+
 	public int getId() {
 		return id;
 	}
@@ -39,11 +36,5 @@ public class PostFeastVO {
 	}
 	public void setCourses(String courses) {
 		this.courses = courses;
-	}
-	public MultipartFile[] getFiles() {
-		return files;
-	}
-	public void setFiles(MultipartFile[] files) {
-		this.files = files;
 	}
 }

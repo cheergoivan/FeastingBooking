@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.iplay.component.util.DelimiterUtils;
+
 @Entity
 @Table(name = "banquet_hall")
 public class BanquetHallDO {
@@ -22,13 +24,15 @@ public class BanquetHallDO {
 	private String actualArea;
 	private String colorOfTablecloth;
 	private String extraInfo;
-	private int numOfPictures;
+	private String pictures;
 	
-	public BanquetHallDO(){}
+	public BanquetHallDO(){
+		pictures = "";
+	}
 
 	public BanquetHallDO(String name, double area, int minimumTables, int maximumTables, double minimumPrice,
 			double height, String columns, String shape, String actualArea, String colorOfTablecloth, String extraInfo,
-			int numOfPictures) {
+			String pictures) {
 		super();
 		this.name = name;
 		this.area = area;
@@ -41,7 +45,7 @@ public class BanquetHallDO {
 		this.actualArea = actualArea;
 		this.colorOfTablecloth = colorOfTablecloth;
 		this.extraInfo = extraInfo;
-		this.numOfPictures = numOfPictures;
+		this.pictures = pictures;
 	}
 
 	public int getId() {
@@ -92,12 +96,16 @@ public class BanquetHallDO {
 		this.minimumPrice = minimumPrice;
 	}
 
-	public int getNumOfPictures() {
-		return numOfPictures;
+	public String getPictures() {
+		return pictures;
 	}
 
-	public void setNumOfPictures(int numOfPictures) {
-		this.numOfPictures = numOfPictures;
+	public void setPictures(String pictures) {
+		this.pictures = pictures;
+	}
+	
+	public String[] getPicturesAsArray(){
+		return pictures.split(DelimiterUtils.PICTURE_DELIMITER);
 	}
 
 	public double getHeight() {

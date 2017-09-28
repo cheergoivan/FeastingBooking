@@ -47,16 +47,19 @@ public class HotelController {
 		return hotelService.saveHotel(postHotelVO);
 	}
 	
-	@ApiOperation(notes = "管理員更新一個酒店，id为必填项", value = "")
+	@ApiOperation(notes = "管理員更新一個酒店，id为必填项，返回酒店id", value = "")
 	@PostMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public int updateHotel(@ApiParam("酒店id")@PathVariable int id, @Valid @ApiParam("酒店实体，属性包括：name, cityOfAddress, districtOfAddress,"
 			+ "streetOfAddress, description, contact, telephone, email, files(非必需)") @RequestBody PostHotelVO postHotelVO){
 		postHotelVO.setId(id);
-		return hotelService.saveHotel(postHotelVO);
+		int rs = hotelService.saveHotel(postHotelVO);
+		if(rs == -1)
+			throw new ResourceNotFoundException("Hotel with id: "+id+" doesn't exist");
+		return id;
 	}
 	
-	@ApiOperation(notes = "管理員删除一个酒店，id为必填项", value = "")
+	@ApiOperation(notes = "管理員删除一个酒店，id为必填项，返回boolean", value = "")
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteHotel(@ApiParam("酒店id")@PathVariable int id){
@@ -137,7 +140,7 @@ public class HotelController {
 		return rs;
 	}
 	
-	@ApiOperation(notes="管理员上传酒店图片",value="")
+	@ApiOperation(notes="管理员上传酒店图片，返回所有增加的图片uri",value="")
     @PostMapping("/{id}/pictures")
 	@PreAuthorize("hasRole('ADMIN')")
 	public String[]  savePictures(@ApiParam("酒店id")@PathVariable("id") int hotelId, 

@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.iplay.component.util.DelimiterUtils;
+
 @Entity
 @Table(name = "feast")
 public class FeastDO {
@@ -14,16 +16,18 @@ public class FeastDO {
 	private String name;
 	private double price;
 	private String courses;
-	private int numOfPictures;
+	private String pictures;
 	
-	public FeastDO(){}
+	public FeastDO(){
+		pictures = "";
+	}
 	
-	public FeastDO(String name, double price, String courses, int numOfPictures) {
+	public FeastDO(String name, double price, String courses, String pictures) {
 		super();
 		this.name = name;
 		this.price = price;
 		this.courses = courses;
-		this.numOfPictures = numOfPictures;
+		this.pictures = pictures;
 	}
 
 	public int getId() {
@@ -44,13 +48,18 @@ public class FeastDO {
 	public void setCourses(String courses) {
 		this.courses = courses;
 	}
-	public int getNumOfPictures() {
-		return numOfPictures;
-	}
-	public void setNumOfPictures(int numOfPictures) {
-		this.numOfPictures = numOfPictures;
+	public String getPictures() {
+		return pictures;
 	}
 
+	public void setPictures(String pictures) {
+		this.pictures = pictures;
+	}
+	
+	public String[] getPicturesAsArray(){
+		return pictures.split(DelimiterUtils.PICTURE_DELIMITER);
+	}
+	
 	public String getName() {
 		return name;
 	}

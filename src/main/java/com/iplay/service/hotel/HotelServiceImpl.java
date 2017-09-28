@@ -31,7 +31,6 @@ import com.iplay.entity.hotel.HotelDO;
 import com.iplay.entity.hotel.rating.HotelRatingDO;
 import com.iplay.entity.hotel.rating.HotelRatingRecordDO;
 import com.iplay.service.storage.StorageService;
-import com.iplay.service.storage.naming.StorageNamingStrategy;
 import com.iplay.vo.hotel.FileDeletionVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFeastVO;
@@ -44,9 +43,6 @@ public class HotelServiceImpl implements HotelService {
 
 	@Autowired
 	private StorageService storageService;
-
-	@Autowired
-	private StorageNamingStrategy storageNamingStrategy;
 
 	@Autowired
 	private HotelDAO hotelDAO;
@@ -66,15 +62,13 @@ public class HotelServiceImpl implements HotelService {
 			return new SimplifiedHotelDTO(hotelDO.getId(), hotelDO.getName(),
 					new double[] { hotelDO.getMinimumPrice(), hotelDO.getMaximumPrice() },
 					new int[] { hotelDO.getMinimumTables(), hotelDO.getMaximunTables() }, 0,
-					ResourcesUriBuilder.buildUri(storageNamingStrategy
-							.generateResourceName(PictureNamingPrefix.HOTEL_PICTURES_PREFIX, hotelDO.getId(), 0)));
+					hotelDO.getPicturesAsArray().length>0?ResourcesUriBuilder.buildUri(hotelDO.getPicturesAsArray()[0]):"");
 		}).collect(Collectors.toList());
 		return hotels;
 	}
 
 	@Override
 	public List<SimplifiedHotelAdminDTO> listHotel() {
-		// TODO Auto-generated method stub
 		Iterable<HotelDO> hotels = hotelDAO.findAll();
 		List<SimplifiedHotelAdminDTO> hotelList = new LinkedList<SimplifiedHotelAdminDTO>();
 		for(HotelDO hotel : hotels) {
@@ -92,6 +86,11 @@ public class HotelServiceImpl implements HotelService {
 		boolean isCreated = true;
 		if (hotel.getId() != -1) {
 			isCreated = false;
+			HotelDO findedHotelDO = hotelDAO.findOne(hotel.getId());
+			if(findedHotelDO == null){
+				return -1;
+			}
+			hotelDO.setPictures(findedHotelDO.getPictures());
 		}
 		HotelDO savedHotel = hotelDAO.save(hotelDO);
 		int hotelId = savedHotel.getId();
@@ -106,8 +105,6 @@ public class HotelServiceImpl implements HotelService {
 	public int addBanquetHall(PostBanquetHallVO banquetHallVO, int hotelId) {
 		BanquetHallDO banquetHallDO = new BanquetHallDO();
 		BeanUtils.copyProperties(banquetHallVO, banquetHallDO, "id");
-		MultipartFile[] pictures = banquetHallVO.getFiles();
-		banquetHallDO.setNumOfPictures(pictures.length);
 		HotelDO hotel = hotelDAO.findOne(hotelId);
 		if(hotel==null)
 			return -1;
@@ -115,10 +112,6 @@ public class HotelServiceImpl implements HotelService {
 		bhs.add(banquetHallDO);
 		hotel.setBanquetHalls(bhs);
 		hotelDAO.save(hotel);
-		for (int i = 0; i < pictures.length; i++) {
-			storageService.store(pictures[i], storageNamingStrategy
-					.generateResourceName(PictureNamingPrefix.BANQUET_HALL_PICTURES_PREFIX, hotelId, i));
-		}
 		return bhs.get(0).getId();
 	}
 
@@ -126,8 +119,6 @@ public class HotelServiceImpl implements HotelService {
 	public int addFeast(PostFeastVO feastVO, int hotelId) {
 		FeastDO feastDO = new FeastDO();
 		BeanUtils.copyProperties(feastVO, feastDO, "id");
-		MultipartFile[] pictures = feastVO.getFiles();
-		feastDO.setNumOfPictures(pictures.length);
 		HotelDO hotel = hotelDAO.findOne(hotelId);
 		if(hotel==null)
 			return -1;
@@ -135,10 +126,6 @@ public class HotelServiceImpl implements HotelService {
 		feasts.add(feastDO);
 		hotel.setFeasts(feasts);
 		hotelDAO.save(hotel);
-		for (int i = 0; i < pictures.length; i++) {
-			storageService.store(pictures[i],
-					storageNamingStrategy.generateResourceName(PictureNamingPrefix.FEAST_PICTURES_PREFIX, hotelId, i));
-		}
 		return feasts.get(0).getId();
 	}
 
@@ -155,8 +142,8 @@ public class HotelServiceImpl implements HotelService {
 				.map(banquetHallDO -> new SimplifiedBanquetHallDTO(banquetHallDO.getId(), banquetHallDO.getArea(),
 						new int[] { banquetHallDO.getMinimumTables(), banquetHallDO.getMaximumTables() },
 						banquetHallDO.getMinimumPrice(),
-						ResourcesUriBuilder.buildUri(storageNamingStrategy.generateResourceName(
-								PictureNamingPrefix.BANQUET_HALL_PICTURES_PREFIX, banquetHallDO.getId(), 0))))
+						banquetHallDO.getPicturesAsArray().length>0?
+								ResourcesUriBuilder.buildUri(banquetHallDO.getPicturesAsArray()[0]):""))
 				.collect(Collectors.toList());
 		
 		String[] pictures = ResourcesUriBuilder.buildUris(hotel.getPicturesAsArray());

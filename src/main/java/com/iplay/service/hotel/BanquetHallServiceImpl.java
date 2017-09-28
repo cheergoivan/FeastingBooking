@@ -5,12 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.iplay.component.naming.UUIDNamingStrategy;
+import com.iplay.component.util.DelimiterUtils;
 import com.iplay.dao.hotel.BanquetHallDAO;
 import com.iplay.dto.hotel.BanquetHallDTO;
 import com.iplay.entity.hotel.BanquetHallDO;
 import com.iplay.service.storage.StorageService;
-import com.iplay.service.storage.naming.StorageNamingStrategy;
+import com.iplay.vo.hotel.FileDeletionVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
+import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.web.resource.ResourcesUriBuilder;
 
 @Service
@@ -18,9 +21,6 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 	
 	@Autowired
 	private BanquetHallDAO banquetHallDAO;
-	
-	@Autowired
-	private StorageNamingStrategy storageNamingStrategy;
 	
 	@Autowired
 	private StorageService storageService;
@@ -35,12 +35,7 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 		BeanUtils.copyProperties(banquetHallDO, banquetHallDTO);
 		banquetHallDTO.setExtraInfos(banquetHallDO.getExtraInfo().split(";"));
 		banquetHallDTO.setTableRange(new int[]{banquetHallDO.getMinimumTables(), banquetHallDO.getMaximumTables()});
-		int numOfPictures = banquetHallDO.getNumOfPictures();
-		String[] pictures = new String[numOfPictures];
-		for(int i=0;i<numOfPictures;i++){
-			pictures[i] = ResourcesUriBuilder.buildUri(storageNamingStrategy.
-					generateResourceName(PictureNamingPrefix.BANQUET_HALL_PICTURES_PREFIX, id, i));
-		}
+		String[] pictures =  ResourcesUriBuilder.buildUris(banquetHallDO.getPicturesAsArray());
 		banquetHallDTO.setPictureUrls(pictures);
 		return banquetHallDTO;
 	}
@@ -55,27 +50,48 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 	public int updateBanquetHall(PostBanquetHallVO banquetHallVO) {
 		if(banquetHallVO.getId() == -1)
 			return -1;
-		MultipartFile[] pictures = banquetHallVO.getFiles();
-		if(pictures == null){
-			pictures = new MultipartFile[0];
-		}
+		BanquetHallDO findedBanquetHallDO = banquetHallDAO.findOne(banquetHallVO.getId());
+		if(findedBanquetHallDO==null)
+			return -1;
 		BanquetHallDO banquetHallDO = new BanquetHallDO();
 		BeanUtils.copyProperties(banquetHallVO, banquetHallDO);
-		banquetHallDO.setNumOfPictures(pictures.length);
-		if(banquetHallVO.getFiles() == null){
-			BanquetHallDO findedBanquetHall = banquetHallDAO.findOne(banquetHallVO.getId());
-			if(findedBanquetHall!=null){
-				banquetHallDO.setNumOfPictures(findedBanquetHall.getNumOfPictures());
-			}else{
-				return -1;
-			}
-		}
+		banquetHallDO.setPictures(findedBanquetHallDO.getPictures());
 		BanquetHallDO savedBanquet = banquetHallDAO.save(banquetHallDO);
 		int banquetHallId = savedBanquet.getId();
-		for (int i = 0; i < pictures.length; i++) {
-			storageService.store(pictures[i],
-					storageNamingStrategy.generateResourceName(PictureNamingPrefix.BANQUET_HALL_PICTURES_PREFIX, banquetHallId, i));
-		}
 		return banquetHallId;
 	}
+
+	@Override
+	public boolean[] deletePictures(int id, FileDeletionVO fileDeletionVO) {
+		BanquetHallDO findedBanquetHallDO = banquetHallDAO.findOne(id);
+		if(findedBanquetHallDO==null)
+			return null;
+		String pictures = findedBanquetHallDO.getPictures();
+		String[] files = fileDeletionVO.getNames();
+		boolean[] rs = new boolean[files.length];
+		for(int i=0;i<files.length;i++){
+			rs[i] = storageService.delete(files[i]);
+			pictures = pictures.replace(files[i]+DelimiterUtils.PICTURE_DELIMITER, "");
+		}
+		findedBanquetHallDO.setPictures(pictures);
+		banquetHallDAO.save(findedBanquetHallDO);
+		return rs;
+	}
+
+	@Override
+	public String[] savePictures(int id, PostFilesVO postFilesVO) {
+		BanquetHallDO findedBanquetHallDO = banquetHallDAO.findOne(id);
+		if(findedBanquetHallDO==null)
+			return null;
+		MultipartFile[] mfs = postFilesVO.getFiles();
+		String[] savedFilenames = new String[mfs.length];
+		for(int i=0;i<mfs.length;i++){
+			savedFilenames[i] = storageService.store(mfs[i], UUIDNamingStrategy.generateUUID());
+		}
+		String pictures = DelimiterUtils.joinArray(savedFilenames, DelimiterUtils.PICTURE_DELIMITER);
+		banquetHallDAO.addPictures(id, pictures);
+		return ResourcesUriBuilder.buildUris(savedFilenames);
+	}
+	
+	
 }
