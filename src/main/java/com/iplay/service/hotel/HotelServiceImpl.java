@@ -150,6 +150,7 @@ public class HotelServiceImpl implements HotelService {
 		List<SimplifiedFeastDTO> feasts = hotel.getFeasts().stream()
 				.map(feastDO -> new SimplifiedFeastDTO(feastDO.getId(), feastDO.getName(), feastDO.getPrice()))
 				.collect(Collectors.toList());
+		
 		List<SimplifiedBanquetHallDTO> banquetHalls = hotel.getBanquetHalls().stream()
 				.map(banquetHallDO -> new SimplifiedBanquetHallDTO(banquetHallDO.getId(), banquetHallDO.getArea(),
 						new int[] { banquetHallDO.getMinimumTables(), banquetHallDO.getMaximumTables() },
@@ -234,6 +235,5 @@ public class HotelServiceImpl implements HotelService {
 		hotelDAO.save(hotel);
 		return rs;
 	}
-	
 	
 }

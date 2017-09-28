@@ -130,7 +130,7 @@ public class HotelController {
     @DeleteMapping("/{id}/pictures")
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean[] deletePictures(@ApiParam("酒店id")@PathVariable("id") int hotelId, 
-			@Valid@RequestBody FileDeletionVO pictures){
+			@Valid@RequestBody@ApiParam("文件名集合") FileDeletionVO pictures){
 		boolean[] rs = hotelService.deletePictures(hotelId, pictures);
 		if(rs==null)
 			throw new ResourceNotFoundException("Hotel with id:"+hotelId+" doesn't exist");
@@ -141,7 +141,7 @@ public class HotelController {
     @PostMapping("/{id}/pictures")
 	@PreAuthorize("hasRole('ADMIN')")
 	public String[]  savePictures(@ApiParam("酒店id")@PathVariable("id") int hotelId, 
-			@ApiParam("文件名集合")@Valid PostFilesVO postFilesVO){
+			@ApiParam("MultipartFile[] files")@Valid PostFilesVO postFilesVO){
 		String[] uris = hotelService.savePictures(hotelId, postFilesVO);
 		if(uris==null)
 			throw new ResourceNotFoundException("Hotel with id:"+hotelId+" doesn't exist");
