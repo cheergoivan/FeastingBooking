@@ -35,15 +35,21 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public void store(MultipartFile file,String filename) {
+    public String store(MultipartFile file,String filenameWithoutSuffix) {
+    	String orignalName = file.getOriginalFilename(); String suffix = "";
         try {
             if (file.isEmpty()) {
-                throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
+                throw new StorageException("Failed to store empty file " + orignalName);
             }
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),StandardCopyOption.REPLACE_EXISTING);
+            int index = orignalName.lastIndexOf(".");
+            if(index!=-1){
+            	suffix = orignalName.substring(index).replace(";", "");
+            }
+            Files.copy(file.getInputStream(), this.rootLocation.resolve(filenameWithoutSuffix+suffix),StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
         }
+        return filenameWithoutSuffix+suffix;
     }
 
 
@@ -67,4 +73,13 @@ public class FileSystemStorageService implements StorageService {
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
         }
     }
+
+	@Override
+	public boolean delete(String filename) {
+		try {
+			return Files.deleteIfExists(this.rootLocation.resolve(filename));
+		} catch (IOException e) {
+			throw new StorageException("Failed to delete file " + filename, e);
+		}
+	}
 }

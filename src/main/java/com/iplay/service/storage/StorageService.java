@@ -6,10 +6,24 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface StorageService {
-	
-	  	void store(MultipartFile file,String filename);
-	  	
-	    Path load(String filename);
 
-	    Resource loadAsResource(String filename);
+	/**
+	 * return the filename with suffix
+	 * 
+	 * @param file
+	 * @param filenameWithoutSuffix
+	 * @return
+	 */
+	String store(MultipartFile file, String filenameWithoutSuffix);
+
+	Path load(String filename);
+
+	Resource loadAsResource(String filename);
+
+	/**
+	 * @param filename
+	 * @return {@code true} if the file was deleted by this method; {@code
+	*          false} if the file could not be deleted because it did not exist
+	 */
+	boolean delete(String filename);
 }

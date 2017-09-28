@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.iplay.component.naming.UUIDNamingStrategy;
+import com.iplay.component.util.DelimiterUtils;
 import com.iplay.dao.hotel.HotelDAO;
 import com.iplay.dao.hotel.rating.HotelRatingDAO;
 import com.iplay.dao.hotel.rating.HotelRatingRecordDAO;
@@ -30,8 +32,10 @@ import com.iplay.entity.hotel.rating.HotelRatingDO;
 import com.iplay.entity.hotel.rating.HotelRatingRecordDO;
 import com.iplay.service.storage.StorageService;
 import com.iplay.service.storage.naming.StorageNamingStrategy;
+import com.iplay.vo.hotel.FileDeletionVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFeastVO;
+import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.vo.hotel.PostHotelVO;
 import com.iplay.web.resource.ResourcesUriBuilder;
 
@@ -62,7 +66,7 @@ public class HotelServiceImpl implements HotelService {
 			return new SimplifiedHotelDTO(hotelDO.getId(), hotelDO.getName(),
 					new double[] { hotelDO.getMinimumPrice(), hotelDO.getMaximumPrice() },
 					new int[] { hotelDO.getMinimumTables(), hotelDO.getMaximunTables() }, 0,
-					ResourcesUriBuilder.buildtUri(storageNamingStrategy
+					ResourcesUriBuilder.buildUri(storageNamingStrategy
 							.generateResourceName(PictureNamingPrefix.HOTEL_PICTURES_PREFIX, hotelDO.getId(), 0)));
 		}).collect(Collectors.toList());
 		return hotels;
@@ -81,32 +85,16 @@ public class HotelServiceImpl implements HotelService {
 	
 	@Override
 	public int saveHotel(PostHotelVO hotel) {
-		MultipartFile[] pictures = hotel.getFiles();
-		if(pictures==null)
-			pictures = new MultipartFile[0];
 		AddressDO addressDO = new AddressDO(hotel.getCityOfAddress(), hotel.getDistrictOfAddress(),
 				hotel.getStreetOfAddress());
 		HotelDO hotelDO = new HotelDO(hotel.getName(), hotel.getDescription(), addressDO, hotel.getContact(),
-				hotel.getTelephone(), hotel.getEmail(), pictures.length);
+				hotel.getTelephone(), hotel.getEmail(), "");
 		boolean isCreated = true;
 		if (hotel.getId() != -1) {
 			isCreated = false;
-			if(hotel.getFiles()==null){
-				HotelDO findedHotel = hotelDAO.findOne(hotel.getId());
-				if(findedHotel != null){
-					hotelDO.setNumOfPictures(findedHotel.getNumOfPictures());
-					hotelDO.setId(hotel.getId());
-				}else{
-					return -1;
-				}
-			}
 		}
 		HotelDO savedHotel = hotelDAO.save(hotelDO);
 		int hotelId = savedHotel.getId();
-		for (int i = 0; i < pictures.length; i++) {
-			storageService.store(pictures[i],
-					storageNamingStrategy.generateResourceName(PictureNamingPrefix.HOTEL_PICTURES_PREFIX, hotelId, i));
-		}
 		if (isCreated) {
 			hotelRatingDAO.save(new HotelRatingDO(hotelId, 0.0, 0));
 		}
@@ -166,15 +154,11 @@ public class HotelServiceImpl implements HotelService {
 				.map(banquetHallDO -> new SimplifiedBanquetHallDTO(banquetHallDO.getId(), banquetHallDO.getArea(),
 						new int[] { banquetHallDO.getMinimumTables(), banquetHallDO.getMaximumTables() },
 						banquetHallDO.getMinimumPrice(),
-						ResourcesUriBuilder.buildtUri(storageNamingStrategy.generateResourceName(
+						ResourcesUriBuilder.buildUri(storageNamingStrategy.generateResourceName(
 								PictureNamingPrefix.BANQUET_HALL_PICTURES_PREFIX, banquetHallDO.getId(), 0))))
 				.collect(Collectors.toList());
 		
-		String[] pictures = new String[hotel.getNumOfPictures()];
-		for(int i=0;i<pictures.length;i++){
-			pictures[i] = ResourcesUriBuilder.buildtUri(storageNamingStrategy.generateResourceName(
-					PictureNamingPrefix.HOTEL_PICTURES_PREFIX, hotel.getId(), i));
-		}
+		String[] pictures = ResourcesUriBuilder.buildUris(hotel.getPicturesAsArray());
 		AddressDTO address = new AddressDTO();
 		BeanUtils.copyProperties(hotel.getAddress(), address);
 		return new HotelDTO(hotel.getId(), hotel.getName(), hotel.getDescription(), 
@@ -218,4 +202,38 @@ public class HotelServiceImpl implements HotelService {
 		}
 		return true;
 	}
+
+	@Override
+	public String[] savePictures(int hotelId, PostFilesVO files) {
+		HotelDO hotel = hotelDAO.findOne(hotelId);
+		if(hotel==null)
+			return null;
+		MultipartFile[] mfs = files.getFiles();
+		String[] savedFilenames = new String[mfs.length];
+		for(int i=0;i<mfs.length;i++){
+			savedFilenames[i] = storageService.store(mfs[i], UUIDNamingStrategy.generateUUID());
+		}
+		String pictures = DelimiterUtils.joinArray(savedFilenames, DelimiterUtils.PICTURE_DELIMITER);
+		hotelDAO.addPictures(hotelId, pictures);
+		return ResourcesUriBuilder.buildUris(savedFilenames);
+	}
+
+	@Override
+	public boolean[] deletePictures(int hotelId, FileDeletionVO fileDeletionVO) {
+		HotelDO hotel = hotelDAO.findOne(hotelId);
+		if(hotel==null)
+			return null;
+		String pictures = hotel.getPictures();
+		String[] files = fileDeletionVO.getNames();
+		boolean[] rs = new boolean[files.length];
+		for(int i=0;i<files.length;i++){
+			rs[i] = storageService.delete(files[i]);
+			pictures = pictures.replace(files[i]+DelimiterUtils.PICTURE_DELIMITER, "");
+		}
+		hotel.setPictures(pictures);
+		hotelDAO.save(hotel);
+		return rs;
+	}
+	
+	
 }

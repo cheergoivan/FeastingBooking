@@ -38,7 +38,7 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 		int numOfPictures = banquetHallDO.getNumOfPictures();
 		String[] pictures = new String[numOfPictures];
 		for(int i=0;i<numOfPictures;i++){
-			pictures[i] = ResourcesUriBuilder.buildtUri(storageNamingStrategy.
+			pictures[i] = ResourcesUriBuilder.buildUri(storageNamingStrategy.
 					generateResourceName(PictureNamingPrefix.BANQUET_HALL_PICTURES_PREFIX, id, i));
 		}
 		banquetHallDTO.setPictureUrls(pictures);

@@ -5,8 +5,10 @@ import java.util.List;
 import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
+import com.iplay.vo.hotel.FileDeletionVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFeastVO;
+import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.vo.hotel.PostHotelVO;
 
 public interface HotelService {
@@ -34,4 +36,8 @@ public interface HotelService {
 	boolean updateHotelRating(int userId, int hotelId, double score);
 	
 	boolean hasUserRatedHotel(int userId, int hotelId);
+	
+	String[] savePictures(int hotelId, PostFilesVO files);
+	
+	boolean[] deletePictures(int hotelId, FileDeletionVO fileDeletionVO);
 }

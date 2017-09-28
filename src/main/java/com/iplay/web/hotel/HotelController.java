@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +21,10 @@ import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
 import com.iplay.service.hotel.HotelService;
+import com.iplay.vo.hotel.FileDeletionVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFeastVO;
+import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.vo.hotel.PostHotelVO;
 import com.iplay.web.configuration.PaginationConfig;
 import com.iplay.web.exception.ResourceNotFoundException;
@@ -121,5 +124,24 @@ public class HotelController {
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
 	public double getRating(@ApiParam("酒店id")@PathVariable("id") int hotelId){
 		return hotelService.getHotelRating(hotelId);
+	}
+	
+	@ApiOperation(notes="管理员删除图片",value="")
+    @DeleteMapping("/{id}/pictures")
+	@PreAuthorize("hasRole('ADMIN')")
+	public boolean[] deletePictures(@ApiParam("酒店id")@PathVariable("id") int hotelId, 
+			@Valid@RequestBody FileDeletionVO pictures){
+		boolean[] rs = hotelService.deletePictures(hotelId, pictures);
+		if(rs==null)
+			throw new ResourceNotFoundException("Hotel with id:"+hotelId+" doesn't exist");
+		return rs;
+	}
+	
+	@ApiOperation(notes="管理员上传酒店图片",value="")
+    @PostMapping("/{id}/pictures")
+	@PreAuthorize("hasRole('ADMIN')")
+	public String[]  savePictures(@ApiParam("酒店id")@PathVariable("id") int hotelId, 
+			@ApiParam("文件名集合")@Valid PostFilesVO postFilesVO){
+		return hotelService.savePictures(hotelId, postFilesVO);
 	}
 }

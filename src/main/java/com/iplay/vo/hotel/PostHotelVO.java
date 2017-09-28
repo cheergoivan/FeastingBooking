@@ -1,7 +1,6 @@
 package com.iplay.vo.hotel;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.web.multipart.MultipartFile;
 
 public class PostHotelVO {
 	private int id = -1;
@@ -21,10 +20,6 @@ public class PostHotelVO {
 	private String telephone;
 	@NotBlank(message="hotel email can't be blank")
 	private String email;
-	
-	//@NotEmpty(message="Photos can not be empty")
-	//@Size(min=1,max=9,message="The quantity of photos must be in the range of 1 and 9")
-	private MultipartFile[] files;
 	
 	public String getName() {
 		return name;
@@ -73,12 +68,6 @@ public class PostHotelVO {
 	}
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	public MultipartFile[] getFiles() {
-		return files;
-	}
-	public void setFiles(MultipartFile[] files) {
-		this.files = files;
 	}
 	public int getId() {
 		return id;

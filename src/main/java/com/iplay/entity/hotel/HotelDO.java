@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.iplay.component.util.DelimiterUtils;
+
 @Entity
 @Table(name = "hotel")
 public class HotelDO {
@@ -26,7 +28,7 @@ public class HotelDO {
 	private String contact;
 	private String telephone;
 	private String email;
-	private int numOfPictures;
+	private String pictures;
 	private int minimumTables;
 	private int maximunTables;
 	private double minimumPrice;
@@ -41,7 +43,7 @@ public class HotelDO {
 	
 	public HotelDO() {}
 
-	public HotelDO(String name, String description, AddressDO address, String contact, String telephone, String email, int numOfPictures) {
+	public HotelDO(String name, String description, AddressDO address, String contact, String telephone, String email, String pictures) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -49,7 +51,7 @@ public class HotelDO {
 		this.contact = contact;
 		this.telephone = telephone;
 		this.email = email;
-		this.numOfPictures = numOfPictures;
+		this.pictures = pictures;
 		this.banquetHalls = new ArrayList<>();
 		this.feasts = new ArrayList<>();
 	}
@@ -110,12 +112,16 @@ public class HotelDO {
 		this.email = email;
 	}
 
-	public int getNumOfPictures() {
-		return numOfPictures;
+	public String getPictures() {
+		return pictures;
 	}
 
-	public void setNumOfPictures(int numOfPictures) {
-		this.numOfPictures = numOfPictures;
+	public void setPictures(String pictures) {
+		this.pictures = pictures;
+	}
+	
+	public String[] getPicturesAsArray(){
+		return pictures.split(DelimiterUtils.PICTURE_DELIMITER);
 	}
 
 	public List<BanquetHallDO> getBanquetHalls() {
@@ -157,7 +163,6 @@ public class HotelDO {
 	public void setMaximumPrice(double maximumPrice) {
 		this.maximumPrice = maximumPrice;
 	}
-
 
 	public List<FeastDO> getFeasts() {
 		return feasts;

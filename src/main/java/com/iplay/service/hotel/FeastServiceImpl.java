@@ -32,7 +32,7 @@ public class FeastServiceImpl implements FeastService{
 		int numOfPictures = feastDO.getNumOfPictures();
 		String[] pictures = new String[numOfPictures];
 		for(int i=0;i<numOfPictures;i++){
-			pictures[i] = ResourcesUriBuilder.buildtUri(storageNamingStrategy.
+			pictures[i] = ResourcesUriBuilder.buildUri(storageNamingStrategy.
 					generateResourceName(PictureNamingPrefix.FEAST_PICTURES_PREFIX, id, i));
 		}
 		return new FeastDTO(id, feastDO.getName(), feastDO.getPrice(), feastDO.getCourses().split(";"), pictures);

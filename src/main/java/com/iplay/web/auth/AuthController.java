@@ -25,6 +25,7 @@ import com.iplay.dto.auth.TotpVerificationResponseDTO;
 import com.iplay.dto.auth.UserDTO;
 import com.iplay.entity.user.UserDO;
 import com.iplay.service.auth.AuthService;
+import com.iplay.service.user.UserService;
 import com.iplay.vo.auth.AuthenticationVO;
 import com.iplay.vo.auth.TotpVerificationRequestVO;
 
@@ -37,6 +38,9 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+    
+    @Autowired
+    private UserService userService;
     
     @Autowired
     private JwtFactory factory;
@@ -69,13 +73,17 @@ public class AuthController {
     	return totp;
     }
     
-    @ApiOperation(notes="请求获得验证码， 此操作会向指定邮箱发送验证码", value = "")
+    @ApiOperation(notes="请求获得验证码， 此操作会向指定邮箱发送验证码。如果邮箱已注册，返回false", value = "")
     @GetMapping("/api/auth/applyForRegistrationEmail") 
-    public void createTOTPAndSendEmail(@ApiParam("邮箱地址")@RequestParam String email){
+    public boolean createTOTPAndSendEmail(@ApiParam("邮箱地址")@RequestParam String email){
+    	if(userService.isEmailOccupied(email)){
+    		return false;
+    	}
     	String totp = authenticator.generateTotpUsingBase64Decoder(email);
     	mailer.sendMail(mailConfigurationProperties.getSender(), email, mailConfigurationProperties.registrationEmail.getSubject()
     			,mailConfigurationProperties.registrationEmail.getContent()
     			.replace("{totp}", totp));
+    	return true;
     }
     
     @ApiOperation(notes="针对用户输入的动态密码进行校验,动态密码默认2分钟内有效", value = "")
