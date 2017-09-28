@@ -62,6 +62,24 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 				controller: "hotelDetailInfoCtrl"
 			}
 		}
+	}, {
+		name: "FeastBooking.hotel.banquet",
+		url: "/banquet",
+		views: {
+			'content@FeastBooking.hotel': {
+				templateUrl: "partialView/hotelDetailBanquet",
+				controller: "hotelDetailBanquetCtrl"
+			}
+		}
+	}, {
+		name: "FeastBooking.hotel.newBanquet",
+		url: "/newBanquet",
+		views: {
+			'content@FeastBooking.hotel': {
+				templateUrl: "",
+				controller: ""
+			}
+		}
 	}];
 	states.forEach(function(state) {
 		$stateProvider.state(state);

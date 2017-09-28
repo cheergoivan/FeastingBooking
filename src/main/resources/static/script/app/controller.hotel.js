@@ -51,7 +51,7 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     		po.streetOfAddress = dto.address.street;
     		delete po.address;
     		return po;
-    	}
+    	};
     	$scope.data.updateHotelDetail = function() {
     		var detail = hotelDTO2hotelPO($scope.data.hotelDetail);
     		apiService.updateHotelDetail(detail).then(function() {
@@ -60,7 +60,7 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     		}, function(response) {
     			alertManager.addAlert('danger', response);
     		});
-    	}
+    	};
     	$scope.data.updateHotelDetailWithImages = function(images) {
     		var detail = hotelDTO2hotelPO($scope.data.hotelDetail);
     		detail.files = images;
@@ -70,10 +70,17 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     		}, function(response) {
     			alertManager.addAlert('danger', response);
     		})
-    	}
+    	};
     	$scope.data.revertChange = function() {
     		$scope.data.hotelDetail = hotelDetail;
-    	}
+    	};
+    }])
+    .controller('hotelDetailBanquetCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'hotelDetail', function($scope, $state, apiService, alertManager, hotelDetail) {
+    	$scope.data = {};
+    	$scope.data.hotelDetail = hotelDetail;
+    	$scope.data.addNewBanquet = function() {
+    		$state.go('FeastBooking.hotel.newBanquet', $scope.data.hotelDetail.id);
+    	};
     }])
     .controller('hotelCreateCtrl', ['$scope', '$state', 'apiService', 'alertManager', function($scope, $state, apiService, alertManager) {
     	$scope.data = {};

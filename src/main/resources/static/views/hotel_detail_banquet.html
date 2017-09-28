@@ -1,0 +1,72 @@
+<div class="banquet-hall-container">
+	<div class="banquet-hall-list">
+		<div>
+			<h3>宴會廳列表</h3>
+		</div>
+		<ul>
+			<li ng-repeat="hall in data.hotelDetail.banquetHalls">
+				<div class="banquet-hall-item-wrapper"
+					ng-class="{'active': hall.id === data.activeHall.id}">
+					<div ng-click="data.onMethod('active')">{{hall.name}}</div>
+					<div class="remove-banquet-wrapper"
+						ng-click="data.onMethod('remove')" title="刪除該宴會廳">&times;</div>
+				</div>
+			</li>
+			<li>
+				<div class="banquet-hall-item-wrapper"
+					ng-click="data.addNewBanquet()">
+					<div>添加新宴會廳</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="banquet-hall-detail" ng-hide="!data.activeHall">
+		<div>
+			<h2>宴會廳詳情</h2>
+		</div>
+		<div>
+			<div>
+				<h3>基本信息</h3>
+			</div>
+			<form>
+				<div class="row">
+					<label-input-text class="col col-md-6" model="data.activeHall.area"
+						label="場地面積"></label-input-text>
+					<label-input-text class="col col-md-6"
+						model="data.activeHall.height" label="場地高度"></label-input-text>
+					<label-checkbox class="col col-md-6" model="data.activeHall.pillar"
+						label="有無立柱"></label-checkbox>
+					<label-input-text class="col col-md-6"
+						model="data.activeHall.shape" label="大廳形狀"></label-input-text>
+					<label-input-text class="col col-md-6"
+						model="data.activeHall.welcomeArea" label="迎賓區域"></label-input-text>
+					<label-input-text class="col col-md-6"
+						model="data.activeHall.shape" label="桌布顔色"></label-input-text>
+					<label-input-text class="col col-md-6"
+						model="data.activeHall.tableCount" label="可訂桌數"></label-input-text>
+					<label-input-text class="col col-md-6"
+						model="data.activeHall.price" label="最低消費"></label-input-text>
+				</div>
+			</form>
+			<div class="row btn-row">
+				<button class="btn btn-primary">保存</button>
+				<button class="btn btn-default">取消</button>
+			</div>
+		</div>
+		<div>
+			<div>
+				<h3>圖片信息</h3>
+			</div>
+			<image-list images="data.activeHall.images"></image-list>
+		</div>
+		<div class="菜單信息">
+			<div>
+				<h3>菜單信息</h3>
+			</div>
+
+		</div>
+	</div>
+	<div class="banquet-hall-detail no-banquet-detail" ng-show="!data.activeHall">
+		<span>沒有宴會廳信息</span>
+	</div>
+</div>

@@ -16,7 +16,12 @@ public class HotelViewController {
 	}
 	
 	@GetMapping("/FeastBooking/hotel/*/info")
-	public String hotelInfoPartialView() {
+	public String hotelInfoView() {
+		return rootFolder + "index.html";
+	}
+	
+	@GetMapping("/FeastBooking/hotel/*/banquet")
+	public String hotelBanquetView() {
 		return rootFolder + "index.html";
 	}
 	
@@ -38,6 +43,11 @@ public class HotelViewController {
 	@GetMapping("/partialView/hotelDetailInfo")
 	public String hotelDetailPartialView() {
 		return rootFolder + "hotel_detail_info.html";
+	}
+	
+	@GetMapping("partialView/hotelDetailBanquet")
+	public String hotelDetailBanquetView() {
+		return rootFolder + "hotel_detail_banquet.html";
 	}
 
 }
