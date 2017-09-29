@@ -3,7 +3,7 @@
 		<div class="table-control">
 			<div class="btn-group" role="group">
 				<button class="btn btn-default" type="button" ng-click="data.addHotel()">添加酒店</button>
-				<button class="btn btn-default" type="button">刪除酒店</button>
+				<button class="btn btn-default" type="button" ng-click="data.deleteHotels()">刪除酒店</button>
 			</div>
 			<div class="search-control">
 				<input type="text" class="form-control" ng-model="data.search"
@@ -29,7 +29,7 @@
 						ng-click="data.enterHotelDetail(hotel.id)">
 						<td><nice-checkbox nice-model="hotel.$$selected"></nice-checkbox></td>
 						<td>{{::hotel.id}}</td>
-						<td><a href="#">{{::hotel.name}}</a></td>
+						<td><a ng-click="data.goDetail(hotel.id)">{{::hotel.name}}</a></td>
 						<td>{{::hotel.contact}}</td>
 						<td>{{::hotel.telephone}}</td>
 						<td>{{::hotel.email}}</td>

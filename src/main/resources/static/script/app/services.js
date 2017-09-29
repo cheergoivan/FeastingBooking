@@ -90,9 +90,11 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
 		var hotelId = hotelDetail.id;
 		return promiseFactory('POST', `${urlPrefix}/hotels/${hotelId}`, null, hotelDetail);
 	}
-	function updateHotelDetailWithImage(hotelDetail) {
-		var hotelId = hotelDetail.id;
-		return fileUploadFactory(`${urlPrefix}/hotels/${hotelId}`, hotelDetail);
+	function addHotelImages(hotelId, images) {
+		return fileUploadFactory(`${urlPrefix}/hotels/${hotelId}/pictrues`, images);
+	}
+	function deleteHotels(id) {
+		
 	}
     return {
     	signin: signin,
@@ -100,7 +102,8 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
         createHotel: createHotel,
         getHotelDetail: getHotelDetail,
         updateHotelDetail: updateHotelDetail,
-        updateHotelDetailWithImage: updateHotelDetailWithImage
+        addHotelImages: addHotelImages,
+        deleteHotels: deleteHotels
     };
 }])
 .service('modals', ['$uibModal', function($uibModal) {
