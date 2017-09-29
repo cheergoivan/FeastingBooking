@@ -17,6 +17,9 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
         $scope.data.changePage = function() {
             $scope.data.startIndex = ($scope.data.page - 1) * $scope.data.countPerPage;
         };
+        $scope.data.goDetail = function(id) {
+        	$state.go('FeastBooking.hotel.info', { hotelId: id });
+        };
         $scope.$watch(function() {
             return $scope.data.chooseAll;
         }, function(newVal) {
@@ -27,8 +30,20 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
         $scope.data.addHotel = function() {
         	$state.go('FeastBooking.newHotel');
         };
-        $scope.data.removeHotel = function() {
-        	
+        $scope.data.deleteHotels = function(ids) {
+        	var ids = $scope.data.hotelList.filter(function(hotel) {
+        		return hotel.$$selected;
+        	}).map(function(selected) {
+        		return selected.id;
+        	});
+        	apiService.deleteHotels(ids).then(function() {
+        		alertManager.addAlert("success", "成功刪除酒店");
+        		$scope.data.hotelList = $scope.data.hotelList.filter(function() {
+        			return !hotel.$$selected;
+        		});
+        	}, function(response) {
+        		alertManager.addAlert("error", response);
+        	})
         };
     }])
     .controller('hotelDetailCtrl', ['$state', '$scope', 'apiService', 'hotelDetail', 'alertManager', function($state, $scope, apiService, hotelDetail, alertManager) {
@@ -61,15 +76,8 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     			alertManager.addAlert('danger', response);
     		});
     	};
-    	$scope.data.updateHotelDetailWithImages = function(images) {
-    		var detail = hotelDTO2hotelPO($scope.data.hotelDetail);
-    		detail.files = images;
-    		apiService.updateHotelDetailWithImage(detail).then(function() {
-    			alertManager.addAlert("success", "成功更新酒店信息。");
-    			hotelDetail = $scope.data.hotelDetail;
-    		}, function(response) {
-    			alertManager.addAlert('danger', response);
-    		})
+    	$scope.data.addHotelImage = function() {
+    		
     	};
     	$scope.data.revertChange = function() {
     		$scope.data.hotelDetail = hotelDetail;
