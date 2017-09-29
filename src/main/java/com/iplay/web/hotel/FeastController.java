@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.iplay.dto.hotel.FeastDTO;
 import com.iplay.service.hotel.FeastService;
+import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.common.FileDeletionVO;
 import com.iplay.vo.hotel.PostFeastVO;
 import com.iplay.vo.hotel.PostFilesVO;
@@ -56,6 +57,13 @@ public class FeastController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteFeast(@ApiParam("宴席id")@PathVariable int id){
 		return feastService.deleteFeast(id); 
+	}
+	
+	@ApiOperation(notes = "管理員批量删除宴席，返回boolean", value = "")
+	@DeleteMapping
+	@PreAuthorize("hasRole('ADMIN')")
+	public boolean deleteFeasts(@Valid@RequestBody@ApiParam("宴席id集合") EntityDeletionVO entityDeletionVO){
+		return feastService.delteFeasts(entityDeletionVO);
 	}
 	
 	@ApiOperation(notes="管理员删除一个宴席，返回boolean",value="")

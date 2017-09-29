@@ -1,5 +1,8 @@
 package com.iplay.service.hotel;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +13,7 @@ import com.iplay.dao.hotel.FeastDAO;
 import com.iplay.dto.hotel.FeastDTO;
 import com.iplay.entity.hotel.FeastDO;
 import com.iplay.service.storage.StorageService;
+import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.common.FileDeletionVO;
 import com.iplay.vo.hotel.PostFeastVO;
 import com.iplay.vo.hotel.PostFilesVO;
@@ -83,5 +87,15 @@ public class FeastServiceImpl implements FeastService{
 		findedFeastDO.setPictures(pictures);
 		feastDAO.save(findedFeastDO);
 		return rs;
+	}
+
+	@Override
+	public boolean delteFeasts(EntityDeletionVO entityDeletionVO) {
+		List<FeastDO> feasts = new LinkedList<>();
+		feastDAO.findAll(entityDeletionVO.getIds()).forEach(f->{
+			feasts.add(f);
+		});
+		feastDAO.delete(feasts);
+		return true;
 	}
 }

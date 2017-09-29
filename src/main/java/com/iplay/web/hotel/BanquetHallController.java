@@ -65,7 +65,7 @@ public class BanquetHallController {
 	@ApiOperation(notes = "管理員批量删除宴会厅，返回boolean", value = "")
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public boolean deleteHotel(@Valid@RequestBody@ApiParam("宴会厅id集合") EntityDeletionVO entityDeletionVO){
+	public boolean deletebanquetHalls(@Valid@RequestBody@ApiParam("宴会厅id集合") EntityDeletionVO entityDeletionVO){
 		return banquetHallService.deleteBanquetHalls(entityDeletionVO);
 	}
 	
