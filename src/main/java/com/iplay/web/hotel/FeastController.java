@@ -42,7 +42,7 @@ public class FeastController {
     @PostMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public int updateFeast(@ApiParam("宴席id")@PathVariable int id, @Valid 
-			@ApiParam("宴席实体，属性包括：name, price, courses(String，菜肴使用;连接), files")PostFeastVO feastVO){
+			@ApiParam("宴席实体，属性包括：name, price, courses(String，菜肴使用;连接), files")@RequestBody PostFeastVO feastVO){
 		feastVO.setId(id);
 		int rs = feastService.updateFeast(feastVO); 
 		if(rs == -1)

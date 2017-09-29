@@ -81,6 +81,7 @@ public class HotelServiceImpl implements HotelService {
 	public int saveHotel(PostHotelVO hotel) {
 		AddressDO addressDO = new AddressDO(hotel.getCityOfAddress(), hotel.getDistrictOfAddress(),
 				hotel.getStreetOfAddress());
+		
 		HotelDO hotelDO = new HotelDO(hotel.getName(), hotel.getDescription(), addressDO, hotel.getContact(),
 				hotel.getTelephone(), hotel.getEmail(), "");
 		boolean isCreated = true;
@@ -90,6 +91,8 @@ public class HotelServiceImpl implements HotelService {
 			if(findedHotelDO == null){
 				return -1;
 			}
+			addressDO.setId(findedHotelDO.getAddress().getId());
+			hotelDO.setId(hotel.getId());
 			hotelDO.setPictures(findedHotelDO.getPictures());
 		}
 		HotelDO savedHotel = hotelDAO.save(hotelDO);

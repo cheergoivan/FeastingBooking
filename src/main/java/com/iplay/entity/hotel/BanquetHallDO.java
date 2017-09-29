@@ -105,6 +105,8 @@ public class BanquetHallDO {
 	}
 	
 	public String[] getPicturesAsArray(){
+		if(pictures.equals(""))
+			return new String[0];
 		return pictures.split(DelimiterUtils.PICTURE_DELIMITER);
 	}
 

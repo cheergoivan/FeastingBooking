@@ -43,7 +43,7 @@ public class BanquetHallController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public int updateBanquetHall(@ApiParam("宴会厅id")@PathVariable int id, @ApiParam("酒店id")int hotelId, @Valid 
 			@ApiParam("宴会厅实体，属性包括： name, area, minimumTables, maximumTables, minimumPrice, height, columns(String), "
-					+ "shape(String), actualArea(String), colorOfTablecloth, extraInfo(String), files(非必需)")
+					+ "shape(String), actualArea(String), colorOfTablecloth, extraInfo(String)")@RequestBody
 	PostBanquetHallVO banquetHallVO){
 		banquetHallVO.setId(id);
 		int rs = banquetHallService.updateBanquetHall(banquetHallVO);
