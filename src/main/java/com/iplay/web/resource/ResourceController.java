@@ -25,7 +25,6 @@ public class ResourceController {
 
 	@ApiOperation(notes = "根据资源名称获得对应的文件资源", value = "")
 	@GetMapping("/{filename:.+}")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 		Resource file = storageService.loadAsResource(filename);
 		return ResponseEntity.ok()

@@ -50,16 +50,16 @@ angular.module('directives', [])
                         + '<div class="image-container">'
                             + '<div class="image-container-content">'
                                 + '<div class="image-container-control">'
-                                    + '<div class="image-zoom" ng-click="onZoom({id: image.id})" title="放大圖片"><span class="glyphicon glyphicon-zoom-in"></span></div>'
-                                    + '<div class="image-remove" ng-click="onRemove({id: image.id})" title="刪除圖片"><span class="glyphicon glyphicon-trash"></span></div>'
+                                    + '<div class="image-zoom" ng-click="onZoom({url: image})" title="放大圖片"><span class="glyphicon glyphicon-zoom-in"></span></div>'
+                                    + '<div class="image-remove" ng-click="onRemove({url: image})" title="刪除圖片"><span class="glyphicon glyphicon-trash"></span></div>'
                                 + '</div>'
-                                + '<img ng-src="{{image.url}}">'
+                                + '<img ng-src="{{image}}">'
                             + '</div>'
                         +'</div>'
                     + '</div>'
                     + '<div class="image-container-wrapper">'
                         + '<div class="image-container">'
-                            + '<div class="image-container-content" ng-click="onAdd()" title="添加圖片">' 
+                            + '<div class="image-container-content" title="添加圖片" ngf-select ngf-multiple="true" ngf-change="onAdd({files: $files})">' 
                                 + '<div class="image-plus-wrapper"><span class="glyphicon glyphicon-plus"></span></div>'
                             + '</div>'
                         + '</div>'
@@ -70,6 +70,11 @@ angular.module('directives', [])
             onRemove: '&',
             onZoom: '&',
             onAdd: '&'
+        },
+        link: function(elem, scope) {
+        	scope.onchange = function(files) {
+        		alert(files.length);
+        	}
         }
     }
 })

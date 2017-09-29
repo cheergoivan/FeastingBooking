@@ -49,7 +49,11 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     .controller('hotelDetailCtrl', ['$state', '$scope', 'apiService', 'hotelDetail', 'alertManager', function($state, $scope, apiService, hotelDetail, alertManager) {
     	$scope.data = {};
     	$scope.data.hotelDetail = hotelDetail;
-        $scope.data.state = $state.current.url.substring(1).toLowerCase();
+    	$scope.$watch(function() {
+    		return $state.current.url;
+    	}, function(newVal) {
+    		$scope.data.state = newVal.substring(1).toLowerCase();
+    	});
     	$scope.data.goto = function(state, params) {
             var fullState = "FeastBooking.hotel." + state;
     		if(fullState.toLowerCase() !== $state.current.name.toLowerCase()) {
@@ -76,8 +80,22 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     			alertManager.addAlert('danger', response);
     		});
     	};
-    	$scope.data.addHotelImage = function() {
-    		
+    	$scope.data.addHotelImage = function(files) {
+    		if(files && files.length) {
+    			apiService.addHotelImages(hotelDetail.id, { files: files}).then(function(response) {
+    				alertManager.addAlert('success', '成功添加圖片。');
+    				var urls = response.data;
+    				if(urls && urls.length) {
+    					hotelDetail.pictureUrls = urls;
+    					$scope.data.hotelDetail.pictureUrls.push(urls);
+    				}
+    			}, function(response) {
+    				alertManager.addAlert('danger', response);
+    			});
+    		}
+    	};
+    	$scope.data.deleteImage = function(url) {
+    		apiService.deleteHotelImage(url)
     	};
     	$scope.data.revertChange = function() {
     		$scope.data.hotelDetail = hotelDetail;
@@ -110,4 +128,8 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
             	alertManager.addAlert('danger', response);
             });
         };
+    }])
+    .controller('banquetCreateCtrl', ['$scope', '$state', 'apiService', 'alertManager', function($scope, $state, apiService, alertManager) {
+    	$scope.data = {};
+    	
     }])

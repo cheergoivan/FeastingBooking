@@ -76,7 +76,7 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 		url: "/newBanquet",
 		views: {
 			'content@FeastBooking.hotel': {
-				templateUrl: "",
+				templateUrl: "partialView/hotelNewBanquet",
 				controller: ""
 			}
 		}

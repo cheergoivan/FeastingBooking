@@ -66,7 +66,14 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
 		return defered.promise;
 	}
 	function fileUploadFactory(url, data) {
+		var token = $window.localStorage[constants.authTokenName];
+		if(!token)
+			alert("No token.");
+		var headers = {
+			"Authorization": token
+		};
 		return Upload.upload({
+			headers: headers,
 			url: url,
 			data: data
 		});
@@ -88,10 +95,14 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
 	}
 	function updateHotelDetail(hotelDetail) {
 		var hotelId = hotelDetail.id;
-		return promiseFactory('POST', `${urlPrefix}/hotels/${hotelId}`, null, hotelDetail);
+		return promiseFactory('PUT', `${urlPrefix}/hotels/${hotelId}`, null, hotelDetail);
 	}
 	function addHotelImages(hotelId, images) {
-		return fileUploadFactory(`${urlPrefix}/hotels/${hotelId}/pictrues`, images);
+		return fileUploadFactory(`${urlPrefix}/hotels/${hotelId}/pictures`, images);
+	}
+	function deleteHotelImage(hotelId, url) {
+		var urls = [url];
+		return promiseFactory(`${urlPrefix}/hotels/${hotelId}/`);
 	}
 	function deleteHotels(id) {
 		
@@ -103,6 +114,7 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
         getHotelDetail: getHotelDetail,
         updateHotelDetail: updateHotelDetail,
         addHotelImages: addHotelImages,
+        deleteHotelImage: deleteHotelImage,
         deleteHotels: deleteHotels
     };
 }])
