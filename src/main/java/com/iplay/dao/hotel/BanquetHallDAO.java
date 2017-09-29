@@ -13,4 +13,11 @@ public interface BanquetHallDAO extends CrudRepository<BanquetHallDO, Integer>{
 	@Modifying
 	@Query("update BanquetHallDO h set h.pictures = concat(h.pictures ,?2) where h.id = ?1")
 	int addPictures(int id, String pictures);
+	
+	/*
+	@Transactional
+	@Modifying
+	@Query("update BanquetHallDO h set h.deleted = ?2 where h.id = ?1")
+	int updateDeleted(int id, boolean deleted);
+	*/
 }

@@ -1,5 +1,8 @@
 package com.iplay.service.hotel;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +14,8 @@ import com.iplay.dao.hotel.BanquetHallDAO;
 import com.iplay.dto.hotel.BanquetHallDTO;
 import com.iplay.entity.hotel.BanquetHallDO;
 import com.iplay.service.storage.StorageService;
-import com.iplay.vo.hotel.FileDeletionVO;
+import com.iplay.vo.common.EntityDeletionVO;
+import com.iplay.vo.common.FileDeletionVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.web.resource.ResourcesUriBuilder;
@@ -45,6 +49,8 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 		banquetHallDAO.delete(id);
 		return true;
 	}
+	
+	
 
 	@Override
 	public int updateBanquetHall(PostBanquetHallVO banquetHallVO) {
@@ -91,6 +97,16 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 		String pictures = DelimiterUtils.joinArray(savedFilenames, DelimiterUtils.PICTURE_DELIMITER);
 		banquetHallDAO.addPictures(id, pictures);
 		return ResourcesUriBuilder.buildUris(savedFilenames);
+	}
+
+	@Override
+	public boolean deleteBanquetHalls(EntityDeletionVO entityDeletionVO) {
+		List<BanquetHallDO> bhs = new LinkedList<>();
+		banquetHallDAO.findAll(entityDeletionVO.getIds()).forEach(bh->{
+			bhs.add(bh);
+		});
+		banquetHallDAO.delete(bhs);
+		return true;
 	}
 	
 	

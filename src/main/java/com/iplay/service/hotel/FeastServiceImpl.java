@@ -10,7 +10,7 @@ import com.iplay.dao.hotel.FeastDAO;
 import com.iplay.dto.hotel.FeastDTO;
 import com.iplay.entity.hotel.FeastDO;
 import com.iplay.service.storage.StorageService;
-import com.iplay.vo.hotel.FileDeletionVO;
+import com.iplay.vo.common.FileDeletionVO;
 import com.iplay.vo.hotel.PostFeastVO;
 import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.web.resource.ResourcesUriBuilder;

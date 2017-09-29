@@ -13,4 +13,11 @@ public interface FeastDAO extends CrudRepository<FeastDO, Integer>{
 	@Modifying
 	@Query("update FeastDO h set h.pictures = concat(h.pictures ,?2) where h.id = ?1")
 	int addPictures(int id, String pictures);
+	
+	/*
+	@Transactional
+	@Modifying
+	@Query("update FeastDO h set h.deleted = ?2 where h.id = ?1")
+	int updateDeleted(int id, boolean deleted);
+	*/
 }

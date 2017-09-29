@@ -1,7 +1,8 @@
 package com.iplay.service.hotel;
 
 import com.iplay.dto.hotel.BanquetHallDTO;
-import com.iplay.vo.hotel.FileDeletionVO;
+import com.iplay.vo.common.EntityDeletionVO;
+import com.iplay.vo.common.FileDeletionVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFilesVO;
 
@@ -16,5 +17,7 @@ public interface BanquetHallService {
 	boolean[] deletePictures(int id, FileDeletionVO fileDeletionVO);
 	
 	String[] savePictures(int id, PostFilesVO postFilesVO);
+	
+	boolean deleteBanquetHalls(EntityDeletionVO entityDeletionVO);
 	
 }

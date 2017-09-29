@@ -3,6 +3,8 @@ package com.iplay.entity.hotel;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.iplay.component.util.DelimiterUtils;
@@ -24,12 +26,18 @@ public class BanquetHallDO {
 	private String actualArea;
 	private String colorOfTablecloth;
 	private String extraInfo;
-	private String pictures;
+	private String pictures = "";
 	
-	public BanquetHallDO(){
-		pictures = "";
-	}
+	@ManyToOne
+	@JoinColumn(name = "hotel_id")
+	private HotelDO hotelDO;
+	
+	public BanquetHallDO(){}
 
+	public BanquetHallDO(int id){
+		this.id = id;
+	}
+	
 	public BanquetHallDO(String name, double area, int minimumTables, int maximumTables, double minimumPrice,
 			double height, String columns, String shape, String actualArea, String colorOfTablecloth, String extraInfo,
 			String pictures) {
@@ -158,5 +166,12 @@ public class BanquetHallDO {
 	public void setExtraInfo(String extraInfo) {
 		this.extraInfo = extraInfo;
 	}
-	
+
+	public HotelDO getHotelDO() {
+		return hotelDO;
+	}
+
+	public void setHotelDO(HotelDO hotelDO) {
+		this.hotelDO = hotelDO;
+	}
 }

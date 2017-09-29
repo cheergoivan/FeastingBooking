@@ -28,20 +28,23 @@ public class HotelDO {
 	private String contact;
 	private String telephone;
 	private String email;
-	private String pictures;
+	private String pictures = "";
 	private int minimumTables;
 	private int maximunTables;
 	private double minimumPrice;
 	private double maximumPrice;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "hotel_id")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="hotelDO")
 	private List<BanquetHallDO> banquetHalls;
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "hotel_id")
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="hotelDO")
 	private List<FeastDO> feasts;
 	
 	public HotelDO() {}
+	
+	public HotelDO(int id){
+		this.id = id;
+	}
 
 	public HotelDO(String name, String description, AddressDO address, String contact, String telephone, String email, String pictures) {
 		super();

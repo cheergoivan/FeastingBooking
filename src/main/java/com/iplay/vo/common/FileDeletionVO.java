@@ -1,4 +1,4 @@
-package com.iplay.vo.hotel;
+package com.iplay.vo.common;
 
 import org.hibernate.validator.constraints.NotEmpty;
 

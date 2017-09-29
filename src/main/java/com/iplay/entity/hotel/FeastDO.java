@@ -3,6 +3,8 @@ package com.iplay.entity.hotel;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.iplay.component.util.DelimiterUtils;
@@ -16,11 +18,13 @@ public class FeastDO {
 	private String name;
 	private double price;
 	private String courses;
-	private String pictures;
+	private String pictures = "";
 	
-	public FeastDO(){
-		pictures = "";
-	}
+	@ManyToOne
+	@JoinColumn(name = "hotel_id")
+	private HotelDO hotelDO;
+	
+	public FeastDO(){}
 	
 	public FeastDO(String name, double price, String courses, String pictures) {
 		super();
@@ -68,5 +72,13 @@ public class FeastDO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public HotelDO getHotelDO() {
+		return hotelDO;
+	}
+
+	public void setHotelDO(HotelDO hotelDO) {
+		this.hotelDO = hotelDO;
 	}
 }

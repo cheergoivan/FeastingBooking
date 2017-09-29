@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.iplay.dto.hotel.BanquetHallDTO;
 import com.iplay.service.hotel.BanquetHallService;
-import com.iplay.vo.hotel.FileDeletionVO;
+import com.iplay.vo.common.EntityDeletionVO;
+import com.iplay.vo.common.FileDeletionVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.web.exception.ResourceNotFoundException;
@@ -42,7 +43,7 @@ public class BanquetHallController {
 	@ApiOperation(notes="管理员修改一个宴会厅，返回宴会厅id",value="")
     @PutMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public int updateBanquetHall(@ApiParam("宴会厅id")@PathVariable int id, @ApiParam("酒店id")int hotelId, @Valid 
+	public int updateBanquetHall(@ApiParam("宴会厅id")@PathVariable int id, @Valid 
 			@ApiParam("宴会厅实体，属性包括： name, area, minimumTables, maximumTables, minimumPrice, height, columns(String), "
 					+ "shape(String), actualArea(String), colorOfTablecloth, extraInfo(String)")@RequestBody
 	PostBanquetHallVO banquetHallVO){
@@ -58,6 +59,14 @@ public class BanquetHallController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteBanquetHall(@ApiParam("宴会厅id")@PathVariable int id){
 		return banquetHallService.deleteBanquetHall(id);
+	}
+	
+	
+	@ApiOperation(notes = "管理員批量删除宴会厅，返回boolean", value = "")
+	@DeleteMapping
+	@PreAuthorize("hasRole('ADMIN')")
+	public boolean deleteHotel(@Valid@RequestBody@ApiParam("宴会厅id集合") EntityDeletionVO entityDeletionVO){
+		return banquetHallService.deleteBanquetHalls(entityDeletionVO);
 	}
 	
 	@ApiOperation(notes="管理员删除宴会厅图片，返回boolean[]",value="")

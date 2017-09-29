@@ -22,7 +22,8 @@ import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
 import com.iplay.service.hotel.HotelService;
-import com.iplay.vo.hotel.FileDeletionVO;
+import com.iplay.vo.common.EntityDeletionVO;
+import com.iplay.vo.common.FileDeletionVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFeastVO;
 import com.iplay.vo.hotel.PostFilesVO;
@@ -67,6 +68,13 @@ public class HotelController {
 		return hotelService.deleteHotel(id);
 	}
 	
+	@ApiOperation(notes = "管理員批量删除酒店，返回boolean", value = "")
+	@DeleteMapping
+	@PreAuthorize("hasRole('ADMIN')")
+	public boolean deleteHotel(@Valid@RequestBody@ApiParam("酒店id集合") EntityDeletionVO entityDeletionVO){
+		return hotelService.deleteHotels(entityDeletionVO);
+	}
+	
 	@ApiOperation(notes="分页展示酒店",value="")
     @GetMapping
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
@@ -95,7 +103,7 @@ public class HotelController {
 	@PostMapping("/{id}/banquet_halls")
 	@PreAuthorize("hasRole('ADMIN')")
 	public int  addBanquetHall(@ApiParam("酒店id")@PathVariable("id") int hotelId, @Valid 
-			@ApiParam("宴会厅实体，属性包括：name, area, minimumTables, maximumTables, minimumPrice, height, columns(String), "
+			@RequestBody@ApiParam("宴会厅实体，属性包括：name, area, minimumTables, maximumTables, minimumPrice, height, columns(String), "
 					+ "shape(String), actualArea(String), colorOfTablecloth, extraInfo(String，配置使用;连接), files")
 	PostBanquetHallVO banquetHallVO){
 		int id = hotelService.addBanquetHall(banquetHallVO, hotelId);
@@ -108,7 +116,7 @@ public class HotelController {
 	@PostMapping("/{id}/feasts")
 	@PreAuthorize("hasRole('ADMIN')")
 	public int addFeast(@ApiParam("酒店id")@PathVariable("id") int hotelId, @Valid 
-			@ApiParam("宴席实体，属性包括：name, price, courses(String，菜肴使用;连接), files")PostFeastVO feastVO){
+			@RequestBody@ApiParam("宴席实体，属性包括：name, price, courses(String，菜肴使用;连接)")PostFeastVO feastVO){
 		int id = hotelService.addFeast(feastVO, hotelId);
 		if(id == -1)
 			throw new ResourceNotFoundException("Hotel with id:"+hotelId+" doesn't exist");

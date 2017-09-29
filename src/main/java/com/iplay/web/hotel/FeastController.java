@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.iplay.dto.hotel.FeastDTO;
 import com.iplay.service.hotel.FeastService;
-import com.iplay.vo.hotel.FileDeletionVO;
+import com.iplay.vo.common.FileDeletionVO;
 import com.iplay.vo.hotel.PostFeastVO;
 import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.web.exception.ResourceNotFoundException;

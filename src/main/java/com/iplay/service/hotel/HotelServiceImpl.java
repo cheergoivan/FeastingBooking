@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iplay.component.naming.UUIDNamingStrategy;
 import com.iplay.component.util.DelimiterUtils;
+import com.iplay.dao.hotel.BanquetHallDAO;
+import com.iplay.dao.hotel.FeastDAO;
 import com.iplay.dao.hotel.HotelDAO;
 import com.iplay.dao.hotel.rating.HotelRatingDAO;
 import com.iplay.dao.hotel.rating.HotelRatingRecordDAO;
@@ -31,7 +33,8 @@ import com.iplay.entity.hotel.HotelDO;
 import com.iplay.entity.hotel.rating.HotelRatingDO;
 import com.iplay.entity.hotel.rating.HotelRatingRecordDO;
 import com.iplay.service.storage.StorageService;
-import com.iplay.vo.hotel.FileDeletionVO;
+import com.iplay.vo.common.EntityDeletionVO;
+import com.iplay.vo.common.FileDeletionVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFeastVO;
 import com.iplay.vo.hotel.PostFilesVO;
@@ -52,6 +55,12 @@ public class HotelServiceImpl implements HotelService {
 	
 	@Autowired
 	private HotelRatingRecordDAO hotelRatingRecordDAO;
+	
+	@Autowired
+	private BanquetHallDAO banquetHallDAO;
+	
+	@Autowired
+	private FeastDAO feastDAO;
 
 	@Override
 	public List<SimplifiedHotelDTO> listHotel(int pageNumber, int pageSize) {
@@ -111,11 +120,9 @@ public class HotelServiceImpl implements HotelService {
 		HotelDO hotel = hotelDAO.findOne(hotelId);
 		if(hotel==null)
 			return -1;
-		List<BanquetHallDO> bhs = new LinkedList<>();
-		bhs.add(banquetHallDO);
-		hotel.setBanquetHalls(bhs);
-		hotelDAO.save(hotel);
-		return bhs.get(0).getId();
+		banquetHallDO.setHotelDO(hotel);
+		banquetHallDAO.save(banquetHallDO);
+		return banquetHallDO.getId();
 	}
 
 	@Override
@@ -125,11 +132,9 @@ public class HotelServiceImpl implements HotelService {
 		HotelDO hotel = hotelDAO.findOne(hotelId);
 		if(hotel==null)
 			return -1;
-		List<FeastDO> feasts = new LinkedList<>();
-		feasts.add(feastDO);
-		hotel.setFeasts(feasts);
-		hotelDAO.save(hotel);
-		return feasts.get(0).getId();
+		feastDO.setHotelDO(hotel);
+		feastDAO.save(feastDO);
+		return feastDO.getId();
 	}
 
 	@Override
@@ -174,7 +179,7 @@ public class HotelServiceImpl implements HotelService {
 		hotelDAO.delete(id);
 		return true;
 	}
-
+	
 	@Override
 	@Transactional
 	public boolean updateHotelRating(int userId, int hotelId, double score) {
@@ -224,6 +229,16 @@ public class HotelServiceImpl implements HotelService {
 		hotel.setPictures(pictures);
 		hotelDAO.save(hotel);
 		return rs;
+	}
+
+	@Override
+	public boolean deleteHotels(EntityDeletionVO entityDeletionVO) {
+		List<HotelDO> hotels = new LinkedList<>();
+		hotelDAO.findAll(entityDeletionVO.getIds()).forEach(h->{
+			hotels.add(h);
+		});
+		hotelDAO.delete(hotels);
+		return true;
 	}
 	
 }
