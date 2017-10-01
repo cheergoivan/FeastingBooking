@@ -24,9 +24,9 @@ import com.iplay.dto.hotel.SimplifiedHotelDTO;
 import com.iplay.service.hotel.HotelService;
 import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.common.FileDeletionVO;
+import com.iplay.vo.common.PostFilesVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFeastVO;
-import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.vo.hotel.PostHotelVO;
 import com.iplay.web.configuration.PaginationConfig;
 import com.iplay.web.exception.ResourceNotFoundException;
@@ -77,7 +77,7 @@ public class HotelController {
 	
 	@ApiOperation(notes="分页展示酒店",value="")
     @GetMapping
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
+	//@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
 	public List<SimplifiedHotelDTO>  listHotelsForUser(@ApiParam("从0开始的页码")@RequestParam int page){
 		return hotelService.listHotel(page, PaginationConfig.HOTELS_PER_PAGE_FOR_ORDINARY_USER);
 	}

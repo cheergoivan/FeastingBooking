@@ -17,8 +17,8 @@ import com.iplay.dto.hotel.BanquetHallDTO;
 import com.iplay.service.hotel.BanquetHallService;
 import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.common.FileDeletionVO;
+import com.iplay.vo.common.PostFilesVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
-import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.web.exception.ResourceNotFoundException;
 
 import io.swagger.annotations.ApiOperation;

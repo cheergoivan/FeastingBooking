@@ -17,8 +17,8 @@ import com.iplay.dto.hotel.FeastDTO;
 import com.iplay.service.hotel.FeastService;
 import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.common.FileDeletionVO;
+import com.iplay.vo.common.PostFilesVO;
 import com.iplay.vo.hotel.PostFeastVO;
-import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.web.exception.ResourceNotFoundException;
 
 import io.swagger.annotations.ApiOperation;

@@ -7,9 +7,9 @@ import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
 import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.common.FileDeletionVO;
+import com.iplay.vo.common.PostFilesVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFeastVO;
-import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.vo.hotel.PostHotelVO;
 
 public interface HotelService {

@@ -17,8 +17,8 @@ import com.iplay.entity.hotel.BanquetHallDO;
 import com.iplay.service.storage.StorageService;
 import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.common.FileDeletionVO;
+import com.iplay.vo.common.PostFilesVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
-import com.iplay.vo.hotel.PostFilesVO;
 import com.iplay.web.resource.ResourcesUriBuilder;
 
 @Service
