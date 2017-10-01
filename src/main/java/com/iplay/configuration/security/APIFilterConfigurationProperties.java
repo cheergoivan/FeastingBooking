@@ -1,6 +1,7 @@
 package com.iplay.configuration.security;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -30,5 +31,9 @@ public class APIFilterConfigurationProperties {
 
 	public void setProtectedResources(String protectedResources) {
 		this.protectedResources = protectedResources;
+	}
+	
+	public List<String> getWhiteListUrls(){
+		return whiteList.stream().map(l->l.contains("::")?l.substring(l.indexOf("::")+2):l).collect(Collectors.toList());
 	}
 }

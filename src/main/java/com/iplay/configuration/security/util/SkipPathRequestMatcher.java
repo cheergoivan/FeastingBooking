@@ -14,13 +14,24 @@ public class SkipPathRequestMatcher implements RequestMatcher {
     private RequestMatcher processingMatcher;
     
     public SkipPathRequestMatcher(List<String> pathsToSkip, String processingPath) {
-        List<RequestMatcher> m = pathsToSkip.stream().map(path -> new AntPathRequestMatcher(path)).collect(Collectors.toList());
+        List<RequestMatcher> m = pathsToSkip.stream()
+        		.map(path -> {
+        			if(path.contains("::")){
+        				System.out.println(path.substring(path.indexOf("::")+2));
+            			System.out.println(path.substring(0,path.indexOf("::")));
+        			}
+        			return 
+        		path.contains("::")?new AntPathRequestMatcher(path.substring(path.indexOf("::")+2), 
+        				path.substring(0,path.indexOf("::"))):
+        					new AntPathRequestMatcher(path);
+        		}).collect(Collectors.toList());
         matchers = new OrRequestMatcher(m);
         processingMatcher = new AntPathRequestMatcher(processingPath);
     }
 
     @Override
     public boolean matches(HttpServletRequest request) {
+    	System.out.println(request.getMethod());
         if (matchers.matches(request)) {
             return false;
         }

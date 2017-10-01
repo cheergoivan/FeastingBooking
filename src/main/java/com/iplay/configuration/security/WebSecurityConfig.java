@@ -70,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
         .and()
             .authorizeRequests()
-                .antMatchers(apis.getWhiteList().toArray(new String[1])).permitAll() // Login end-point
+                .antMatchers(apis.getWhiteListUrls().toArray(new String[1])).permitAll() // Login end-point
         .and()
             .authorizeRequests()
                 .antMatchers(apis.getProtectedResources()).authenticated() // Protected API End-points
