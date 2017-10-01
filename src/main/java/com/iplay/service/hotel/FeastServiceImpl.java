@@ -1,5 +1,6 @@
 package com.iplay.service.hotel;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,7 +40,11 @@ public class FeastServiceImpl implements FeastService{
 
 	@Override
 	public boolean deleteFeast(int id) {
-		feastDAO.delete(id);
+		FeastDO feast = feastDAO.findOne(id);
+		if(feast!=null){
+			storageService.delete(feast.getPicturesAsArray());
+			feastDAO.delete(id);
+		}
 		return true;
 	}
 
@@ -92,10 +97,13 @@ public class FeastServiceImpl implements FeastService{
 	@Override
 	public boolean delteFeasts(EntityDeletionVO entityDeletionVO) {
 		List<FeastDO> feasts = new LinkedList<>();
+		List<String> pictures = new LinkedList<>();
 		feastDAO.findAll(entityDeletionVO.getIds()).forEach(f->{
+			pictures.addAll(Arrays.asList(f.getPicturesAsArray()));
 			feasts.add(f);
 		});
 		feastDAO.delete(feasts);
+		storageService.delete(pictures);
 		return true;
 	}
 }

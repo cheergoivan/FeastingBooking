@@ -1,5 +1,7 @@
 package com.iplay.service.hotel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -176,7 +178,11 @@ public class HotelServiceImpl implements HotelService {
 
 	@Override
 	public boolean deleteHotel(int id) {
-		hotelDAO.delete(id);
+		HotelDO hotel = hotelDAO.findOne(id);
+		if(hotel!=null){
+			storageService.delete(hotel.getPicturesAsArray());
+			hotelDAO.delete(id);
+		}
 		return true;
 	}
 	
@@ -233,11 +239,15 @@ public class HotelServiceImpl implements HotelService {
 
 	@Override
 	public boolean deleteHotels(EntityDeletionVO entityDeletionVO) {
+		new ArrayList<>();
 		List<HotelDO> hotels = new LinkedList<>();
+		List<String> pictures = new LinkedList<>();
 		hotelDAO.findAll(entityDeletionVO.getIds()).forEach(h->{
+			pictures.addAll(Arrays.asList(h.getPicturesAsArray()));
 			hotels.add(h);
 		});
 		hotelDAO.delete(hotels);
+		storageService.delete(pictures);
 		return true;
 	}
 	

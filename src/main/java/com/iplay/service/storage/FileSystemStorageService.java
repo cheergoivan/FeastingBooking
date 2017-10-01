@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 @Service
 @EnableConfigurationProperties(StorageConfigurationProperties.class)
@@ -80,6 +82,20 @@ public class FileSystemStorageService implements StorageService {
 			return Files.deleteIfExists(this.rootLocation.resolve(filename));
 		} catch (IOException e) {
 			throw new StorageException("Failed to delete file " + filename, e);
+		}
+	}
+
+	@Async
+	public void delete(List<String> files) {
+		files.forEach(f->{
+			delete(f);
+		});
+	}
+
+	@Async
+	public void delete(String[] files) {
+		for(String f:files){
+			delete(f);
 		}
 	}
 }

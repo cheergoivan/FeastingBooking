@@ -1,5 +1,6 @@
 package com.iplay.service.hotel;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,7 +47,11 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 
 	@Override
 	public boolean deleteBanquetHall(int id) {
-		banquetHallDAO.delete(id);
+		BanquetHallDO banquetHall = banquetHallDAO.findOne(id);
+		if(banquetHall!=null){
+			storageService.delete(banquetHall.getPicturesAsArray());
+			banquetHallDAO.delete(id);
+		}
 		return true;
 	}
 	
@@ -102,10 +107,13 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 	@Override
 	public boolean deleteBanquetHalls(EntityDeletionVO entityDeletionVO) {
 		List<BanquetHallDO> bhs = new LinkedList<>();
+		List<String> pictures = new LinkedList<>();
 		banquetHallDAO.findAll(entityDeletionVO.getIds()).forEach(bh->{
+			pictures.addAll(Arrays.asList(bh.getPicturesAsArray()));
 			bhs.add(bh);
 		});
 		banquetHallDAO.delete(bhs);
+		storageService.delete(pictures);
 		return true;
 	}
 	
