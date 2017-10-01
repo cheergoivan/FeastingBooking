@@ -34,7 +34,7 @@ public interface HotelService {
 	
 	double getHotelRating(int id);
 	
-	boolean updateHotelRating(int userId, int hotelId, double score);
+	double updateHotelRating(int userId, int hotelId, double score);
 	
 	boolean hasUserRatedHotel(int userId, int hotelId);
 	

@@ -109,7 +109,7 @@ public class HotelServiceImpl implements HotelService {
 		HotelDO savedHotel = hotelDAO.save(hotelDO);
 		int hotelId = savedHotel.getId();
 		if (isCreated) {
-			hotelRatingDAO.save(new HotelRatingDO(hotelId, 0.0, 0));
+			hotelRatingDAO.save(new HotelRatingDO(hotelId, 0.0, 0, 5.0));
 		}
 		return hotelId;
 	}
@@ -170,10 +170,10 @@ public class HotelServiceImpl implements HotelService {
 	public double getHotelRating(int id) {
 		HotelRatingDO rating = hotelRatingDAO.findOne(id);
 		if(rating==null){
-			hotelRatingDAO.save(new HotelRatingDO(id, 0.0, 0));
+			hotelRatingDAO.save(new HotelRatingDO(id, 0.0, 0, 5.0));
 			return 5.0;
 		}
-		return rating.getTimes()==0? 5.0:rating.getTotalScore()/rating.getTimes();
+		return rating.getRating();
 	}
 
 	@Override
@@ -188,13 +188,20 @@ public class HotelServiceImpl implements HotelService {
 	
 	@Override
 	@Transactional
-	public boolean updateHotelRating(int userId, int hotelId, double score) {
+	public double updateHotelRating(int userId, int hotelId, double score) {
 		if(hasUserRatedHotel(userId, hotelId)){
-			return false;
+			return hotelRatingDAO.findOne(hotelId).getRating();
 		}
 		hotelRatingRecordDAO.save(new HotelRatingRecordDO(userId, hotelId));
-		hotelRatingDAO.updateScore(score, hotelId);
-		return true;
+		HotelRatingDO rating = hotelRatingDAO.findOne(hotelId);
+		if(rating==null){
+			rating = hotelRatingDAO.save(new HotelRatingDO(hotelId, 0, 0, 5.0));
+		}
+		rating.setRating((rating.getTotalScore()+score)/(rating.getTimes()+1));
+		rating.setTimes(rating.getTimes()+1);
+		rating.setTotalScore(rating.getTotalScore()+score);
+		hotelRatingDAO.save(rating);
+		return rating.getRating();
 	}
 
 	@Override

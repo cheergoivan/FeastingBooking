@@ -126,7 +126,7 @@ public class HotelController {
 	@ApiOperation(notes="用户对酒店进行打分",value="")
     @PostMapping("/{id}/rating")
 	@PreAuthorize("hasAnyRole('USER', 'MANAGER')")
-	public boolean postRating(@ApiParam("酒店id")@PathVariable("id") int hotelId, 
+	public double postRating(@ApiParam("酒店id")@PathVariable("id") int hotelId, 
 			@ApiParam("评分") double score, @AuthenticationPrincipal UserContext context){
 		return hotelService.updateHotelRating(context.getUserId(), hotelId, score);
 	}

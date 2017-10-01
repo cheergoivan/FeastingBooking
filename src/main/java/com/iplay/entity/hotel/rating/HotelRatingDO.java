@@ -11,14 +11,16 @@ public class HotelRatingDO {
 	private int id;
 	private double totalScore;
 	private int times;
+	private double rating;
 	
-	public HotelRatingDO(int id, double totalScore, int times) {
+	public HotelRatingDO(int id, double totalScore, int times, double rating) {
 		super();
 		this.id = id;
 		this.totalScore = totalScore;
 		this.times = times;
+		this.rating = rating;
 	}
-	
+
 	public HotelRatingDO(){}
 
 	public int getId() {
@@ -43,5 +45,13 @@ public class HotelRatingDO {
 
 	public void setTimes(int times) {
 		this.times = times;
+	}
+
+	public double getRating() {
+		return rating;
+	}
+
+	public void setRating(double rating) {
+		this.rating = rating;
 	}
 }
