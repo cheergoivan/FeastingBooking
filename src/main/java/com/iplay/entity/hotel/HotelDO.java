@@ -57,6 +57,10 @@ public class HotelDO {
 		this.pictures = pictures;
 		this.banquetHalls = new ArrayList<>();
 		this.feasts = new ArrayList<>();
+		this.minimumPrice = 1000000000;
+		this.minimumTables = 1000000000;
+		this.maximumPrice = -1;
+		this.maximunTables = -1;
 	}
 
 	public int getId() {

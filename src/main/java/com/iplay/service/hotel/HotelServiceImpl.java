@@ -122,6 +122,7 @@ public class HotelServiceImpl implements HotelService {
 		HotelDO hotel = hotelDAO.findOne(hotelId);
 		if(hotel==null)
 			return -1;
+		updateTableRange(hotel, banquetHallDO.getMinimumTables(), banquetHallDO.getMaximumTables());
 		banquetHallDO.setHotelDO(hotel);
 		banquetHallDAO.save(banquetHallDO);
 		return banquetHallDO.getId();
@@ -134,6 +135,7 @@ public class HotelServiceImpl implements HotelService {
 		HotelDO hotel = hotelDAO.findOne(hotelId);
 		if(hotel==null)
 			return -1;
+		updatePriceRange(hotel, feastDO.getPrice(), feastDO.getPrice());
 		feastDO.setHotelDO(hotel);
 		feastDAO.save(feastDO);
 		return feastDO.getId();
@@ -256,6 +258,38 @@ public class HotelServiceImpl implements HotelService {
 		hotelDAO.delete(hotels);
 		storageService.delete(pictures);
 		return true;
+	}
+
+	@Override
+	public void updateTableRange(HotelDO hotel, int minimumTables, int maximumTables) {
+		boolean isHotelUpdated = false;
+		if(hotel.getMinimumTables()>minimumTables){
+			hotel.setMinimumTables(minimumTables);
+			isHotelUpdated = true;
+		}
+		if(hotel.getMaximunTables()<maximumTables){
+			hotel.setMaximunTables(maximumTables);
+			isHotelUpdated = true;
+		}
+		if(isHotelUpdated){
+			hotelDAO.save(hotel);
+		}
+	}
+
+	@Override
+	public void updatePriceRange(HotelDO hotel, double minimumPrice, double maximumPrice) {
+		boolean isHotelUpdated = false;
+		if(hotel.getMinimumPrice()>minimumPrice){
+			hotel.setMinimumPrice(minimumPrice);
+			isHotelUpdated = true;
+		}
+		if(hotel.getMaximumPrice()<maximumPrice){
+			hotel.setMaximumPrice(maximumPrice);
+			isHotelUpdated = true;
+		}
+		if(isHotelUpdated){
+			hotelDAO.save(hotel);
+		}
 	}
 	
 }

@@ -18,10 +18,9 @@ public interface HotelDAO extends PagingAndSortingRepository<HotelDO,Integer>{
 	/*
 	@Transactional
 	@Modifying
-	@Query("update HotelDO h set h.deleted = ?2 where h.id = ?1")
-	int updateDeleted(int id, boolean deleted);
+	@Query("update HotelDO h set h.minimumTables = ?2, h.maximumTables  = ?3 where h.id = ?1")
+	int updateTableRange(int id, int minimumTables, int maximumTables);
 	*/
-	
 	//Page<HotelDO> findByDeleted(boolean deleted, Pageable pageable);
 	
 	/*

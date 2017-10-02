@@ -5,6 +5,7 @@ import java.util.List;
 import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
+import com.iplay.entity.hotel.HotelDO;
 import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.common.FileDeletionVO;
 import com.iplay.vo.common.PostFilesVO;
@@ -43,4 +44,8 @@ public interface HotelService {
 	boolean[] deletePictures(int hotelId, FileDeletionVO fileDeletionVO);
 	
 	boolean deleteHotels(EntityDeletionVO entityDeletionVO);
+	
+	void updateTableRange(HotelDO hotel, int minimumTables, int maximumTables);
+	
+	void updatePriceRange(HotelDO hotel, double minimumPrice, double maximumPrice);
 }

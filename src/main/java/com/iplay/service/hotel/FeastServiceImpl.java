@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,9 @@ public class FeastServiceImpl implements FeastService{
 	
 	@Autowired
 	private StorageService storageService;
+	
+	@Autowired
+	private HotelService hotelService;
 
 	@Override
 	public FeastDTO findFeastById(int id) {
@@ -55,9 +59,11 @@ public class FeastServiceImpl implements FeastService{
 		FeastDO findedFeastDO = feastDAO.findOne(feastVO.getId());
 		if(findedFeastDO == null)
 			return -1;
-		FeastDO feast = new FeastDO(feastVO.getName(), feastVO.getPrice(), feastVO.getCourses(), findedFeastDO.getPictures());
-		feast.setId(feastVO.getId());
-		FeastDO savedFeast = feastDAO.save(feast);
+		//FeastDO feast = new FeastDO(feastVO.getName(), feastVO.getPrice(), feastVO.getCourses(), findedFeastDO.getPictures());
+		//feast.setId(feastVO.getId());
+		BeanUtils.copyProperties(feastVO, findedFeastDO);
+		FeastDO savedFeast = feastDAO.save(findedFeastDO);
+		hotelService.updatePriceRange(savedFeast.getHotelDO(), savedFeast.getPrice(), savedFeast.getPrice());
 		int feastId = savedFeast.getId();
 		return feastId;
 	}

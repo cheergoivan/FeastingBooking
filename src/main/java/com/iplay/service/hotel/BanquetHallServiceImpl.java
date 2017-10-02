@@ -29,7 +29,10 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 	
 	@Autowired
 	private StorageService storageService;
-
+	
+	@Autowired
+	private HotelService hotelService;
+	
 	@Override
 	public BanquetHallDTO findBanquetHallById(int id) {
 		BanquetHallDO banquetHallDO = banquetHallDAO.findOne(id);
@@ -54,8 +57,6 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 		}
 		return true;
 	}
-	
-	
 
 	@Override
 	public int updateBanquetHall(PostBanquetHallVO banquetHallVO) {
@@ -64,10 +65,11 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 		BanquetHallDO findedBanquetHallDO = banquetHallDAO.findOne(banquetHallVO.getId());
 		if(findedBanquetHallDO==null)
 			return -1;
-		BanquetHallDO banquetHallDO = new BanquetHallDO();
-		BeanUtils.copyProperties(banquetHallVO, banquetHallDO);
-		banquetHallDO.setPictures(findedBanquetHallDO.getPictures());
-		BanquetHallDO savedBanquet = banquetHallDAO.save(banquetHallDO);
+		//BanquetHallDO banquetHallDO = new BanquetHallDO();
+		BeanUtils.copyProperties(banquetHallVO, findedBanquetHallDO);
+		//banquetHallDO.setPictures(findedBanquetHallDO.getPictures());
+		BanquetHallDO savedBanquet = banquetHallDAO.save(findedBanquetHallDO);
+		hotelService.updateTableRange(savedBanquet.getHotelDO(), savedBanquet.getMinimumTables(), savedBanquet.getMaximumTables());
 		int banquetHallId = savedBanquet.getId();
 		return banquetHallId;
 	}
