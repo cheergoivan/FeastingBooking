@@ -297,12 +297,6 @@ public class HotelServiceImpl implements HotelService {
 	@Async
 	@Transactional
 	public void reCalculateTableRange(int hotelId) {
-		try {
-			Thread.sleep(20*1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println("reCalculateTableRange.....");
 		HotelDO hotel = hotelDAO.findOne(hotelId);
 		if(hotel==null)
 			return;
