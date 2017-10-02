@@ -100,18 +100,29 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
 	function addHotelImages(hotelId, images) {
 		return fileUploadFactory(`${urlPrefix}/hotels/${hotelId}/pictures`, images);
 	}
-	function deleteHotelImage(hotelId, url) {
-		var name = {
-			"names": [url.substring(url.lastIndexOf('/') + 1)]
-		}
+	function deleteHotelImage(hotelId, names) {
 		var headers = {'Content-Type': 'application/json'};
-		return promiseFactory('DELETE', `${urlPrefix}/hotels/${hotelId}/pictures`, headers, name);
+		return promiseFactory('DELETE', `${urlPrefix}/hotels/${hotelId}/pictures`, headers, names);
 	}
 	function deleteHotels(hotelId, id) {
 
 	}
 	function createBanquet(hotelId, banquet) {
 		return promiseFactory('POST', `${urlPrefix}/hotels/${hotelId}/banquet_halls`, null, banquet);
+	}
+	function getBanquetHall(hallId) {
+		return promiseFactory('GET', `${urlPrefix}/banquet_halls/${hallId}`);
+	}
+	function addBanquetImages(banquetId, images) {
+		return fileUploadFactory(`${urlPrefix}/banquet_halls/${banquetId}/pictures`, images);
+	}
+	function removeBanquetImage(banquetId, names) {
+		var headers = {'Content-Type': 'application/json'};
+		return promiseFactory('DELETE', `${urlPrefix}/banquet_halls/${banquetId}/pictures`, headers, names);
+	}
+	function updateBanquet(banquet) {
+		var banquetId = banquet.id;
+		return promiseFactory('PUT', `${urlPrefix}/banquet_halls/${banquetId}`, null, banquet);
 	}
     return {
     	signin: signin,
@@ -122,7 +133,11 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
         addHotelImages: addHotelImages,
         deleteHotelImage: deleteHotelImage,
         deleteHotels: deleteHotels,
-        createBanquet: createBanquet
+        createBanquet: createBanquet,
+        getBanquetHall: getBanquetHall,
+        addBanquetImages: addBanquetImages,
+        removeBanquetImage: removeBanquetImage,
+        updateBanquet: updateBanquet
     };
 }])
 .service('modals', ['$uibModal', function($uibModal) {

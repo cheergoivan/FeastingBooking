@@ -96,7 +96,8 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     	};
     	$scope.data.deleteImage = function(url) {
     		modals.messageModal('確認', '刪除這張圖片?').then(function() {
-        		apiService.deleteHotelImage(hotelDetail.id, url).then(function(response) {
+    			var names = [url.substring(url.lastIndexOf('/') + 1)];
+        		apiService.deleteHotelImage(hotelDetail.id, names).then(function(response) {
         			alertManager.addAlert('success', '成功刪除圖片。');
         			hotelDetail.pictureUrls.splice(hotelDetail.pictureUrls.indexOf(url), 1);
         			$scope.data.hotelDetail.pictureUrls.splice($scope.data.hotelDetail.pictureUrls.indexOf(url), 1);
@@ -109,12 +110,53 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     		$scope.data.hotelDetail = hotelDetail;
     	};
     }])
-    .controller('hotelDetailBanquetCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'hotelDetail', function($scope, $state, apiService, alertManager, hotelDetail) {
+    .controller('hotelDetailBanquetCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'hotelDetail', 'modals', function($scope, $state, apiService, alertManager, hotelDetail, modals) {
     	$scope.data = {};
     	$scope.data.hotelDetail = hotelDetail;
     	$scope.data.addNewBanquet = function() {
     		$state.go('FeastBooking.hotel.newBanquet', $scope.data.hotelDetail.id);
     	};
+    	function initActiveHall(hallId) {
+    		apiService.getBanquetHall(hallId).then(function(response) {
+    			$scope.data.activeBanquet = response;
+    		}, function(response) {
+    			alertManager.addAlert('danger', response);
+    		});
+    	}
+    	$scope.data.hotelDetail.banquetHalls && $scope.data.hotelDetail.banquetHalls.length && initActiveHall($scope.data.hotelDetail.banquetHalls[0].id);
+    	$scope.updateBanquet = function() {
+    		apiService.updateBanquet(data.activeBanquet).then(function(response) {
+    			alertManager.addAlert('success', '成功更新宴會聼。');
+    		}, function(response) {
+    			alertManager.addAlert('danger', response);
+    		})
+    	}
+    	$scope.data.addBanquetImage = function(files) {
+    		if(files && files.length) {
+    			apiService.addBanquetImages($scope.data.activeBanquet.id, { files: files}).then(function(response) {
+    				alertManager.addAlert('success', '成功添加圖片。');
+    				var urls = response.data;
+    				if(urls && urls.length) {
+    					$scope.data.activeBanquet.pictureUrls = $scope.data.activeBanquet.pictureUrls.concat(urls);
+    				}
+    			}, function(response) {
+    				alertManager.addAlert('danger', response);
+    			});
+    		}
+    	}
+    	$scope.data.removeBanquetImage = function(url) {
+    		modals.messageModal('確認', '刪除這張圖片').then(function() {
+        		var names = [url.substring(url.lastIndexOf('/') + 1)];
+        		apiService.removeBanquetImage($scope.data.activeBanquet.id, { names: names }).then(function() {
+        			alertManager.addAlert('success', '成功刪除圖片');
+        			$scope.data.activeBanquet.pictureUrls = $scope.data.activeBanquet.pictureUrls.filter(function(url) {
+        				return url !== url;
+        			});
+        		}, function(response) {
+        			alertManager.addAlert(response);
+        		});
+    		});
+    	}
     }])
     .controller('hotelCreateCtrl', ['$scope', '$state', 'apiService', 'alertManager', function($scope, $state, apiService, alertManager) {
     	$scope.data = {};

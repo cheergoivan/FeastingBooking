@@ -307,9 +307,6 @@ main .content {
 .hotel-detail-container {
   padding: 0 20px;
 }
-.banquet-hall-container {
-  display: flex;
-}
 .banquet-hall-container > .banquet-hall-detail {
   padding: 20px;
 }
@@ -321,12 +318,15 @@ main .content {
   padding: 20px;
   flex: 0 0 250px;
 }
-.banquet-hall-container > .banquet-hall-list ul {
+.banquet-hall-container > .banquet-hall-list ul.banquet-hall-list-container {
   padding-left: 0;
+  display: flex;
 }
 .banquet-hall-container > .banquet-hall-list .banquet-hall-item-wrapper {
+  width: 200px;
   padding: 6px;
   margin-bottom: 10px;
+  margin-right: 10px;
   border: 1px solid #eee;
   border-radius: 4px;
   background-color: #fbfbfb;
@@ -346,6 +346,14 @@ main .content {
   right: 10px;
   font-size: 20px;
   font-weight: 400;
+}
+.banquet-hall-container > .banquet-hall-list .banquet-hall-item-wrapper.active {
+  background-color: #175199;
+  color: white;
+}
+.banquet-hall-container > .banquet-hall-list .banquet-hall-item-wrapper.active:hover {
+  background-color: #175199;
+  color: white;
 }
 .banquet-hall-container > .banquet-hall-detail {
   flex: 1 1 auto;

@@ -347,7 +347,6 @@ main {
     padding: 0 20px;
 }
 .banquet-hall-container {
-    display: flex;
     >.banquet-hall-detail {
         padding: 20px;
     }
@@ -358,12 +357,15 @@ main {
     >.banquet-hall-list {
         padding: 20px;
         flex: 0 0 250px;
-        ul {
+        ul.banquet-hall-list-container {
             padding-left: 0;
+            display: flex;
         }
         .banquet-hall-item-wrapper {
+            width: 200px;
             padding: 6px;
             margin-bottom: 10px;
+            margin-right: 10px;
             border: 1px solid @theme-gray;
             border-radius: 4px;
             background-color: @light-theme-gray;
@@ -381,6 +383,14 @@ main {
                 right: 10px;
                 font-size: 20px;
                 font-weight: 400;
+            }
+            &.active {
+                background-color: @primary-color;
+                color: white;
+                &:hover {
+                    background-color: @primary-color;
+                    color: white;
+                }
             }
         }
     }
