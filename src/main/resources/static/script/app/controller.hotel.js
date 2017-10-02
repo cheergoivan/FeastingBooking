@@ -61,7 +61,7 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
             }
     	};
     }])
-    .controller('hotelDetailInfoCtrl', ['$scope', 'apiService', 'hotelDetail', 'alertManager', 'Upload', function($scope, apiService, hotelDetail, alertManager, Upload) {
+    .controller('hotelDetailInfoCtrl', ['$scope', 'apiService', 'hotelDetail', 'alertManager', 'Upload', 'modals', function($scope, apiService, hotelDetail, alertManager, Upload, modals) {
     	$scope.data = { hotelDetail : angular.copy(hotelDetail) };
     	function hotelDTO2hotelPO(dto) {
     		var po = angular.copy(dto);
@@ -86,8 +86,8 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     				alertManager.addAlert('success', '成功添加圖片。');
     				var urls = response.data;
     				if(urls && urls.length) {
-    					hotelDetail.pictureUrls = urls;
-    					$scope.data.hotelDetail.pictureUrls.push(urls);
+    					hotelDetail.pictureUrls = hotelDetail.pictureUrls.concat(urls);
+    					$scope.data.hotelDetail.pictureUrls = $scope.data.hotelDetail.pictureUrls.concat(urls);
     				}
     			}, function(response) {
     				alertManager.addAlert('danger', response);
@@ -95,7 +95,15 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     		}
     	};
     	$scope.data.deleteImage = function(url) {
-    		apiService.deleteHotelImage(url)
+    		modals.messageModal('確認', '刪除這張圖片?').then(function() {
+        		apiService.deleteHotelImage(hotelDetail.id, url).then(function(response) {
+        			alertManager.addAlert('success', '成功刪除圖片。');
+        			hotelDetail.pictureUrls.splice(hotelDetail.pictureUrls.indexOf(url), 1);
+        			$scope.data.hotelDetail.pictureUrls.splice($scope.data.hotelDetail.pictureUrls.indexOf(url), 1);
+        		}, function(response) {
+        			alertManager.addAlert('danger', response);
+        		});
+    		});
     	};
     	$scope.data.revertChange = function() {
     		$scope.data.hotelDetail = hotelDetail;
@@ -129,7 +137,15 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
             });
         };
     }])
-    .controller('banquetCreateCtrl', ['$scope', '$state', 'apiService', 'alertManager', function($scope, $state, apiService, alertManager) {
+    .controller('banquetCreateCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'hotelDetail', function($scope, $state, apiService, alertManager, hotelDetail) {
     	$scope.data = {};
-    	
+    	$scope.data.hotelDetail = hotelDetail;
+    	$scope.data.banquet = {};
+        $scope.data.createBanquet = function() {
+        	apiService.createBanquet($scope.data.hotelDetail.id, $scope.data.banquet).then(function() {
+        		alertManager.addAlert('success', '成功創建宴會廳');
+        	}, function(response) {
+        		alertManager.addAlert('danger', response);
+        	})
+        };
     }])

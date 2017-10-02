@@ -352,16 +352,29 @@ main .content {
 }
 /*signin*/
 .signin-board {
-  width: 400px;
+  width: 300px;
   padding: 100px 20px 80px;
   margin: 20vh auto 0 auto;
-  border-radius: 4px;
-  box-shadow: 3px 3px 10px 3px #888;
-  background-color: white;
+}
+.signin-board .signin-info-container > input {
+  border-radius: 0;
+  height: 40px;
+}
+.signin-board .signin-info-container > input:nth-child(1 + n) {
+  border-top: 0;
+}
+.signin-board .signin-info-container > input:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.signin-board .signin-info-container > input:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 .signin-board > .btn-row {
   text-align: center;
+  padding-right: 10px;
 }
 .signin-board > .btn-row > .btn {
-  width: 100px;
+  width: 100%;
 }

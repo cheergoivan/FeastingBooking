@@ -77,7 +77,7 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 		views: {
 			'content@FeastBooking.hotel': {
 				templateUrl: "partialView/hotelNewBanquet",
-				controller: ""
+				controller: "banquetCreateCtrl"
 			}
 		}
 	}];

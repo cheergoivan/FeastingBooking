@@ -194,8 +194,8 @@ angular.module('directives', [])
 		template: '<div class="label-number-range">'
 					+ '<label class="control-label">{{::label}}</label>'
 					+ '<div class="number-range-container">'
-						+ '<input type="number" ng-model="from" class="form-control" readonly>'
-						+ '<input type="number" ng-model="to" class="form-control" readonly>'
+						+ '<input type="number" ng-model="from" class="form-control" min="min" max="max" step="step" readonly>'
+						+ '<input type="number" ng-model="to" class="form-control" min="min" max="max" step="step" readonly>'
 					+ '</div>'
 				+ '</div>',
 		scope: {
@@ -203,6 +203,34 @@ angular.module('directives', [])
 			to: '=',
 			min: '@',
 			max: '@',
+			step: '@',
+			label: '@'
+		},
+		link: function(elem, scope) {
+			scope.min = parseFloat(scope.min) || 0;
+			scope.max = parseFloat(scope.max) || 99999999;
+			if(scope.min > scope.max) {
+				var temp = scope.max;
+				scope.max = scope.min;
+				scope.min = temp;
+			}
+			scope.step = parseFloat(scope) || 1;
+		}
+	}
+})
+.directive('labelInputNumber', function() {
+	return {
+		restrict: 'AE',
+		replace: true,
+		template: '<div class="">'
+					+ '<label class="control-label">{{::label}}</label>'
+					+ '<input ng-model="model" min="min" max="max" step="step" type="number" class="form-control">'
+				+ '</div>'
+					,
+		scope: {
+			min: '@',
+			max: '@',
+			model: '=',
 			step: '@',
 			label: '@'
 		},

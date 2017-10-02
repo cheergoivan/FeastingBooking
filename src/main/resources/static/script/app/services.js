@@ -101,11 +101,17 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
 		return fileUploadFactory(`${urlPrefix}/hotels/${hotelId}/pictures`, images);
 	}
 	function deleteHotelImage(hotelId, url) {
-		var urls = [url];
-		return promiseFactory(`${urlPrefix}/hotels/${hotelId}/`);
+		var name = {
+			"names": [url.substring(url.lastIndexOf('/') + 1)]
+		}
+		var headers = {'Content-Type': 'application/json'};
+		return promiseFactory('DELETE', `${urlPrefix}/hotels/${hotelId}/pictures`, headers, name);
 	}
-	function deleteHotels(id) {
-		
+	function deleteHotels(hotelId, id) {
+
+	}
+	function createBanquet(hotelId, banquet) {
+		return promiseFactory('POST', `${urlPrefix}/hotels/${hotelId}/banquet_halls`, null, banquet);
 	}
     return {
     	signin: signin,
@@ -115,7 +121,8 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
         updateHotelDetail: updateHotelDetail,
         addHotelImages: addHotelImages,
         deleteHotelImage: deleteHotelImage,
-        deleteHotels: deleteHotels
+        deleteHotels: deleteHotels,
+        createBanquet: createBanquet
     };
 }])
 .service('modals', ['$uibModal', function($uibModal) {
@@ -125,14 +132,16 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
 						+ '<header class="modal-header">'
 							+ '<h3>{{::title}}<span class="modal-cross" ng-click="cancel()"><span></h3>'
 						+ '</header>'
-						+ '<div class="modal-body"></div>'
+						+ '<div class="modal-body">'
+							+ '<span>{{::message}}</span>'
+						+ '</div>'
 						+ '<footer class="modal-footer">'
 							+ '<button class="btn btn-primary" ng-click="confirm()">確認</button>'
 							+ '<button class="btn btn-default" ng-click="cancel()">取消</button>'
 						+ '</footer>'
 					+ '</div>',
 			controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
-				$socpe.title = title;
+				$scope.title = title;
 				$scope.message = message;
 				$scope.confirm = function() {
 					$uibModalInstance.close();
@@ -144,5 +153,8 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
 			windowClass: "modal-window"
 		});
 		return modalInstance.result;
+	}
+	return {
+		messageModal: messageModal
 	}
 }])
