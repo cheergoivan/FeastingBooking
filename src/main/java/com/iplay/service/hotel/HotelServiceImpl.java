@@ -149,7 +149,7 @@ public class HotelServiceImpl implements HotelService {
 				.collect(Collectors.toList());
 		
 		List<SimplifiedBanquetHallDTO> banquetHalls = hotel.getBanquetHalls().stream()
-				.map(banquetHallDO -> new SimplifiedBanquetHallDTO(banquetHallDO.getId(), banquetHallDO.getArea(),
+				.map(banquetHallDO -> new SimplifiedBanquetHallDTO(banquetHallDO.getId(), banquetHallDO.getName(), banquetHallDO.getArea(),
 						new int[] { banquetHallDO.getMinimumTables(), banquetHallDO.getMaximumTables() },
 						banquetHallDO.getMinimumPrice(),
 						banquetHallDO.getPicturesAsArray().length>0?

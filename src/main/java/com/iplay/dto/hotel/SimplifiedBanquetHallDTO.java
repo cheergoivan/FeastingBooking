@@ -2,14 +2,16 @@ package com.iplay.dto.hotel;
 
 public class SimplifiedBanquetHallDTO {
 	private int id;
+	private String name;
 	private double area;
 	private int[] tableRange;
 	private double minimumPrice;
 	private String pictureUrl;
 	
-	public SimplifiedBanquetHallDTO(int id, double area, int[] tableRange, double minimumPrice, String pictureUrl) {
+	public SimplifiedBanquetHallDTO(int id, String name, double area, int[] tableRange, double minimumPrice, String pictureUrl) {
 		super();
 		this.id = id;
+		this.name = name;
 		this.area = area;
 		this.tableRange = tableRange;
 		this.minimumPrice = minimumPrice;
@@ -46,5 +48,13 @@ public class SimplifiedBanquetHallDTO {
 	}
 	public void setPictureUrl(String pictureUrl) {
 		this.pictureUrl = pictureUrl;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
