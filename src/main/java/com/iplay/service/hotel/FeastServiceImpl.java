@@ -49,6 +49,7 @@ public class FeastServiceImpl implements FeastService{
 			storageService.delete(feast.getPicturesAsArray());
 			feastDAO.delete(id);
 		}
+		hotelService.reClaculatePriceRange(feast.getHotelDO().getId());
 		return true;
 	}
 
@@ -110,6 +111,8 @@ public class FeastServiceImpl implements FeastService{
 		});
 		feastDAO.delete(feasts);
 		storageService.delete(pictures);
+		if(feasts.size()>0)
+			hotelService.reClaculatePriceRange(feasts.get(0).getHotelDO().getId());
 		return true;
 	}
 }

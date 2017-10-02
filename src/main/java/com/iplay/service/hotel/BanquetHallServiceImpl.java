@@ -55,6 +55,7 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 			storageService.delete(banquetHall.getPicturesAsArray());
 			banquetHallDAO.delete(id);
 		}
+		hotelService.reCalculateTableRange(banquetHall.getHotelDO().getId());
 		return true;
 	}
 
@@ -116,6 +117,9 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 		});
 		banquetHallDAO.delete(bhs);
 		storageService.delete(pictures);
+		if(bhs.size()>0){
+			hotelService.reCalculateTableRange(bhs.get(0).getHotelDO().getId());
+		}
 		return true;
 	}
 	

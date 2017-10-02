@@ -48,4 +48,8 @@ public interface HotelService {
 	void updateTableRange(HotelDO hotel, int minimumTables, int maximumTables);
 	
 	void updatePriceRange(HotelDO hotel, double minimumPrice, double maximumPrice);
+	
+	void reCalculateTableRange(int hotelId);
+	
+	void reClaculatePriceRange(int hotelId);
 }

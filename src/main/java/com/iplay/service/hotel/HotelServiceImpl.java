@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -288,6 +289,63 @@ public class HotelServiceImpl implements HotelService {
 			isHotelUpdated = true;
 		}
 		if(isHotelUpdated){
+			hotelDAO.save(hotel);
+		}
+	}
+
+	@Override
+	@Async
+	@Transactional
+	public void reCalculateTableRange(int hotelId) {
+		try {
+			Thread.sleep(20*1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("reCalculateTableRange.....");
+		HotelDO hotel = hotelDAO.findOne(hotelId);
+		if(hotel==null)
+			return;
+		boolean[] hasUpdated = {false};
+		int[] tableRange = {hotel.getMinimumTables(), hotel.getMaximunTables()};
+		hotel.getBanquetHalls().forEach(bh->{
+			if(tableRange[0]>bh.getMinimumTables()){
+				tableRange[0] = bh.getMinimumTables();
+				hasUpdated[0] = true;
+			}
+			if(tableRange[1]<bh.getMaximumTables()){
+				tableRange[1] = bh.getMaximumTables();
+				hasUpdated[0] = true;
+			}
+		});
+		if(hasUpdated[0]){
+			hotel.setMinimumTables(tableRange[0]);
+			hotel.setMaximunTables(tableRange[1]);
+			hotelDAO.save(hotel);
+		}
+	}
+
+	@Override
+	@Async
+	public void reClaculatePriceRange(int hotelId) {
+		HotelDO hotel = hotelDAO.findOne(hotelId);
+		if(hotel==null)
+			return;
+		boolean[] hasUpdated = {false};
+		double[] priceRange = {hotel.getMinimumPrice(), hotel.getMaximumPrice()};
+		hotel.getFeasts().forEach(f->{
+			if(priceRange[0]>f.getPrice()){
+				hasUpdated[0] = true;
+				priceRange[0] = f.getPrice();
+			}
+			if(priceRange[1]<f.getPrice()){
+				hasUpdated[0] = true;
+				priceRange[1] = f.getPrice();
+			}
+		});
+		if(hasUpdated[0]){
+			hotel.setMinimumPrice(priceRange[0]);
+			hotel.setMaximumPrice(priceRange[1]);
 			hotelDAO.save(hotel);
 		}
 	}
