@@ -66,7 +66,7 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 		if(findedBanquetHallDO==null)
 			return -1;
 		//BanquetHallDO banquetHallDO = new BanquetHallDO();
-		BeanUtils.copyProperties(banquetHallVO, findedBanquetHallDO);
+		BeanUtils.copyProperties(banquetHallVO, findedBanquetHallDO, "id");
 		//banquetHallDO.setPictures(findedBanquetHallDO.getPictures());
 		BanquetHallDO savedBanquet = banquetHallDAO.save(findedBanquetHallDO);
 		hotelService.updateTableRange(savedBanquet.getHotelDO(), savedBanquet.getMinimumTables(), savedBanquet.getMaximumTables());

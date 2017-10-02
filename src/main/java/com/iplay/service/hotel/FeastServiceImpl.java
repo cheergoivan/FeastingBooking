@@ -61,7 +61,7 @@ public class FeastServiceImpl implements FeastService{
 			return -1;
 		//FeastDO feast = new FeastDO(feastVO.getName(), feastVO.getPrice(), feastVO.getCourses(), findedFeastDO.getPictures());
 		//feast.setId(feastVO.getId());
-		BeanUtils.copyProperties(feastVO, findedFeastDO);
+		BeanUtils.copyProperties(feastVO, findedFeastDO,"id");
 		FeastDO savedFeast = feastDAO.save(findedFeastDO);
 		hotelService.updatePriceRange(savedFeast.getHotelDO(), savedFeast.getPrice(), savedFeast.getPrice());
 		int feastId = savedFeast.getId();
