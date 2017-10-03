@@ -4,13 +4,13 @@
 		<form class="form">
 			<div class="row">
 				<label-input-text class="col col-md-6" model="data.banquet.name" label="名稱"></label-input-text>
-                <label-input-number class="col col-md-6" model="data.banquet.name.area" label="面積"></label-input-number>
+                <label-input-number class="col col-md-6" model="data.banquet.area" label="面積"></label-input-number>
                 <label-input-number class="col col-md-6" model="data.banquet.height" label="高度"></label-input-number>
                 <label-input-text class="col col-md-6" model="data.banquet.shape" label="大廳形狀"></label-input-text>
                 <label-input-text class="col col-md-6" model="data.banquet.actualArea" label="迎賓區域"></label-input-text>
                 <label-input-text class="col col-md-6" model="data.banquet.columns" label="立柱情況"></label-input-text>
                 <label-input-text class="col col-md-6" model="data.banquet.colorOfTablecloth" label="桌布顔色"></label-input-text>
-                <label-input-number class="col col-md-6" model="data.banquet.tableCount" label="桌數"></label-input-number>
+                <label-range class="col col-md-6" from="data.banquet.minimumTables" to="data.banquet.maximumTables" label="桌數"></label-range>
               	<label-input-number class="col col-md-6" model="data.banquet.minimumPrice" label="最低消費"></label-input-number>
                 <label-textarea class="col col-md-6" model="data.banquet.extraInfo" label="額外信息"></label-textarea>
 			</div>
