@@ -76,19 +76,20 @@ public class HotelController {
 		return hotelService.deleteHotels(entityDeletionVO);
 	}
 	
-	//@ApiOperation(notes="分页展示酒店,返回酒店的List，默认每页展示10条数据",value="")
-    //@GetMapping
-	//@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
+	@ApiOperation(notes="分页展示酒店,返回酒店的List，默认每页展示10条数据",value="")
+    @GetMapping
 	public List<SimplifiedHotelDTO>  listHotelsForUser(@ApiParam("从0开始的页码")@RequestParam int page){
 		return hotelService.listHotel(page, PaginationConfig.HOTELS_PER_PAGE_FOR_ORDINARY_USER);
 	}
 	
+	/*
 	@ApiOperation(notes="分页展示酒店， 返回page对象",value="")
     @GetMapping
     public Page<SimplifiedHotelDTO> listHotelsByPage(@ApiParam("从0开始的页码")@RequestParam int page, 
     		@ApiParam("每页显示的数量")@RequestParam int size){
 		return hotelService.listHotelsByPage(page, size);
 	}
+	*/
 	
 	@ApiOperation(notes="管理員獲取酒店列表",value="")
 	@GetMapping("/all")
