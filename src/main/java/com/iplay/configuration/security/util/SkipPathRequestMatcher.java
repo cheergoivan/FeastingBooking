@@ -31,7 +31,6 @@ public class SkipPathRequestMatcher implements RequestMatcher {
 
     @Override
     public boolean matches(HttpServletRequest request) {
-    	System.out.println(request.getMethod());
         if (matchers.matches(request)) {
             return false;
         }
