@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -75,11 +76,18 @@ public class HotelController {
 		return hotelService.deleteHotels(entityDeletionVO);
 	}
 	
-	@ApiOperation(notes="分页展示酒店",value="")
-    @GetMapping
+	@ApiOperation(notes="分页展示酒店,返回酒店的List，默认每页展示10条数据",value="")
+    //@GetMapping
 	//@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
 	public List<SimplifiedHotelDTO>  listHotelsForUser(@ApiParam("从0开始的页码")@RequestParam int page){
 		return hotelService.listHotel(page, PaginationConfig.HOTELS_PER_PAGE_FOR_ORDINARY_USER);
+	}
+	
+	@ApiOperation(notes="分页展示酒店， 返回page对象",value="")
+    @GetMapping
+    public Page<SimplifiedHotelDTO> listHotelsByPage(@ApiParam("从0开始的页码")@RequestParam int page, 
+    		@ApiParam("每页显示的数量")@RequestParam int size){
+		return hotelService.listHotelsByPage(page, size);
 	}
 	
 	@ApiOperation(notes="管理員獲取酒店列表",value="")

@@ -2,6 +2,8 @@ package com.iplay.service.hotel;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
@@ -52,4 +54,6 @@ public interface HotelService {
 	void reCalculateTableRange(int hotelId);
 	
 	void reClaculatePriceRange(int hotelId);
+	
+	Page<SimplifiedHotelDTO> listHotelsByPage(int page, int size);
 }
