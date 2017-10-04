@@ -78,6 +78,20 @@ public class HotelServiceImpl implements HotelService {
 		}).collect(Collectors.toList());
 		return hotels;
 	}
+	
+
+	@Override
+	public Page<SimplifiedHotelDTO> listHotelsByPage(int page, int size) {
+		PageRequest pageRequest = new PageRequest(page, size, null);
+		Page<HotelDO> hotelPages = hotelDAO.findAll(pageRequest);
+		return hotelPages.map(hotelDO -> {
+			return new SimplifiedHotelDTO(hotelDO.getId(), hotelDO.getName(),
+					new double[] { hotelDO.getMinimumPrice(), hotelDO.getMaximumPrice() },
+					new int[] { hotelDO.getMinimumTables(), hotelDO.getMaximunTables() }, 0,
+					hotelDO.getPicturesAsArray().length>0?ResourcesUriBuilder.buildUri(hotelDO.getPicturesAsArray()[0]):"");
+		});
+	}
+	
 
 	@Override
 	public List<SimplifiedHotelAdminDTO> listHotel() {
@@ -343,5 +357,4 @@ public class HotelServiceImpl implements HotelService {
 			hotelDAO.save(hotel);
 		}
 	}
-	
 }
