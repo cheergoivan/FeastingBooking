@@ -119,13 +119,15 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
     	function initActiveHall(hallId) {
     		apiService.getBanquetHall(hallId).then(function(response) {
     			$scope.data.activeBanquet = response;
+    			$scope.data.activeBanquet.minimumTables = response.tableRange[0];
+    			$scope.data.activeBanquet.maximumTables = response.tableRange[1];
     		}, function(response) {
     			alertManager.addAlert('danger', response);
     		});
     	}
     	$scope.data.hotelDetail.banquetHalls && $scope.data.hotelDetail.banquetHalls.length && initActiveHall($scope.data.hotelDetail.banquetHalls[0].id);
-    	$scope.updateBanquet = function() {
-    		apiService.updateBanquet(data.activeBanquet).then(function(response) {
+    	$scope.data.updateBanquet = function() {
+    		apiService.updateBanquet($scope.data.activeBanquet).then(function(response) {
     			alertManager.addAlert('success', '成功更新宴會聼。');
     		}, function(response) {
     			alertManager.addAlert('danger', response);

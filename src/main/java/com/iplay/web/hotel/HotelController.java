@@ -110,7 +110,7 @@ public class HotelController {
 		if(id == -1)
 			throw new ResourceNotFoundException("Hotel with id:"+hotelId+" doesn't exist");
 		return id;
-	}
+	} 
 	
 	@ApiOperation(notes = "管理員新增一個宴席，返回宴席id", value = "")
 	@PostMapping("/{id}/feasts")
