@@ -10,9 +10,19 @@ public class HotelViewController {
 	@Value("${iplay.view.templateFolder}")
 	private String rootFolder;
 	
-	@GetMapping("/FeastBooking/hotels")
+	@GetMapping("/FeastBooking/hotels/*")
 	public String indexView() {
 		return rootFolder + "index.html";
+	}
+	
+	@GetMapping("/partialView/hotels")
+	public String hotelsPartialView() {
+		return rootFolder + "partialView_hotels.html";
+	}
+	
+	@GetMapping("/partialView/hotel_list")
+	public String hotelListPartialView() {
+		return rootFolder + "partialView_hotel_list.html";
 	}
 	
 	@GetMapping("/FeastBooking/hotel/*/info")
@@ -25,14 +35,11 @@ public class HotelViewController {
 		return rootFolder + "index.html";
 	}
 	
-	@GetMapping("/partialView/hotels")
-	public String hotelListPartialView() {
-		return rootFolder + "hotel_list.html";
-	}
+
 	
-	@GetMapping("/partialView/hotelDetail")
+	@GetMapping("/partialView/hotel_detail")
 	public String hotelPartialView() {
-		return rootFolder + "hotel_detail.html";
+		return rootFolder + "partialView_hotel_detail.html";
 	}
 	
 	@GetMapping("/partialView/newHotel")

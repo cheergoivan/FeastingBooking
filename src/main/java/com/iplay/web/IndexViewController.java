@@ -12,7 +12,7 @@ public class IndexViewController {
 	
 	@GetMapping("/partialView/FeastBooking")
 	public String index() {
-		return templateFolder + "feastBookingIndex.html";
+		return templateFolder + "partialView_feastBooking.html";
 	}
 	
 	@GetMapping("/FeastBooking/*")

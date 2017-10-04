@@ -1,5 +1,5 @@
-angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router'])
-.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', function($stateProvider, $locationProvider, $urlRouterProvider) {
+angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router', 'services'])
+.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'constants', function($stateProvider, $locationProvider, $urlRouterProvider, constants) {
 	$locationProvider.html5Mode(true).hashPrefix('!');
 	var states = [{
 		name: "signin",
@@ -16,16 +16,35 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 		abstract: true,
 		views: {
 			"index@": {
-				templateUrl: "partialView/FeastBooking"
+				templateUrl: "partialView/FeastBooking",
+				controller: "feastBookingCtrl"
 			}
 		}
 	}, {
-		name: "FeastBooking.hotels",
+		name: constants.hotelsStatePrefix,
 		url: "/hotels",
+		abstract: true,
 		views: {
 			'main@FeastBooking': {
-				templateUrl:"partialView/hotels",
+				templateUrl: "partialView/hotels",
+				controller: "hotelsCtrl"
+			}
+		}
+	}, {
+		name: constants.hotelsStatePrefix + "." + constants.hotelsListState,
+		url: "/list",
+		views: {
+			"hotelsMain@FeastBooking.hotels": {
+				templateUrl:"partialView/hotel_list",
 				controller: "hotelListCtrl"
+			}
+		}
+	}, {
+		name: constants.hotelsStatePrefix + "." + constants.hotelsRecommondationState,
+		url: "/recommendation",
+		views: {
+			"hotelsMain@FeastBooking.hotels": {
+				template: "TODO"
 			}
 		}
 	}, {
@@ -34,7 +53,7 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 		abstract: true,
 		views: {
 			'main@FeastBooking': {
-				templateUrl: "partialView/hotelDetail",
+				templateUrl: "partialView/hotel_detail",
 				controller: "hotelDetailCtrl"
 			}
 		},
@@ -45,16 +64,16 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 			}]
 		}
 	}, {
-		name: "FeastBooking.newHotel",
-		url: "/newHotel",
+		name: constants.hotelsStatePrefix + "." + constants.createHotelState,
+		url: "/new",
 		views: {
-			'main@FeastBooking': {
+			'hotelsMain@FeastBooking.hotels': {
 				templateUrl: "partialView/newHotel",
 				controller: "hotelCreateCtrl"
 			}
 		}
 	}, {
-		name: "FeastBooking.hotel.info",
+		name: constants.hotelStatePrefix + "." + constants.hotelInfoState,
 		url: "/info",
 		views: {
 			'content@FeastBooking.hotel': {
@@ -63,7 +82,7 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router']
 			}
 		}
 	}, {
-		name: "FeastBooking.hotel.banquet",
+		name: constants.hotelStatePrefix + "." + constants.hotelBanquetState,
 		url: "/banquet",
 		views: {
 			'content@FeastBooking.hotel': {

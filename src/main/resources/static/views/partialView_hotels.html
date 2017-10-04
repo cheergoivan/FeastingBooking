@@ -1,0 +1,10 @@
+<div class="hotels-container">
+	<div class="hotels-control-panel nav-panel">
+		<ul class="nav-menu hotels-menu">
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.hotelsListState)}" ng-click="data.goto(constants.hotelsListState)"><a ui-sref="{{constants.hotelsStatePrefix + '.' + constants.hotelsListState}}">酒店列表</a></li>
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.hotelsRecommondationState)}" ng-click="data.goto(constants.hotelsRecommondationState)"><a ui-sref="{{constants.hotelsStatePrefix + '.' + constants.hotelsRecommondationState}}">酒店推薦</a></li>
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.createHotelState)}" ng-click="data.goto(constants.createHotelState)"><a ui-sref="{{constants.hotelsStatePrefix + '.' + constants.constants.createHotelState}}">創建酒店</a></li>
+		</ul>
+	</div>
+	<div class="hotels-main-content" ui-view="hotelsMain"></div>
+</div>

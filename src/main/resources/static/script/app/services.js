@@ -1,11 +1,16 @@
-angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
-.service('constants', [function() {
-	return {
-		apiPrefix: '/api',
-		authTokenName: 'FeastBookingAuthToken'
-	}
-}])
-.service('alertManager', ['$rootScope', '$timeout', function($rootScope, $timeout) {
+angular.module("services", ["ui.bootstrap", "ngFileUpload"])
+.constant("constants", {
+	apiPrefix: "/api",
+	authTokenName: "FeastBookingAuthToken",
+	hotelsStatePrefix: "FeastBooking.hotels",
+	hotelsListState: "list",
+	hotelsRecommondationState: "recommendation",
+	hotelStatePrefix: "FeastBooking.hotel",
+	createHotelState: "newHotel",
+	hotelInfoState: "info",
+	hotelBanquetState: "banquet"
+})
+.service("alertManager", ["$rootScope", "$timeout", function($rootScope, $timeout) {
 	var timeout = 5000;
 	function addAlert(level, message) {
 		if(!level)
@@ -22,7 +27,7 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
 				message: message
 			};
 			$rootScope.alerts.push(notification);
-			if(level !== 'danger') {
+			if(level !== "danger") {
 				$timeout(function() {
 					$rootScope.alerts.splice($rootScope.alerts.indexOf(notification), 1);
 				}, timeout);
@@ -39,7 +44,7 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
 		removeAlert: removeAlert
 	}
 }])
-.service('apiService', ['$http', '$q', '$window', 'constants', 'Upload', function($http, $q, $window, constants, Upload) {
+.service("apiService", ["$http", "$q", "$window", "constants", "Upload", function($http, $q, $window, constants, Upload) {
 	function promiseFactory(method, url, headers, data) {
 		var defered = $q.defer();
 		if(!method) {
@@ -81,48 +86,48 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
 	var urlPrefix = constants.apiPrefix;
 	// account api
 	function signin(account) {
-		return promiseFactory('POST', `${urlPrefix}/auth/token`, null, account);
+		return promiseFactory("POST", `${urlPrefix}/auth/token`, null, account);
 	}
 	// hotel api
 	function getHotelList() {
-		return promiseFactory('GET', `${urlPrefix}/hotels/all`);
+		return promiseFactory("GET", `${urlPrefix}/hotels/all`);
     }
 	function createHotel(hotel) {
-		return promiseFactory('POST', `${urlPrefix}/hotels`, null, hotel);
+		return promiseFactory("POST", `${urlPrefix}/hotels`, null, hotel);
 	}
 	function getHotelDetail(hotelId) {
-		return promiseFactory('GET', `${urlPrefix}/hotels/${hotelId}`);
+		return promiseFactory("GET", `${urlPrefix}/hotels/${hotelId}`);
 	}
 	function updateHotelDetail(hotelDetail) {
 		var hotelId = hotelDetail.id;
-		return promiseFactory('PUT', `${urlPrefix}/hotels/${hotelId}`, null, hotelDetail);
+		return promiseFactory("PUT", `${urlPrefix}/hotels/${hotelId}`, null, hotelDetail);
 	}
 	function addHotelImages(hotelId, images) {
 		return fileUploadFactory(`${urlPrefix}/hotels/${hotelId}/pictures`, images);
 	}
 	function deleteHotelImage(hotelId, names) {
-		var headers = {'Content-Type': 'application/json'};
-		return promiseFactory('DELETE', `${urlPrefix}/hotels/${hotelId}/pictures`, headers, names);
+		var headers = {"Content-Type": "application/json"};
+		return promiseFactory("DELETE", `${urlPrefix}/hotels/${hotelId}/pictures`, headers, names);
 	}
 	function deleteHotels(hotelId, id) {
 
 	}
 	function createBanquet(hotelId, banquet) {
-		return promiseFactory('POST', `${urlPrefix}/hotels/${hotelId}/banquet_halls`, null, banquet);
+		return promiseFactory("POST", `${urlPrefix}/hotels/${hotelId}/banquet_halls`, null, banquet);
 	}
 	function getBanquetHall(hallId) {
-		return promiseFactory('GET', `${urlPrefix}/banquet_halls/${hallId}`);
+		return promiseFactory("GET", `${urlPrefix}/banquet_halls/${hallId}`);
 	}
 	function addBanquetImages(banquetId, images) {
 		return fileUploadFactory(`${urlPrefix}/banquet_halls/${banquetId}/pictures`, images);
 	}
 	function removeBanquetImage(banquetId, names) {
-		var headers = {'Content-Type': 'application/json'};
-		return promiseFactory('DELETE', `${urlPrefix}/banquet_halls/${banquetId}/pictures`, headers, names);
+		var headers = {"Content-Type": "application/json"};
+		return promiseFactory("DELETE", `${urlPrefix}/banquet_halls/${banquetId}/pictures`, headers, names);
 	}
 	function updateBanquet(banquet) {
 		var banquetId = banquet.id;
-		return promiseFactory('PUT', `${urlPrefix}/banquet_halls/${banquetId}`, null, banquet);
+		return promiseFactory("PUT", `${urlPrefix}/banquet_halls/${banquetId}`, null, banquet);
 	}
     return {
     	signin: signin,
@@ -140,7 +145,7 @@ angular.module('services', ['ui.bootstrap', 'ngFileUpload'])
         updateBanquet: updateBanquet
     };
 }])
-.service('modals', ['$uibModal', function($uibModal) {
+.service("modals", ["$uibModal", function($uibModal) {
 	function messageModal(title, message) {
 		var modalInstance = $uibModal.open({
 			template: '<div class="modal-container">'

@@ -17,7 +17,7 @@ public class AuthViewController {
 	
 	@GetMapping("/partialView/signin")
 	public String AdminSignin() {
-		return templateFolder + "signin.html";
+		return templateFolder + "partialView_signin.html";
 	}
 	
 }
