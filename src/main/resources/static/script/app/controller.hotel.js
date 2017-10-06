@@ -1,4 +1,11 @@
-angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
+angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
+	.controller("hotelsCtrl", ["$scope", "$state", "$rootScope", "constants", function($scope, $state, $rootScope, constants) {
+		$scope.data = {};
+		$rootScope.state = $state.current;
+		$scope.data.goto = function goto(state) {
+			$state.go(constants.hotelsStatePrefix + "." + state);
+		}
+	}])
     .controller('hotelListCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'modals', function ($scope, $state, apiService, alertManager, modals) {
         function initHotelList() {
         	apiService.getHotelList().then(function(response) {
@@ -28,7 +35,7 @@ angular.module('controller.hotel', ['services', 'ui.router', 'ngFileUpload'])
             });
         });
         $scope.data.addHotel = function() {
-        	$state.go('FeastBooking.newHotel');
+        	$state.go('FeastBooking.hotels.newHotel');
         };
         $scope.data.deleteHotels = function(ids) {
         	var ids = $scope.data.hotelList.filter(function(hotel) {

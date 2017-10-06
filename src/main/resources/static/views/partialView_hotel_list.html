@@ -1,0 +1,48 @@
+<div>
+	<div class="table-container">
+		<div class="table-control">
+			<div class="btn-group" role="group">
+				<button class="btn btn-default" type="button" ng-click="data.addHotel()">添加酒店</button>
+				<button class="btn btn-default" type="button" ng-click="data.deleteHotels()">刪除酒店</button>
+			</div>
+			<div class="search-control">
+				<input type="text" class="form-control" ng-model="data.search"
+					placeholder="輸入内容可以過濾">
+			</div>
+		</div>
+		<div class="table-body">
+			<table class="table">
+				<thead>
+					<tr>
+						<td><nice-checkbox nice-model="data.chooseAll"></nice-checkbox></td>
+						<td>ID</td>
+						<td>酒樓名稱</td>
+						<td>聯係人</td>
+						<td>聯係電話</td>
+						<td>郵箱</td>
+						<td>地址</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr
+						ng-repeat="hotel in data.hotelList | filter: data.search | limitTo: data.countPerPage: data.startIndex"
+						ng-click="data.enterHotelDetail(hotel.id)">
+						<td><nice-checkbox nice-model="hotel.$$selected"></nice-checkbox></td>
+						<td>{{::hotel.id}}</td>
+						<td><a ng-click="data.goDetail(hotel.id)">{{::hotel.name}}</a></td>
+						<td>{{::hotel.contact}}</td>
+						<td>{{::hotel.telephone}}</td>
+						<td>{{::hotel.email}}</td>
+						<td>{{::hotel.address}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="table-pagination">
+			<ul uib-pagination items-per-page="data.countPerPage"
+				max-size="data.maxCount" total-items="data.hotelList.length"
+				ng-model="data.page" ng-change="data.changePage()"
+				previous-text="前一頁" next-text="后一頁"></ul>
+		</div>
+	</div>
+</div>
