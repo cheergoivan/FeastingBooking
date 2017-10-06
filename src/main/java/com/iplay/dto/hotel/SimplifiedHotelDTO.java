@@ -6,7 +6,7 @@ public class SimplifiedHotelDTO {
 	private double[] priceRange;
 	private int[] tableRange;
 	private int numOfComment;
-	private String pirctureUrl;
+	private String pictureUrl;
 
 	public SimplifiedHotelDTO(int id, String name, double[] priceRange, int[] tableRange, int numOfComment,
 			String pirctureUrl) {
@@ -16,7 +16,7 @@ public class SimplifiedHotelDTO {
 		this.priceRange = priceRange;
 		this.tableRange = tableRange;
 		this.numOfComment = numOfComment;
-		this.pirctureUrl = pirctureUrl;
+		this.pictureUrl = pirctureUrl;
 	}
 
 	public int getId() {
@@ -60,10 +60,10 @@ public class SimplifiedHotelDTO {
 	}
 
 	public String getPirctureUrl() {
-		return pirctureUrl;
+		return pictureUrl;
 	}
 
 	public void setPirctureUrl(String pirctureUrl) {
-		this.pirctureUrl = pirctureUrl;
+		this.pictureUrl = pirctureUrl;
 	}
 }
