@@ -8,7 +8,11 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 	hotelStatePrefix: "FeastBooking.hotel",
 	createHotelState: "newHotel",
 	hotelInfoState: "info",
-	hotelBanquetState: "banquet"
+	hotelBanquetState: "banquet",
+	hotelDiscountState: "discount",
+	hotelOrderState: "order",
+	hotelCommentState: "commont",
+	hotelCreateBanquetState: "newBanquet"
 })
 .service("alertManager", ["$rootScope", "$timeout", function($rootScope, $timeout) {
 	var timeout = 5000;
@@ -109,8 +113,9 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 		var headers = {"Content-Type": "application/json"};
 		return promiseFactory("DELETE", `${urlPrefix}/hotels/${hotelId}/pictures`, headers, names);
 	}
-	function deleteHotels(hotelId, id) {
-
+	function deleteHotels(ids) {
+		var headers = {"Content-Type": "application/json"};
+		return promiseFactory('DELETE', `${urlPrefix}/hotels`, headers, ids);
 	}
 	function createBanquet(hotelId, banquet) {
 		return promiseFactory("POST", `${urlPrefix}/hotels/${hotelId}/banquet_halls`, null, banquet);

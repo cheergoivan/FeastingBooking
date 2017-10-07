@@ -11,7 +11,7 @@ angular.module('controller.account', ['services', 'ui.router'])
 			}
 			else {
 				$window.localStorage[constants.authTokenName] = "Bearer " + response.token;
-				$state.go('FeastBooking.hotels');
+				$state.go(constants.hotelsStatePrefix + '.' + constants.hotelsListState);
 			}
 		}, function(response) {
 			alert(response);

@@ -30,12 +30,10 @@ public class HotelViewController {
 		return rootFolder + "index.html";
 	}
 	
-	@GetMapping("/FeastBooking/hotel/*/banquet")
+	@GetMapping("/FeastBooking/hotel/*/banquet/*")
 	public String hotelBanquetView() {
 		return rootFolder + "index.html";
 	}
-	
-
 	
 	@GetMapping("/partialView/hotel_detail")
 	public String hotelPartialView() {
@@ -44,22 +42,22 @@ public class HotelViewController {
 	
 	@GetMapping("/partialView/newHotel")
 	public String createHotelPartialVIew() {
-		return rootFolder + "create_hotel.html";
+		return rootFolder + "partialView_create_hotel.html";
 	}
 	
 	@GetMapping("/partialView/hotelDetailInfo")
 	public String hotelDetailPartialView() {
-		return rootFolder + "hotel_detail_info.html";
+		return rootFolder + "partialView_hotel_info.html";
 	}
 	
 	@GetMapping("/partialView/hotelDetailBanquet")
 	public String hotelDetailBanquetView() {
-		return rootFolder + "hotel_detail_banquet.html";
+		return rootFolder + "partialView_hotel_banquet.html";
 	}
 
-	@GetMapping("/partialView/hotelNewBanquet")
+	@GetMapping("/partialView/newBanquet")
 	public String hotelNewBanquetPartialView() {
-		return rootFolder + "create_banquet.html";
+		return rootFolder + "partialView_create_banquet.html";
 	}
 	
 	@GetMapping("/FeastBooking/hotel/*/newBanquet")

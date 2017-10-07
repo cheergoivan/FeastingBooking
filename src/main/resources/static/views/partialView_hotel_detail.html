@@ -1,26 +1,23 @@
-<div class="hotels-detail-container">
-	<div class="hotels-control-panel nav-panel">
+<div class="content-container">
+	<div class="nav-panel">
+		<div class="hotel-basic-info-container">
+			<div><h1>{{::data.hotelDetail.name}}</h1></div>
+			<div><label>聯係電話:</label><span>{{data.hotelDetail.telephone}}</span></div>
+			<div><label>地址:</label><span>{{data.hotelDetail.address.city + ' ' + data.hotelDetail.address.district + ' ' + data.hotelDetail.address.street}}</span></div>
+		</div>
 		<ul class="nav-menu hotels-menu">
-			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.hotelsListState)}" ng-click="data.goto(constants.hotelsListState)"><a ui-sref="{{constants.hotelsStatePrefix + '.' + constants.hotelsListState}}">酒店列表</a></li>
-			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.hotelsRecommondationState)}" ng-click="data.goto(constants.hotelsRecommondationState)"><a ui-sref="{{constants.hotelsStatePrefix + '.' + constants.hotelsRecommondationState}}">酒店推薦</a></li>
-			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.createHotelState)}" ng-click="data.goto(constants.createHotelState)"><a ui-sref="{{constants.hotelsStatePrefix + '.' + constants.constants.createHotelState}}">創建酒店</a></li>
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelStatePrefix + '.' + constants.hotelInfoState)}" ng-click="data.goto(constants.hotelInfoState)"><a class="nav-link">酒店詳情</a></li>
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelStatePrefix + '.' + constants.hotelBanquetState) || state.name === (constants.hotelStatePrefix + '.' + constants.hotelCreateBanquetState)}">
+				<a class="nav-link">宴會廳</a>
+				<ul class="nav-menu">
+					<li class="nav-menu-item" ng-click="data.createNewBanquet()"><a class="nav-child-link">創建宴會廳</a></li>
+					<li class="nav-menu-item" ng-repeat="banquet in data.hotelDetail.banquetHalls" ng-click="data.goBanquet(banquet.id)"><a class="nav-child-link">{{::banquet.name}}</a></li>
+				</ul>
+			</li>
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelStatePrefix + '.' + constants.hotelDiscountState)}"><a class="nav-link">優惠信息</a></li>
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelStatePrefix + '.' + constants.hotelOrderState)}"><a class="nav-link" >訂單信息</a></li>
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelStatePrefix + '.' + constants.hotelCommentState)}"><a class="nav-link">酒店評價</a></li>
 		</ul>
 	</div>
-	<div class="hotels-main-content" ui-view="hotelsMain"></div>
-</div>
-
-<div>
-	<div class="hotel-name-wrapper">
-		<h1>{{::data.hotelDetail.name}}</h1>
-	</div>
-	<div class="hotel-detail-container">
-		<ul class="hotel-detail-menu">
-			<li class="hotel-detail-menu-item" ng-click="data.goto('info', hotelId)" ng-class="{'active': data.state === 'info'}">基本信息</li>
-			<li class="hotel-detail-menu-item" ng-click="data.goto('banquet', hotelId)" ng-class="{'active': data.state === 'banquet' || data.state === 'newbanquet'}">宴會廳信息</li>
-			<li class="hotel-detail-menu-item" ng-click="goto('discount', hotelId)" ng-class="{'active': data.state === 'discount'}">優惠信息</li>
-			<li class="hotel-detail-menu-item" ng-click="goto('order', hotelId)" ng-class="{'active': data.state === 'order'}">訂單信息</li>
-			<li class="hotel-detail-menu-item" ng-click="goto('comment', hotelId)" ng-class="{'comment': data.state === 'comment'}">酒店評價</li>
-		</ul>
-		<div class="hotel-detail-content" ui-view="content"></div>
-	</div>
+	<div class="content-panel" ui-view="hotelDetailMain"></div>
 </div>

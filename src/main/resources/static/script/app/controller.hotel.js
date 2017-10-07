@@ -43,9 +43,9 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
         	}).map(function(selected) {
         		return selected.id;
         	});
-        	apiService.deleteHotels(ids).then(function() {
+        	apiService.deleteHotels({ ids: ids}).then(function() {
         		alertManager.addAlert("success", "成功刪除酒店");
-        		$scope.data.hotelList = $scope.data.hotelList.filter(function() {
+        		$scope.data.hotelList = $scope.data.hotelList.filter(function(hotel) {
         			return !hotel.$$selected;
         		});
         	}, function(response) {
@@ -53,22 +53,23 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
         	})
         };
     }])
-    .controller('hotelDetailCtrl', ['$state', '$scope', 'apiService', 'hotelDetail', 'alertManager', function($state, $scope, apiService, hotelDetail, alertManager) {
+    .controller('hotelDetailCtrl', ['$state', '$scope', 'apiService', 'hotelDetail', 'alertManager', 'constants', function($state, $scope, apiService, hotelDetail, alertManager, constants) {
     	$scope.data = {};
     	$scope.data.hotelDetail = hotelDetail;
-    	$scope.$watch(function() {
-    		return $state.current.url;
-    	}, function(newVal) {
-    		$scope.data.state = newVal.substring(1).toLowerCase();
-    	});
-    	$scope.data.goto = function(state, params) {
-            var fullState = "FeastBooking.hotel." + state;
+    	$scope.data.goto = function(state) {
+            var fullState = constants.hotelStatePrefix + '.' + state;
     		if(fullState.toLowerCase() !== $state.current.name.toLowerCase()) {
-                $state.go(fullState, params);
+                $state.go(fullState, $scope.data.hotelDetail.id);
             }
     	};
+    	$scope.data.createNewBanquet = function() {
+    		$state.go(constants.hotelStatePrefix + '.' + constants.hotelCreateBanquetState, $scope.data.hotelDetail.id);
+    	}
+    	$scope.data.goBanquet = function(banquetId) {
+    		$state.go(constants.hotelStatePrefix + '.' + constants.hotelBanquetState, {hotelId: $scope.data.hotelDetail.id, banquetId: banquetId});
+    	}
     }])
-    .controller('hotelDetailInfoCtrl', ['$scope', 'apiService', 'hotelDetail', 'alertManager', 'Upload', 'modals', function($scope, apiService, hotelDetail, alertManager, Upload, modals) {
+    .controller('hotelInfoCtrl', ['$scope', 'apiService', 'hotelDetail', 'alertManager', 'Upload', 'modals', function($scope, apiService, hotelDetail, alertManager, Upload, modals) {
     	$scope.data = { hotelDetail : angular.copy(hotelDetail) };
     	function hotelDTO2hotelPO(dto) {
     		var po = angular.copy(dto);
@@ -104,7 +105,7 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
     	$scope.data.deleteImage = function(url) {
     		modals.messageModal('確認', '刪除這張圖片?').then(function() {
     			var names = [url.substring(url.lastIndexOf('/') + 1)];
-        		apiService.deleteHotelImage(hotelDetail.id, names).then(function(response) {
+        		apiService.deleteHotelImage(hotelDetail.id, {names : names}).then(function(response) {
         			alertManager.addAlert('success', '成功刪除圖片。');
         			hotelDetail.pictureUrls.splice(hotelDetail.pictureUrls.indexOf(url), 1);
         			$scope.data.hotelDetail.pictureUrls.splice($scope.data.hotelDetail.pictureUrls.indexOf(url), 1);
@@ -117,22 +118,10 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
     		$scope.data.hotelDetail = hotelDetail;
     	};
     }])
-    .controller('hotelDetailBanquetCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'hotelDetail', 'modals', function($scope, $state, apiService, alertManager, hotelDetail, modals) {
+    .controller('hotelDetailBanquetCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'hotelDetail', 'banquet', 'modals', function($scope, $state, apiService, alertManager, hotelDetail, banquet, modals) {
     	$scope.data = {};
     	$scope.data.hotelDetail = hotelDetail;
-    	$scope.data.addNewBanquet = function() {
-    		$state.go('FeastBooking.hotel.newBanquet', $scope.data.hotelDetail.id);
-    	};
-    	function initActiveHall(hallId) {
-    		apiService.getBanquetHall(hallId).then(function(response) {
-    			$scope.data.activeBanquet = response;
-    			$scope.data.activeBanquet.minimumTables = response.tableRange[0];
-    			$scope.data.activeBanquet.maximumTables = response.tableRange[1];
-    		}, function(response) {
-    			alertManager.addAlert('danger', response);
-    		});
-    	}
-    	$scope.data.hotelDetail.banquetHalls && $scope.data.hotelDetail.banquetHalls.length && initActiveHall($scope.data.hotelDetail.banquetHalls[0].id);
+    	$scope.data.banquet = banquet;
     	$scope.data.updateBanquet = function() {
     		apiService.updateBanquet($scope.data.activeBanquet).then(function(response) {
     			alertManager.addAlert('success', '成功更新宴會聼。');
@@ -188,15 +177,16 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
             });
         };
     }])
-    .controller('banquetCreateCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'hotelDetail', function($scope, $state, apiService, alertManager, hotelDetail) {
+    .controller("banquetCreateCtrl", ["$scope", "$state", "apiService", "alertManager", "hotelDetail", function($scope, $state, apiService, alertManager, hotelDetail) {
     	$scope.data = {};
     	$scope.data.hotelDetail = hotelDetail;
     	$scope.data.banquet = {};
         $scope.data.createBanquet = function() {
+        	$scope.data.banquet.extraInfo = $scope.data.banquet.extraInfos.join(";")
         	apiService.createBanquet($scope.data.hotelDetail.id, $scope.data.banquet).then(function() {
-        		alertManager.addAlert('success', '成功創建宴會廳');
+        		alertManager.addAlert("success", "成功創建宴會廳");
         	}, function(response) {
-        		alertManager.addAlert('danger', response);
+        		alertManager.addAlert("danger", response);
         	})
         };
     }])

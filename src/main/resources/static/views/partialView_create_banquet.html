@@ -1,0 +1,22 @@
+<div class="create-banquet-container">
+	<div><h1>創建新的宴會廳</h1></div>
+	<div>
+		<form class="form">
+			<div class="row">
+				<label-input-text class="col col-md-6" model="data.banquet.name" label="名稱"></label-input-text>
+                <label-input-number class="col col-md-6" model="data.banquet.area" label="面積" step="0.1"></label-input-number>
+                <label-input-number class="col col-md-6" model="data.banquet.height" label="高度" step="0.1"></label-input-number>
+                <label-input-text class="col col-md-6" model="data.banquet.shape" label="大廳形狀"></label-input-text>
+                <label-input-text class="col col-md-6" model="data.banquet.actualArea" label="迎賓區域"></label-input-text>
+                <label-input-text class="col col-md-6" model="data.banquet.columns" label="立柱情況"></label-input-text>
+                <label-input-text class="col col-md-6" model="data.banquet.colorOfTablecloth" label="桌布顔色"></label-input-text>
+                <label-range class="col col-md-6" from="data.banquet.minimumTables" to="data.banquet.maximumTables" label="桌數"></label-range>
+              	<label-input-number class="col col-md-6" model="data.banquet.minimumPrice" label="最低消費"></label-input-number>
+              	<editable-list class="col-adj col-md-12" infos="data.banquet.extraInfos" label="額外信息"></editable-list>
+			</div>
+			<div class="row btn-row">
+				<button class="btn btn-primary" ng-click="data.createBanquet()">保存</button>
+			</div>
+		</form>
+	</div>
+</div>

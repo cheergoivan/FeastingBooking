@@ -34,6 +34,7 @@ h3 {
 }
 .navbar .nav > li > a {
   color: #999999;
+  background-color: transparent!important;
 }
 .navbar .nav > li.active {
   background-color: #175199;
@@ -64,6 +65,10 @@ h3 {
   display: flex;
   justify-content: space-between;
 }
+.col-adj {
+  padding: 8px 20px;
+  display: flex;
+}
 .control-label {
   min-width: 100px;
   font-size: 16px;
@@ -92,39 +97,38 @@ main.main {
   left: 0;
   right: 0;
   overflow-x: hidden;
-  overflow-y: scroll;
 }
 main.main .nav-panel {
   background-color: white;
 }
-main.main .nav-panel > .nav-menu {
+main.main .nav-panel .nav-menu {
   padding: 0;
 }
-main.main .nav-panel > .nav-menu > .nav-menu-item {
-  height: 40px;
+main.main .nav-panel .nav-menu .nav-menu-item {
+  min-height: 40px;
   line-height: 40px;
-  padding-left: 20px;
   border-bottom: 1px solid #ebebeb;
-}
-main.main .nav-panel > .nav-menu > .nav-menu-item:nth-child(2n - 1) {
   background-color: #fbfbfb;
 }
-main.main .nav-panel > .nav-menu > .nav-menu-item:nth-child(2n) {
-  background-color: #eee;
+main.main .nav-panel .nav-menu .nav-menu-item > .nav-child-link {
+  padding-left: 40px;
 }
-main.main .nav-panel > .nav-menu > .nav-menu-item.active {
+main.main .nav-panel .nav-menu .nav-menu-item > .nav-link {
+  padding-left: 20px;
+}
+main.main .nav-panel .nav-menu .nav-menu-item.active {
   background-color: #175199;
 }
-main.main .nav-panel > .nav-menu > .nav-menu-item.active > a {
+main.main .nav-panel .nav-menu .nav-menu-item.active > a {
   color: white;
 }
-main.main .nav-panel > .nav-menu > .nav-menu-item.active:hover {
+main.main .nav-panel .nav-menu .nav-menu-item.active:hover {
   background-color: #175199;
 }
-main.main .nav-panel > .nav-menu > .nav-menu-item.active:hover > a {
+main.main .nav-panel .nav-menu .nav-menu-item.active:hover > a {
   color: white;
 }
-main.main .nav-panel > .nav-menu > .nav-menu-item:hover {
+main.main .nav-panel .nav-menu .nav-menu-item:hover {
   cursor: pointer;
   background-color: #ebebeb;
 }
@@ -286,6 +290,7 @@ main.main .nav-panel > .nav-menu > .nav-menu-item:hover {
   font-size: 80px;
 }
 .range-container {
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
@@ -304,6 +309,7 @@ main.main .nav-panel > .nav-menu > .nav-menu-item:hover {
   margin-right: 0;
 }
 .number-range-container {
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
@@ -313,25 +319,51 @@ main.main .nav-panel > .nav-menu > .nav-menu-item:hover {
 .number-range-container input:last-child {
   margin-right: 0;
 }
-/*hotel_list*/
-.hotels-container {
+.editable-list-container {
+  display: flex;
+}
+.editable-list-container > ul {
+  padding: 0;
+  margin: 0;
+}
+.editable-list-container > ul > .editable-list-item {
+  margin-right: 10px;
+}
+#editableList {
+  margin-top: 6px;
+  width: 200px;
+}
+/*hotel*/
+.content-container {
   width: 100%;
   height: 100%;
   display: flex;
 }
-.hotels-container > .hotels-control-panel {
+.content-container > .nav-panel {
   width: 300px;
   height: 100%;
   overflow-y: scroll;
 }
-.hotels-container > .hotels-main-content {
+.content-container > .content-panel {
   width: calc(100% -  300px);
   height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
-.create-hotel-container {
+/*hotel_list*/
+.create-hotel-container,
+.create-banquet-container,
+.hotel-info-container,
+.banquet-container {
+  max-width: 1000px;
+  margin: 0 auto;
   padding: 20px 10px;
 }
 /*hotel detail*/
+.hotels-detail-container {
+  display: flex;
+  height: 100%;
+}
 .hotel-detail-menu {
   display: flex;
   padding-left: 0;
@@ -362,11 +394,8 @@ main.main .nav-panel > .nav-menu > .nav-menu-item:hover {
   bottom: -3px;
   left: 0;
 }
-.hotel-name-wrapper {
-  padding: 0 40px;
-}
-.hotel-detail-container {
-  padding: 0 20px;
+.hotel-basic-info-container {
+  padding: 20px;
 }
 .banquet-hall-container > .banquet-hall-detail {
   padding: 20px;

@@ -76,26 +76,32 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router',
 		name: constants.hotelStatePrefix + "." + constants.hotelInfoState,
 		url: "/info",
 		views: {
-			'content@FeastBooking.hotel': {
-				templateUrl: 'partialView/hotelDetailInfo',
-				controller: "hotelDetailInfoCtrl"
+			'hotelDetailMain@FeastBooking.hotel': {
+				templateUrl: "partialView/hotelDetailInfo",
+				controller: "hotelInfoCtrl"
 			}
 		}
 	}, {
 		name: constants.hotelStatePrefix + "." + constants.hotelBanquetState,
-		url: "/banquet",
+		url: "/banquet/:banquetId",
 		views: {
-			'content@FeastBooking.hotel': {
+			"hotelDetailMain@FeastBooking.hotel": {
 				templateUrl: "partialView/hotelDetailBanquet",
 				controller: "hotelDetailBanquetCtrl"
 			}
+		},
+		resolve: {
+			apiService: 'apiService',
+			banquet: ['$stateParams', 'apiService', function($stateParams, apiService) {
+				return apiService.getBanquetHall($stateParams.banquetId);
+			}]
 		}
 	}, {
-		name: "FeastBooking.hotel.newBanquet",
+		name: constants.hotelStatePrefix + '.' + constants.hotelCreateBanquetState,
 		url: "/newBanquet",
 		views: {
-			'content@FeastBooking.hotel': {
-				templateUrl: "partialView/hotelNewBanquet",
+			'hotelDetailMain@FeastBooking.hotel': {
+				templateUrl: "partialView/newBanquet",
 				controller: "banquetCreateCtrl"
 			}
 		}

@@ -1,4 +1,4 @@
-angular.module('directives', [])
+angular.module('directives', ['services'])
 .directive('imageGallery', function() {
     return {
         restrict: 'AE',
@@ -156,7 +156,7 @@ angular.module('directives', [])
 					+ '<label class="control-label">{{::label}}</label>'
 					+ '<div class="range-container">'
 						+ '<input type="number" ng-model="from" class="form-control">'
-						+ '<span class="range">~</span>'
+						+ '<span class="range">-</span>'
 						+ '<input type="number" ng-model="to" class="form-control">'
 					+ '</div>'
 				+ '</div>',
@@ -194,16 +194,16 @@ angular.module('directives', [])
 		template: '<div class="label-number-range">'
 					+ '<label class="control-label">{{::label}}</label>'
 					+ '<div class="number-range-container">'
-						+ '<input type="number" ng-model="from" class="form-control" min="min" max="max" step="step" readonly>'
-						+ '<input type="number" ng-model="to" class="form-control" min="min" max="max" step="step" readonly>'
+						+ '<input type="number" ng-model="from" class="form-control" min="{{min}}" max="{{max}}" step="{{step}}" readonly>'
+						+ '<input type="number" ng-model="to" class="form-control" min="{{min}}" max="{{max}}" step="{{step}}" readonly>'
 					+ '</div>'
 				+ '</div>',
 		scope: {
 			from: '=',
 			to: '=',
-			min: '@',
-			max: '@',
-			step: '@',
+			min: '=',
+			max: '=',
+			step: '=',
 			label: '@'
 		},
 		link: function(elem, scope) {
@@ -224,14 +224,14 @@ angular.module('directives', [])
 		replace: true,
 		template: '<div class="">'
 					+ '<label class="control-label">{{::label}}</label>'
-					+ '<input ng-model="model" min="min" max="max" step="step" type="number" class="form-control">'
+					+ '<input ng-model="model" min="{{min}}" max="{{max}}" step="{{step}}" type="number" class="form-control">'
 				+ '</div>'
 					,
 		scope: {
-			min: '@',
-			max: '@',
+			min: '=',
+			max: '=',
 			model: '=',
-			step: '@',
+			step: '=',
 			label: '@'
 		},
 		link: function(elem, scope) {
@@ -243,6 +243,65 @@ angular.module('directives', [])
 				scope.min = temp;
 			}
 			scope.step = parseFloat(scope) || 1;
+		}
+	}
+})
+.directive('editableList', function() {
+	return {
+		restrict: 'AE',
+		replace: true,
+		template: '<div>'
+					+ '<label class="control-label">{{::label}}</label>'
+					+ '<div class="editable-list-container">'
+						+ '<ul>'
+							+ '<li class="editable-list-item btn btn-warning" ng-repeat="info in infos track by $index">{{::info}}<span title="刪除" ng-click="infos.splice($index, 1)">&times</span></li>'
+							+ '<li>'
+								+ '<span class="glyphicon glyphicon-plus btn btn-success" ng-click="editMode()" ng-class="{\'hidden\': mode === 1}" title="添加"></span>'
+								+ '<input id="editableList" type="text" ng-model="candidateInfo" class="form-control" ng-class="{\'hidden\': mode === 0}"/>'
+							+ '</li>'
+						+ '</ul>'
+					+ '</div>'
+				+ '</div>',
+		scope: {
+			label: '@',
+			infos: '='
+		},
+		controller: ['$scope', 'alertManager', function($scope, alertManager) {
+			//mode 0 is scan, 1 is edit
+			$scope.editMode = function() {
+				$scope.mode = 1;
+				$('#editableList').focus();
+			};
+			$('#editableList').blur(function() {
+				if(!$scope.candidateInfo) {
+					$scope.$apply(function() {
+						alertManager.addAlert('warning', '不能爲空');
+					});
+					return;
+				}
+				if($scope.infos.indexOf($scope.candidateInfo) !== -1) {
+					$scope.$apply(function() {
+						alertManager.addAlert('warning', '不能重複');
+					});
+					return;
+				}
+				if($scope.candidateInfo.length > 20) {
+					$scope.$apply(function() {
+						alertManager.addAlert('warning', '長度不能超過20')
+					});
+					return;
+				}
+				$scope.$apply(function() {
+					$scope.infos.push($scope.candidateInfo);
+					$scope.candidateInfo = '';
+					$scope.mode = 0;
+				});
+			});
+		}],
+		link: function(scope, elem) {
+			scope.mode = 0;
+			if(!scope.infos)
+				scope.infos = [];
 		}
 	}
 })
