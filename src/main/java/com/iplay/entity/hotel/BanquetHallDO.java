@@ -1,5 +1,6 @@
 package com.iplay.entity.hotel;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,7 +26,9 @@ public class BanquetHallDO {
 	private String shape;
 	private String actualArea;
 	private String colorOfTablecloth;
+	@Column(length=1000)
 	private String extraInfo;
+	@Column(length=1000)
 	private String pictures = "";
 	
 	@ManyToOne

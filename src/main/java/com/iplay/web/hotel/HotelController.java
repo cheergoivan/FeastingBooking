@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iplay.configuration.security.jwtAuthentication.auth.UserContext;
+import com.iplay.dto.ApiResponse;
 import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
@@ -136,15 +137,33 @@ public class HotelController {
 	@PreAuthorize("hasAnyRole('USER', 'MANAGER')")
 	public double postRating(@ApiParam("酒店id")@PathVariable("id") int hotelId, 
 			@ApiParam("评分") double score, @AuthenticationPrincipal UserContext context){
-		return hotelService.updateHotelRating(context.getUserId(), hotelId, score);
+		double rating = hotelService.updateHotelRating(context.getUserId(), hotelId, score);
+		if(rating == -1)
+			throw new ResourceNotFoundException("Hotel with id:"+hotelId+" doesn't exist");
+		return rating;
 	}
 	
+	@ApiOperation(notes="用户对酒店进行评价",value="")
+    @PostMapping("/{id}/comments")
+	@PreAuthorize("hasAnyRole('USER', 'MANAGER')")
+	public ApiResponse<String> postComment(@ApiParam("酒店id")@PathVariable("id") int hotelId, 
+			@ApiParam("评分") double score, @AuthenticationPrincipal UserContext context){
+				return null;
+		//return score;
+		//return hotelService.updateHotelRating(context.getUserId(), hotelId, score);
+	}
+	
+	/*
 	@ApiOperation(notes="用户获得酒店评分",value="")
     @GetMapping("/{id}/rating")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
 	public double getRating(@ApiParam("酒店id")@PathVariable("id") int hotelId){
-		return hotelService.getHotelRating(hotelId);
+		double rating = hotelService.getHotelRating(hotelId);
+		if(rating == -1)
+			throw new ResourceNotFoundException("Hotel with id:"+hotelId+" doesn't exist");
+		return rating;
 	}
+	*/
 	
 	@ApiOperation(notes="管理员删除图片",value="")
     @DeleteMapping("/{id}/pictures")

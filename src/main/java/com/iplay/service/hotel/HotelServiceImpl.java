@@ -185,6 +185,9 @@ public class HotelServiceImpl implements HotelService {
 
 	@Override
 	public double getHotelRating(int id) {
+		if(hotelDAO.findOne(id) == null){
+			return -1;
+		}
 		HotelRatingDO rating = hotelRatingDAO.findOne(id);
 		if(rating==null){
 			hotelRatingDAO.save(new HotelRatingDO(id, 0.0, 0, 5.0));
@@ -206,6 +209,9 @@ public class HotelServiceImpl implements HotelService {
 	@Override
 	@Transactional
 	public double updateHotelRating(int userId, int hotelId, double score) {
+		if(hotelDAO.findOne(hotelId) == null){
+			return -1;
+		}
 		if(hasUserRatedHotel(userId, hotelId)){
 			return hotelRatingDAO.findOne(hotelId).getRating();
 		}

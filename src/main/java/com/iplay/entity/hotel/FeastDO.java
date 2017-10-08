@@ -1,5 +1,6 @@
 package com.iplay.entity.hotel;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,7 +18,9 @@ public class FeastDO {
 	private int id;
 	private String name;
 	private double price;
+	@Column(length=1000)
 	private String courses;
+	@Column(length=1000)
 	private String pictures = "";
 	
 	@ManyToOne

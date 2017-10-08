@@ -22,7 +22,7 @@ public class HotelDO {
 	@GeneratedValue
 	private int id;
 	private String name;
-	@Column(length=4000)
+	@Column(length=1000)
 	private String description;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id")
@@ -30,6 +30,7 @@ public class HotelDO {
 	private String contact;
 	private String telephone;
 	private String email;
+	@Column(length=1000)
 	private String pictures = "";
 	private int minimumTables;
 	private int maximunTables;
