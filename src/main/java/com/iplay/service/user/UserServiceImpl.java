@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.iplay.dao.user.UserDAO;
 import com.iplay.entity.user.Role;
+import com.iplay.entity.user.SimplifiedUserDO;
 import com.iplay.entity.user.UserDO;
 
 @Service
@@ -52,5 +53,10 @@ public class UserServiceImpl implements UserService{
 			LOGGER.error(e.getMessage());
 		}
 		return Optional.ofNullable(user);
+	}
+
+	@Override
+	public Optional<SimplifiedUserDO> findSimplifiedUserByUsername(String username) {
+		return Optional.ofNullable(userDAO.findOneByUsername(username));
 	}
 }

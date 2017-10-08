@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ public class HotelDO {
 	@GeneratedValue
 	private int id;
 	private String name;
+	@Column(length=4000)
 	private String description;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id")
@@ -57,8 +59,8 @@ public class HotelDO {
 		this.pictures = pictures;
 		this.banquetHalls = new ArrayList<>();
 		this.feasts = new ArrayList<>();
-		this.minimumPrice = 1000000000;
-		this.minimumTables = 1000000000;
+		this.minimumPrice = Double.MAX_VALUE;
+		this.minimumTables = Integer.MAX_VALUE;
 		this.maximumPrice = -1;
 		this.maximunTables = -1;
 	}

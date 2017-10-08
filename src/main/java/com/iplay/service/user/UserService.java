@@ -2,6 +2,7 @@ package com.iplay.service.user;
 
 import java.util.Optional;
 
+import com.iplay.entity.user.SimplifiedUserDO;
 import com.iplay.entity.user.UserDO;
 
 public interface UserService {
@@ -14,5 +15,5 @@ public interface UserService {
 	
 	boolean isEmailOccupied(String email);
 	
-	
+	Optional<SimplifiedUserDO> findSimplifiedUserByUsername(String username);
 }

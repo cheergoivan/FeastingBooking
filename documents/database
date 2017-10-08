@@ -1,0 +1,7 @@
+1. bh_reservation
+(id, bh_id, user, tables, date, recommender, contact, phone)
+
+2.order
+(id, reservationId, order_time, manager, amount_paid, status)
+
+

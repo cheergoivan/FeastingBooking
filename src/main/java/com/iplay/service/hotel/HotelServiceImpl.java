@@ -178,8 +178,8 @@ public class HotelServiceImpl implements HotelService {
 		BeanUtils.copyProperties(hotel.getAddress(), address);
 		return new HotelDTO(hotel.getId(), hotel.getName(), hotel.getDescription(), 
 				address,hotel.getContact(), hotel.getTelephone(), hotel.getEmail(),
-				new int[]{hotel.getMinimumTables(), hotel.getMaximunTables()},
-				new double[]{hotel.getMinimumPrice(), hotel.getMaximumPrice()},
+				new int[]{hotel.getMinimumTables()==Integer.MAX_VALUE?0:hotel.getMinimumTables(), hotel.getMaximunTables()==-1?0: hotel.getMaximunTables()},
+				new double[]{hotel.getMinimumPrice()==Double.MAX_VALUE?0:hotel.getMinimumPrice(), hotel.getMaximumPrice()==-1?0:hotel.getMaximumPrice()},
 				getHotelRating(hotel.getId()), banquetHalls, feasts, pictures);
 	}
 
