@@ -7,7 +7,8 @@ angular.module("controller.main", ["services"])
 		$rootScope.state = toState;
 	});
 }])
-.controller("feastBookingCtrl", ["$scope", "$state", "$rootScope", function($scope, $state, $rootScope) {
+.controller("feastBookingCtrl", ["$scope", "$state", "$rootScope", '$stateParams', function($scope, $state, $rootScope, $stateParams) {
 	$scope.data = {};
 	$rootScope.state = $state.current;
+	$rootScope.stateParams = $stateParams;
 }])

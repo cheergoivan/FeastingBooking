@@ -63,10 +63,16 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
             }
     	};
     	$scope.data.createNewBanquet = function() {
-    		$state.go(constants.hotelStatePrefix + '.' + constants.hotelCreateBanquetState, $scope.data.hotelDetail.id);
+    		$state.go(constants.hotelStatePrefix + "." + constants.hotelCreateBanquetState, $scope.data.hotelDetail.id);
+    	}
+    	$scope.data.createNewFeast = function() {
+    		$state.go(constants.hotelStatePrefix + "." + constants.hotelCreateFeastState, $scope.data.hotelDetail.id);
     	}
     	$scope.data.goBanquet = function(banquetId) {
-    		$state.go(constants.hotelStatePrefix + '.' + constants.hotelBanquetState, {hotelId: $scope.data.hotelDetail.id, banquetId: banquetId});
+    		$state.go(constants.hotelStatePrefix + "." + constants.hotelBanquetState, {hotelId: $scope.data.hotelDetail.id, banquetId: banquetId});
+    	}
+    	$scope.data.goFeast = function(feastId) {
+    		$state.go(constants.hotelStatePrefix + "." + constants.hotelFeastState, {hotelId: $scope.data.hotelDetail.id, feastId: feastId});
     	}
     }])
     .controller('hotelInfoCtrl', ['$scope', 'apiService', 'hotelDetail', 'alertManager', 'Upload', 'modals', function($scope, apiService, hotelDetail, alertManager, Upload, modals) {
@@ -118,24 +124,30 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
     		$scope.data.hotelDetail = hotelDetail;
     	};
     }])
-    .controller('hotelDetailBanquetCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'hotelDetail', 'banquet', 'modals', function($scope, $state, apiService, alertManager, hotelDetail, banquet, modals) {
+    .controller('hotelBanquetCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'hotelDetail', 'banquet', 'modals', function($scope, $state, apiService, alertManager, hotelDetail, banquet, modals) {
     	$scope.data = {};
     	$scope.data.hotelDetail = hotelDetail;
-    	$scope.data.banquet = banquet;
+    	function initBanquet(banquet) {
+        	$scope.data.banquet = banquet;
+        	$scope.data.banquet.minimumTables = banquet.tableRange[0];
+        	$scope.data.banquet.maximumTables = banquet.tableRange[1];
+    	}
+    	initBanquet(banquet);
     	$scope.data.updateBanquet = function() {
-    		apiService.updateBanquet($scope.data.activeBanquet).then(function(response) {
+    		$scope.data.banquet.extraInfo = $scope.data.banquet.extraInfos.join(";");
+    		apiService.updateBanquet($scope.data.banquet).then(function(response) {
     			alertManager.addAlert('success', '成功更新宴會聼。');
     		}, function(response) {
     			alertManager.addAlert('danger', response);
-    		})
+    		});
     	}
     	$scope.data.addBanquetImage = function(files) {
     		if(files && files.length) {
-    			apiService.addBanquetImages($scope.data.activeBanquet.id, { files: files}).then(function(response) {
+    			apiService.addBanquetImages(banquet.id, { files: files}).then(function(response) {
     				alertManager.addAlert('success', '成功添加圖片。');
     				var urls = response.data;
     				if(urls && urls.length) {
-    					$scope.data.activeBanquet.pictureUrls = $scope.data.activeBanquet.pictureUrls.concat(urls);
+    					banquet.pictureUrls = banquet.pictureUrls.concat(urls);
     				}
     			}, function(response) {
     				alertManager.addAlert('danger', response);
@@ -145,10 +157,10 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
     	$scope.data.removeBanquetImage = function(url) {
     		modals.messageModal('確認', '刪除這張圖片').then(function() {
         		var names = [url.substring(url.lastIndexOf('/') + 1)];
-        		apiService.removeBanquetImage($scope.data.activeBanquet.id, { names: names }).then(function() {
+        		apiService.removeBanquetImage($scope.data.banquet.id, { names: names }).then(function() {
         			alertManager.addAlert('success', '成功刪除圖片');
-        			$scope.data.activeBanquet.pictureUrls = $scope.data.activeBanquet.pictureUrls.filter(function(url) {
-        				return url !== url;
+        			$scope.data.banquet.pictureUrls = $scope.data.banquet.pictureUrls.filter(function(src) {
+        				return src !== url;
         			});
         		}, function(response) {
         			alertManager.addAlert(response);
@@ -177,16 +189,75 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
             });
         };
     }])
-    .controller("banquetCreateCtrl", ["$scope", "$state", "apiService", "alertManager", "hotelDetail", function($scope, $state, apiService, alertManager, hotelDetail) {
+    .controller("banquetCreateCtrl", ["$scope", "$state", "apiService", "alertManager", "hotelDetail", "constants", function($scope, $state, apiService, alertManager, hotelDetail, constants) {
     	$scope.data = {};
     	$scope.data.hotelDetail = hotelDetail;
     	$scope.data.banquet = {};
         $scope.data.createBanquet = function() {
-        	$scope.data.banquet.extraInfo = $scope.data.banquet.extraInfos.join(";")
-        	apiService.createBanquet($scope.data.hotelDetail.id, $scope.data.banquet).then(function() {
+        	$scope.data.banquet.extraInfo = $scope.data.banquet.extraInfos.join(";") || "";
+        	apiService.createBanquet($scope.data.hotelDetail.id, $scope.data.banquet).then(function(banquetId) {
+        		$scope.data.banquet.id = banquetId;
+        		hotelDetail.banquetHalls.push($scope.data.banquet);
         		alertManager.addAlert("success", "成功創建宴會廳");
+        		$state.go(constants.hotelStatePrefix + "." + constants.hotelBanquetState, {hotelId: $scope.data.hotelDetail.id, banquetId: banquetId});
         	}, function(response) {
         		alertManager.addAlert("danger", response);
         	})
         };
+    }])
+    .controller("feastCreateCtrl", ["$scope", "$state", "apiService", "alertManager", "hotelDetail", "constants", function($scope, $state, apiService, alertManager, hotelDetail, constants) {
+    	$scope.data = {};
+    	$scope.data.hotelDetail = hotelDetail;
+    	$scope.data.feast = {};
+    	$scope.data.createFeast = function() {
+    		$scope.data.feast.courses = $scope.data.feast.courseList.join(";") || "";
+    		apiService.createFeast($scope.data.hotelDetail.id, $scope.data.feast).then(function(feastId) {
+    			$scope.data.feast.id = feastId;
+    			alertManager.addAlert("success", "成功創建菜單");
+    			hotelDetail.feasts.push($scope.data.feast);
+    			$state.go(constants.hotelStatePrefix + "." + constants.hotelFeastState, {hotelId: $scope.data.hotelDetail.id, feastId: feastId});
+    		}, function(response) {
+    			alertManager.addAlert("danger", response);
+    		});
+    	}
+    }])
+    .controller("hotelFeastCtrl", ["$scope", "$state", "apiService", "alertManager", "hotelDetail", "feast", 'modals', function($scope, $state, apiService, alertManager, hotelDetail, feast, modals) {
+    	$scope.data = {};
+    	$scope.data.hotelDetail = hotelDetail;
+    	$scope.data.feast = feast;
+    	$scope.data.updateFeast = function() {
+    		var copyOfFeast = angular.copy($scope.data.feast);
+    		copyOfFeast.courses = copyOfFeast.courses.join(";");
+    		apiService.updateFeast(copyOfFeast).then(function(response) {
+    			alertManager.addAlert('success', '成功更新宴會聼。');
+    		}, function(response) {
+    			alertManager.addAlert('danger', response);
+    		});
+    	};
+    	$scope.data.addFeastImage = function(files) {
+    		if(files && files.length) {
+    			apiService.addFeastImages(feast.id, { files: files}).then(function(response) {
+    				alertManager.addAlert('success', '成功添加圖片。');
+    				var urls = response.data;
+    				if(urls && urls.length) {
+    					feast.pictureUrls = feast.pictureUrls.concat(urls);
+    				}
+    			}, function(response) {
+    				alertManager.addAlert('danger', response);
+    			});
+    		}
+    	}
+    	$scope.data.removeFeastImage = function(url) {
+    		modals.messageModal('確認', '刪除這張圖片').then(function() {
+        		var names = [url.substring(url.lastIndexOf('/') + 1)];
+        		apiService.removeFeastImage($scope.data.feast.id, { names: names }).then(function() {
+        			alertManager.addAlert('success', '成功刪除圖片');
+        			$scope.data.feast.pictureUrls = $scope.data.feast.pictureUrls.filter(function(src) {
+        				return src !== url;
+        			});
+        		}, function(response) {
+        			alertManager.addAlert(response);
+        		});
+    		});
+    	}
     }])

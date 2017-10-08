@@ -10,8 +10,15 @@
 			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelStatePrefix + '.' + constants.hotelBanquetState) || state.name === (constants.hotelStatePrefix + '.' + constants.hotelCreateBanquetState)}">
 				<a class="nav-link">宴會廳</a>
 				<ul class="nav-menu">
-					<li class="nav-menu-item" ng-click="data.createNewBanquet()"><a class="nav-child-link">創建宴會廳</a></li>
 					<li class="nav-menu-item" ng-repeat="banquet in data.hotelDetail.banquetHalls" ng-click="data.goBanquet(banquet.id)"><a class="nav-child-link">{{::banquet.name}}</a></li>
+					<li class="nav-menu-item" ng-click="data.createNewBanquet()" style="border-bottom: 0"><a class="nav-child-link">創建宴會廳</a></li>
+				</ul>
+			</li>
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelStatePrefix + '.' + constants.hotelFeastState) || state.name === (constants.hotelStatePrefix + '.' + constants.hotelCreateFeastState)}">
+				<a class="nav-link">菜單</a>
+				<ul class="nav-menu">
+					<li class="nav-menu-item" ng-repeat="feast in data.hotelDetail.feasts" ng-click="data.goFeast(feast.id)"><a class="nav-child-link">{{::feast.name}}</a></li>
+					<li class="nav-menu-item" ng-click="data.createNewFeast()" style="border-bottom: 0"><a class="nav-child-link">創建菜單</a></li>
 				</ul>
 			</li>
 			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelStatePrefix + '.' + constants.hotelDiscountState)}"><a class="nav-link">優惠信息</a></li>

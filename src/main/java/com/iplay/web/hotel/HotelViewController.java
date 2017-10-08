@@ -64,4 +64,24 @@ public class HotelViewController {
 	public String hotelNewBanquetView() {
 		return rootFolder + "index.html";
 	}
+	
+	@GetMapping("/partialView/newFeast")
+	public String hotelNewFeastPartialView() {
+		return rootFolder + "partialView_create_feast.html";
+	}
+	
+	@GetMapping("/partialView/hotelDetailFeast")
+	public String hotelDetailFeastView() {
+		return rootFolder + "partialView_hotel_feast.html";
+	}
+	
+	@GetMapping("/FeastBooking/hotel/*/feast/*")
+	public String hotelFeastView() {
+		return rootFolder + "index.html";
+	}
+	
+	@GetMapping("/FeastBooking/hotel/*/newFeast")
+	public String hotelNewFeastView() {
+		return rootFolder + "index.html";
+	}
 }

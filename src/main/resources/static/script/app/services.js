@@ -12,7 +12,9 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 	hotelDiscountState: "discount",
 	hotelOrderState: "order",
 	hotelCommentState: "commont",
-	hotelCreateBanquetState: "newBanquet"
+	hotelCreateBanquetState: "newBanquet",
+	hotelFeastState: "feast",
+	hotelCreateFeastState: "newFeast"
 })
 .service("alertManager", ["$rootScope", "$timeout", function($rootScope, $timeout) {
 	var timeout = 5000;
@@ -134,6 +136,23 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 		var banquetId = banquet.id;
 		return promiseFactory("PUT", `${urlPrefix}/banquet_halls/${banquetId}`, null, banquet);
 	}
+	function createFeast(hotelId, feast) {
+		return promiseFactory("POST", `${urlPrefix}/hotels/${hotelId}/feasts`, null, feast);
+	}
+	function getFeast(feastId) {
+		return promiseFactory("GET", `${urlPrefix}/feasts/${feastId}`);
+	}
+	function updateFeast(feast) {
+		var feastId = feast.id;
+		return promiseFactory("PUT", `${urlPrefix}/feasts/${feastId}`, null, feast);
+	}
+	function addFeastImages(feastId, images) {
+		return fileUploadFactory(`${urlPrefix}/feasts/${feastId}/pictures`, images);
+	}
+	function removeFeastImage(feastId, names) {
+		var headers = {"Content-Type": "application/json"};
+		return promiseFactory("DELETE", `${urlPrefix}/feasts/${feastId}/pictures`, headers, names);
+	}
     return {
     	signin: signin,
         getHotelList: getHotelList,
@@ -147,7 +166,12 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
         getBanquetHall: getBanquetHall,
         addBanquetImages: addBanquetImages,
         removeBanquetImage: removeBanquetImage,
-        updateBanquet: updateBanquet
+        updateBanquet: updateBanquet,
+        createFeast: createFeast,
+        getFeast: getFeast,
+        updateFeast: updateFeast,
+        addFeastImages: addFeastImages,
+        removeFeastImage: removeFeastImage
     };
 }])
 .service("modals", ["$uibModal", function($uibModal) {
