@@ -55,5 +55,11 @@ public interface HotelService {
 	
 	void reClaculatePriceRange(int hotelId);
 	
+	/**
+	 * 
+	 * @param page
+	 * @param size
+	 * @return
+	 */
 	Page<SimplifiedHotelDTO> listHotelsByPage(int page, int size);
 }
