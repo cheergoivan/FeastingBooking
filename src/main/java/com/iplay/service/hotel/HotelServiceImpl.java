@@ -72,8 +72,8 @@ public class HotelServiceImpl implements HotelService {
 		List<HotelDO> hotelDOs = hotelPages.getContent();
 		List<SimplifiedHotelDTO> hotels = hotelDOs.stream().map(hotelDO -> {
 			return new SimplifiedHotelDTO(hotelDO.getId(), hotelDO.getName(),
-					new double[] { hotelDO.getMinimumPrice(), hotelDO.getMaximumPrice() },
-					new int[] { hotelDO.getMinimumTables(), hotelDO.getMaximunTables() }, 0,
+					new double[]{hotelDO.getMinimumPrice()==Double.MAX_VALUE?0:hotelDO.getMinimumPrice(), hotelDO.getMaximumPrice()==-1?0:hotelDO.getMaximumPrice()},
+					new int[]{hotelDO.getMinimumTables()==Integer.MAX_VALUE?0:hotelDO.getMinimumTables(), hotelDO.getMaximunTables()==-1?0: hotelDO.getMaximunTables()},0,
 					hotelDO.getPicturesAsArray().length>0?ResourcesUriBuilder.buildUri(hotelDO.getPicturesAsArray()[0]):"");
 		}).collect(Collectors.toList());
 		return hotels;

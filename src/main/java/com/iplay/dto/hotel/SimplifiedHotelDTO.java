@@ -9,14 +9,14 @@ public class SimplifiedHotelDTO {
 	private String pictureUrl;
 
 	public SimplifiedHotelDTO(int id, String name, double[] priceRange, int[] tableRange, int numOfComment,
-			String pirctureUrl) {
+			String pictureUrl) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.priceRange = priceRange;
 		this.tableRange = tableRange;
 		this.numOfComment = numOfComment;
-		this.pictureUrl = pirctureUrl;
+		this.pictureUrl = pictureUrl;
 	}
 
 	public int getId() {
@@ -59,11 +59,11 @@ public class SimplifiedHotelDTO {
 		this.numOfComment = numOfComment;
 	}
 
-	public String getPirctureUrl() {
+	public String getPictureUrl() {
 		return pictureUrl;
 	}
 
-	public void setPirctureUrl(String pirctureUrl) {
-		this.pictureUrl = pirctureUrl;
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl;
 	}
 }
