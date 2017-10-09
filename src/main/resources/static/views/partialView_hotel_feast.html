@@ -1,0 +1,29 @@
+<div class="feast-container">
+	<div>
+		<h1>{{data.feast.name}}</h1>
+	</div>
+	<div>
+	<div>
+		<h2>基本信息</h2>
+	</div>
+		<form>
+			<div class="row">
+				<label-input-text class="col col-md-6" model="data.feast.name"
+					label="名稱"></label-input-text>
+				<label-input-number class="col col-md-6" model="data.feast.price"
+					label="價格" step="0.01"></label-input-number>
+				<editable-list class="col-adj col-md-12"
+					infos="data.feast.courses" label="菜單"></editable-list>
+			</div>
+			<div class="row btn-row">
+				<button class="btn btn-primary" ng-click="data.updateFeast()">保存</button>
+			</div>
+		</form>
+	</div>
+	<div>
+		<div>
+			<h2>菜單圖片</h2>
+		</div>
+		<image-list images="data.feast.pictureUrls" on-add="data.addFeastImage(files)" on-remove="data.removeFeastImage(url)"></image-list>
+	</div>
+</div>

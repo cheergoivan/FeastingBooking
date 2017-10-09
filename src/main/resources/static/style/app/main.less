@@ -124,6 +124,18 @@ main.main {
                 line-height: 40px;
                 border-bottom: 1px solid @dark-theme-gray;
                 background-color: @light-theme-gray;
+                position: relative;
+                &.disable-nav-menu-item {
+                    &:hover {
+                        background-color: @light-theme-gray;
+                    }
+                }
+                >.nav-icon {
+                    position: absolute;
+                    right: 5px;
+                    padding: 0 10px;
+                    color: @primary-color;
+                }
                 >.nav-child-link {
                     padding-left: 40px;
                 }
@@ -384,7 +396,7 @@ main.main {
 }
 
 /*hotel_list*/
-.create-hotel-container, .create-banquet-container, .hotel-info-container, .banquet-container {
+.create-hotel-container, .create-banquet-container, .hotel-info-container, .banquet-container, .create-feast-container, .feast-container {
     max-width: 1000px;
     margin: 0 auto;
     padding: 20px 10px;

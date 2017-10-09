@@ -109,6 +109,16 @@ main.main .nav-panel .nav-menu .nav-menu-item {
   line-height: 40px;
   border-bottom: 1px solid #ebebeb;
   background-color: #fbfbfb;
+  position: relative;
+}
+main.main .nav-panel .nav-menu .nav-menu-item.disable-nav-menu-item:hover {
+  background-color: #fbfbfb;
+}
+main.main .nav-panel .nav-menu .nav-menu-item > .nav-icon {
+  position: absolute;
+  right: 5px;
+  padding: 0 10px;
+  color: #175199;
 }
 main.main .nav-panel .nav-menu .nav-menu-item > .nav-child-link {
   padding-left: 40px;
@@ -354,7 +364,9 @@ main.main .nav-panel .nav-menu .nav-menu-item:hover {
 .create-hotel-container,
 .create-banquet-container,
 .hotel-info-container,
-.banquet-container {
+.banquet-container,
+.create-feast-container,
+.feast-container {
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px 10px;

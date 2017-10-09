@@ -1,6 +1,6 @@
-angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router', 'services'])
-.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'constants', function($stateProvider, $locationProvider, $urlRouterProvider, constants) {
-	$locationProvider.html5Mode(true).hashPrefix('!');
+angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router", "services"])
+.config(["$stateProvider", "$locationProvider", "$urlRouterProvider", "constants", function($stateProvider, $locationProvider, $urlRouterProvider, constants) {
+	$locationProvider.html5Mode(true).hashPrefix("!");
 	var states = [{
 		name: "signin",
 		url: "/signin",
@@ -25,7 +25,7 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router',
 		url: "/hotels",
 		abstract: true,
 		views: {
-			'main@FeastBooking': {
+			"main@FeastBooking": {
 				templateUrl: "partialView/hotels",
 				controller: "hotelsCtrl"
 			}
@@ -48,18 +48,18 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router',
 			}
 		}
 	}, {
-		name: "FeastBooking.hotel",
+		name: constants.hotelStatePrefix,
 		url: "/hotel/:hotelId",
 		abstract: true,
 		views: {
-			'main@FeastBooking': {
+			"main@FeastBooking": {
 				templateUrl: "partialView/hotel_detail",
 				controller: "hotelDetailCtrl"
 			}
 		},
 		resolve: {
-			apiService: 'apiService',
-			hotelDetail: ['$stateParams', 'apiService', function($stateParams, apiService) {
+			apiService: "apiService",
+			hotelDetail: ["$stateParams", "apiService", function($stateParams, apiService) {
 				return apiService.getHotelDetail(parseInt($stateParams.hotelId, 10));
 			}]
 		}
@@ -67,7 +67,7 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router',
 		name: constants.hotelsStatePrefix + "." + constants.createHotelState,
 		url: "/new",
 		views: {
-			'hotelsMain@FeastBooking.hotels': {
+			"hotelsMain@FeastBooking.hotels": {
 				templateUrl: "partialView/newHotel",
 				controller: "hotelCreateCtrl"
 			}
@@ -76,7 +76,7 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router',
 		name: constants.hotelStatePrefix + "." + constants.hotelInfoState,
 		url: "/info",
 		views: {
-			'hotelDetailMain@FeastBooking.hotel': {
+			"hotelDetailMain@FeastBooking.hotel": {
 				templateUrl: "partialView/hotelDetailInfo",
 				controller: "hotelInfoCtrl"
 			}
@@ -87,24 +87,48 @@ angular.module('app', ['controllers', 'ui.bootstrap', 'directives', 'ui.router',
 		views: {
 			"hotelDetailMain@FeastBooking.hotel": {
 				templateUrl: "partialView/hotelDetailBanquet",
-				controller: "hotelDetailBanquetCtrl"
+				controller: "hotelBanquetCtrl"
 			}
 		},
 		resolve: {
-			apiService: 'apiService',
-			banquet: ['$stateParams', 'apiService', function($stateParams, apiService) {
+			apiService: "apiService",
+			banquet: ["$stateParams", "apiService", function($stateParams, apiService) {
 				return apiService.getBanquetHall($stateParams.banquetId);
 			}]
 		}
 	}, {
-		name: constants.hotelStatePrefix + '.' + constants.hotelCreateBanquetState,
+		name: constants.hotelStatePrefix + "." + constants.hotelCreateBanquetState,
 		url: "/newBanquet",
 		views: {
-			'hotelDetailMain@FeastBooking.hotel': {
+			"hotelDetailMain@FeastBooking.hotel": {
 				templateUrl: "partialView/newBanquet",
 				controller: "banquetCreateCtrl"
 			}
 		}
+	}, {
+		name: constants.hotelStatePrefix + "." + constants.hotelFeastState,
+		url: "/feast/:feastId",
+		views: {
+			"hotelDetailMain@FeastBooking.hotel": {
+				templateUrl: "partialView/hotelDetailFeast",
+				controller: "hotelFeastCtrl"
+			}
+		},
+		resolve: {
+			apiService: "apiService",
+			feast: ["$stateParams", "apiService", function($stateParams, apiService) {
+				return apiService.getFeast($stateParams.feastId);
+			}]
+		}
+	}, {
+		name: constants.hotelStatePrefix + "." + constants.hotelCreateFeastState,
+		url: "/newFeast",
+		views: {
+			"hotelDetailMain@FeastBooking.hotel": {
+				templateUrl: "partialView/newFeast",
+				controller: "feastCreateCtrl"
+			}
+		},
 	}];
 	states.forEach(function(state) {
 		$stateProvider.state(state);
