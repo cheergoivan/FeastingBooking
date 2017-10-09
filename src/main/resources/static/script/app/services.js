@@ -153,6 +153,14 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 		var headers = {"Content-Type": "application/json"};
 		return promiseFactory("DELETE", `${urlPrefix}/feasts/${feastId}/pictures`, headers, names);
 	}
+	function removeBanquet(banquetId) {
+		var headers = {"Content-Type": "application/json"};
+		return promiseFactory("DELETE", `${urlPrefix}/banquet_halls/${banquetId}`, headers);
+	}
+	function removeFeast(feastId) {
+		var headers = {"Content-Type": "application/json"};
+		return promiseFactory("DELETE", `${urlPrefix}/feasts/${feastId}`, headers);
+	}
     return {
     	signin: signin,
         getHotelList: getHotelList,
@@ -171,7 +179,9 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
         getFeast: getFeast,
         updateFeast: updateFeast,
         addFeastImages: addFeastImages,
-        removeFeastImage: removeFeastImage
+        removeFeastImage: removeFeastImage,
+        removeBanquet: removeBanquet,
+        removeFeast: removeFeast
     };
 }])
 .service("modals", ["$uibModal", function($uibModal) {

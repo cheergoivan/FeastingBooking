@@ -53,7 +53,7 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
         	})
         };
     }])
-    .controller('hotelDetailCtrl', ['$state', '$scope', 'apiService', 'hotelDetail', 'alertManager', 'constants', function($state, $scope, apiService, hotelDetail, alertManager, constants) {
+    .controller("hotelDetailCtrl", ["$state", "$scope", "apiService", "hotelDetail", "alertManager", "constants", "modals", function($state, $scope, apiService, hotelDetail, alertManager, constants, modals) {
     	$scope.data = {};
     	$scope.data.hotelDetail = hotelDetail;
     	$scope.data.goto = function(state) {
@@ -62,6 +62,12 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
                 $state.go(fullState, $scope.data.hotelDetail.id);
             }
     	};
+    	$scope.data.isBanquetActive = function(banquetId) {
+    		return window.location.href.substring(window.location.href.indexOf("banquet/")).endsWith(banquetId);
+    	}
+    	$scope.data.isFeastActive = function(feastId) {
+    		return window.location.href.substring(window.location.href.indexOf("feast/")).endsWith(feastId);
+    	}
     	$scope.data.createNewBanquet = function() {
     		$state.go(constants.hotelStatePrefix + "." + constants.hotelCreateBanquetState, $scope.data.hotelDetail.id);
     	}
@@ -73,6 +79,33 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
     	}
     	$scope.data.goFeast = function(feastId) {
     		$state.go(constants.hotelStatePrefix + "." + constants.hotelFeastState, {hotelId: $scope.data.hotelDetail.id, feastId: feastId});
+    	}
+    	$scope.data.removeBanquet = function(banquetId, $event) {
+    		modals.messageModal("確認", "確認刪除這個宴會廳?").then(function() {
+    			apiService.removeBanquet(banquetId).then(function() {
+    				$scope.data.hotelDetail.banquetHalls = $scope.data.hotelDetail.banquetHalls.filter(function(banquet) {
+    					return banquet.id !== banquetId;
+    				});
+    				alertManager.addAlert("success", "成功刪除宴會廳");
+    				$state.go(constants.hotelStatePrefix + "." + constants.hotelInfoState);
+    			}, function(response) {
+    				alertManager.addAlert("danger", response);
+    			});
+    		});
+    		$event.stopPropagation();
+    	}
+    	$scope.data.removeFeast = function(feastId, $event) {
+    		modals.messageModal("確認", "確認刪除這個菜單?").then(function() {
+    			apiService.removeFeast(feastId).then(function() {
+    				$scope.data.hotelDetail.feasts = $scope.data.hotelDetail.feasts.filter(function(feast) {
+    					return feast.id !== feastId;
+    				});
+    				alertManager.addAlert("success", "成功刪除菜單");
+    				$state.go(constants.hotelStatePrefix + "." + constants.hotelInfoState);
+    			}, function(response) {
+    				alertManager.addAlert("danger", response);
+    			});
+    		});
     	}
     }])
     .controller('hotelInfoCtrl', ['$scope', 'apiService', 'hotelDetail', 'alertManager', 'Upload', 'modals', function($scope, apiService, hotelDetail, alertManager, Upload, modals) {

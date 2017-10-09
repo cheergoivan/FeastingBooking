@@ -111,9 +111,14 @@ main.main .nav-panel .nav-menu .nav-menu-item {
   background-color: #fbfbfb;
   position: relative;
 }
+main.main .nav-panel .nav-menu .nav-menu-item.disable-nav-menu-item:hover {
+  background-color: #fbfbfb;
+}
 main.main .nav-panel .nav-menu .nav-menu-item > .nav-icon {
   position: absolute;
   right: 5px;
+  padding: 0 10px;
+  color: #175199;
 }
 main.main .nav-panel .nav-menu .nav-menu-item > .nav-child-link {
   padding-left: 40px;
