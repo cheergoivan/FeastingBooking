@@ -120,6 +120,13 @@ public class BanquetHallDO {
 			return new String[0];
 		return pictures.split(DelimiterUtils.PICTURE_DELIMITER);
 	}
+	
+	public String[] getExtraInfoAsArray(){
+		if(extraInfo.equals(""))
+			return new String[0];
+		return extraInfo.split(DelimiterUtils.PICTURE_DELIMITER);
+	}
+	
 
 	public double getHeight() {
 		return height;

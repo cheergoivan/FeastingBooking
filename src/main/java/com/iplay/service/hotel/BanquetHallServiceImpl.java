@@ -41,7 +41,7 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 		}
 		BanquetHallDTO banquetHallDTO = new BanquetHallDTO();
 		BeanUtils.copyProperties(banquetHallDO, banquetHallDTO);
-		banquetHallDTO.setExtraInfos(banquetHallDO.getExtraInfo().split(";"));
+		banquetHallDTO.setExtraInfos(banquetHallDO.getExtraInfoAsArray());
 		banquetHallDTO.setTableRange(new int[]{banquetHallDO.getMinimumTables(), banquetHallDO.getMaximumTables()});
 		String[] pictures =  ResourcesUriBuilder.buildUris(banquetHallDO.getPicturesAsArray());
 		banquetHallDTO.setPictureUrls(pictures);

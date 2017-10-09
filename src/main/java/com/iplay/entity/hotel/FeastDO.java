@@ -69,6 +69,12 @@ public class FeastDO {
 		return pictures.split(DelimiterUtils.PICTURE_DELIMITER);
 	}
 	
+	public String[] getCoursesAsArray(){
+		if(courses.equals(""))
+			return new String[0];
+		return courses.split(DelimiterUtils.PICTURE_DELIMITER);
+	}
+	
 	public String getName() {
 		return name;
 	}

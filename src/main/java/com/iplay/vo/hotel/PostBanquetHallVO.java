@@ -27,7 +27,7 @@ public class PostBanquetHallVO {
 	@NotBlank(message="The colorOfTablecloth of the banquet hall can't be blank")
 	private String colorOfTablecloth;
 
-	private String extraInfo;
+	private String extraInfo = "";
 	
 	public String getName() {
 		return name;

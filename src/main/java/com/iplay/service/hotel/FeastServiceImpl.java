@@ -39,7 +39,7 @@ public class FeastServiceImpl implements FeastService{
 		if(feastDO==null)
 			return null;
 		String[] pictures = ResourcesUriBuilder.buildUris(feastDO.getPicturesAsArray());
-		return new FeastDTO(id, feastDO.getName(), feastDO.getPrice(), feastDO.getCourses().split(";"), pictures);
+		return new FeastDTO(id, feastDO.getName(), feastDO.getPrice(), feastDO.getCoursesAsArray(), pictures);
 	}
 
 	@Override
