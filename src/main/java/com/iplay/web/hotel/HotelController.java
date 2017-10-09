@@ -143,15 +143,16 @@ public class HotelController {
 		return rating;
 	}
 	
+	
+	/*
 	@ApiOperation(notes="用户对酒店进行评价",value="")
     @PostMapping("/{id}/comments")
 	@PreAuthorize("hasAnyRole('USER', 'MANAGER')")
 	public ApiResponse<String> postComment(@ApiParam("酒店id")@PathVariable("id") int hotelId, 
 			@ApiParam("评分") double score, @AuthenticationPrincipal UserContext context){
 				return null;
-		//return score;
-		//return hotelService.updateHotelRating(context.getUserId(), hotelId, score);
 	}
+	*/
 	
 	/*
 	@ApiOperation(notes="用户获得酒店评分",value="")
