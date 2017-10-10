@@ -1,6 +1,6 @@
 <div class="signin-board" ng-controller="accountCtrl">
 	<div class="row">
-		<form>
+		<form class="form" role="form" name="signinForm" novalidate>
 			<div class="signin-info-container">
 				<input type="text" ng-model="username" placeholder="用戶名" class="form-control"/>
 				<input type="password" ng-model="password" placeholder="密碼" class="form-control"/>
@@ -8,6 +8,6 @@
 		</form>
 	</div>
 	<div class="row btn-row">
-		<button class="btn btn-primary" ng-click="signin()">登陸</button>
+		<button class="btn btn-primary" ng-click="signin()" ng-disabled="signinForm.$invalid">登陸</button>
 	</div>
 </div>

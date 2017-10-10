@@ -1,4 +1,4 @@
-angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router", "services"])
+angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router", "services", "blockUI"])
 .config(["$stateProvider", "$locationProvider", "$urlRouterProvider", "constants", function($stateProvider, $locationProvider, $urlRouterProvider, constants) {
 	$locationProvider.html5Mode(true).hashPrefix("!");
 	var states = [{

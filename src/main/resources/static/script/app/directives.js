@@ -84,7 +84,7 @@ angular.module('directives', ['services'])
         replace: true,
         template:  '<div class="label-input-text-container">'
                         + '<label class="control-label">{{label}}</label>'
-                        + '<input ng-model="model" type="text" class="form-control"/>'
+                        + '<input ng-model="model" type="text" class="form-control" required/>'
                    +'</div>',
         scope: {
             model: "=",
@@ -140,7 +140,7 @@ angular.module('directives', ['services'])
         replace: true,
         template: '<div class="label-plain-text-container">'
                     + '<label class="control-label">{{label}}</label>'
-                    + '<input ng-model="model" class="form-control" type="password">'
+                    + '<input ng-model="model" class="form-control" type="password" required>'
                 +'</div>',
         scope: {
             model: '=',
@@ -155,9 +155,9 @@ angular.module('directives', ['services'])
 		template: '<div class="label-range-container">'
 					+ '<label class="control-label">{{::label}}</label>'
 					+ '<div class="range-container">'
-						+ '<input type="number" ng-model="from" class="form-control">'
+						+ '<input type="number" ng-model="from" class="form-control" required>'
 						+ '<span class="range">-</span>'
-						+ '<input type="number" ng-model="to" class="form-control">'
+						+ '<input type="number" ng-model="to" class="form-control" required>'
 					+ '</div>'
 				+ '</div>',
 		scope: {
@@ -174,9 +174,9 @@ angular.module('directives', ['services'])
 		template: '<div class="label-address">'
 					+ '<label class="control-label">{{::label}}</label>'
 					+ '<div class="address-container">'
-						+ '<input type="text" ng-model="city" class="form-control" placeholder="市">'
-						+ '<input type="text" ng-model="district" class="form-control" placeholder="區">'
-						+ '<input type="text" ng-model="street" class="form-control" placeholder="街道">'
+						+ '<input type="text" ng-model="city" class="form-control" placeholder="市" required>'
+						+ '<input type="text" ng-model="district" class="form-control" placeholder="區" required>'
+						+ '<input type="text" ng-model="street" class="form-control" placeholder="街道" required>'
 					+ '</div>'
                 + '</div>',
         scope: {
@@ -187,44 +187,13 @@ angular.module('directives', ['services'])
         }
 	}
 })
-.directive('labelNumberRange', function() {
-	return {
-		restrict: 'AE',
-		replace: true,
-		template: '<div class="label-number-range">'
-					+ '<label class="control-label">{{::label}}</label>'
-					+ '<div class="number-range-container">'
-						+ '<input type="number" ng-model="from" class="form-control" min="{{min}}" max="{{max}}" step="{{step}}" readonly>'
-						+ '<input type="number" ng-model="to" class="form-control" min="{{min}}" max="{{max}}" step="{{step}}" readonly>'
-					+ '</div>'
-				+ '</div>',
-		scope: {
-			from: '=',
-			to: '=',
-			min: '=',
-			max: '=',
-			step: '=',
-			label: '@'
-		},
-		link: function(elem, scope) {
-			scope.min = parseFloat(scope.min) || 0;
-			scope.max = parseFloat(scope.max) || 99999999;
-			if(scope.min > scope.max) {
-				var temp = scope.max;
-				scope.max = scope.min;
-				scope.min = temp;
-			}
-			scope.step = parseFloat(scope) || 1;
-		}
-	}
-})
 .directive('labelInputNumber', function() {
 	return {
 		restrict: 'AE',
 		replace: true,
-		template: '<div class="">'
+		template: '<div>'
 					+ '<label class="control-label">{{::label}}</label>'
-					+ '<input ng-model="model" min="{{min}}" max="{{max}}" step="{{step}}" type="number" class="form-control">'
+					+ '<input ng-model="model" min="{{min}}" max="{{max}}" step="{{step}}" type="number" class="form-control" required>'
 				+ '</div>'
 					,
 		scope: {
@@ -256,7 +225,7 @@ angular.module('directives', ['services'])
 						+ '<ul>'
 							+ '<li class="editable-list-item btn btn-warning" ng-repeat="info in infos track by $index">{{::info}}<span title="刪除" ng-click="infos.splice($index, 1)">&times</span></li>'
 							+ '<li>'
-								+ '<span class="glyphicon glyphicon-plus btn btn-success" ng-click="editMode()" ng-class="{\'hidden\': mode === 1}" title="添加"></span>'
+								+ '<span class="glyphicon glyphicon-plus btn" style="padding: 6px 9px;" ng-click="editMode()" ng-class="{\'hidden\': mode === 1}" title="添加"></span>'
 								+ '<input id="editableList" type="text" ng-model="candidateInfo" class="form-control" ng-class="{\'hidden\': mode === 0}"/>'
 							+ '</li>'
 						+ '</ul>'

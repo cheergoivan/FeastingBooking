@@ -1,7 +1,7 @@
 <div class="create-banquet-container">
 	<div><h1>創建新的宴會廳</h1></div>
 	<div>
-		<form class="form">
+		<form name="createBanquetForm" class="form" role="form" novalidate>
 			<div class="row">
 				<label-input-text class="col col-md-6" model="data.banquet.name" label="名稱"></label-input-text>
                 <label-input-number class="col col-md-6" model="data.banquet.area" label="面積" step="0.1"></label-input-number>
@@ -15,7 +15,7 @@
               	<editable-list class="col-adj col-md-12" infos="data.banquet.extraInfos" label="額外信息"></editable-list>
 			</div>
 			<div class="row btn-row">
-				<button class="btn btn-primary" ng-click="data.createBanquet()">保存</button>
+				<button class="btn btn-primary" ng-click="data.createBanquet()" ng-disabled="createBanquetForm.$invalid || !(data.banquet.minimumTables <= data.banquet.maximumTables) || data.banquet.extraInfos.length === 0">保存</button>
 			</div>
 		</form>
 	</div>
