@@ -50,7 +50,7 @@ angular.module('directives', ['services'])
                         + '<div class="image-container">'
                             + '<div class="image-container-content">'
                                 + '<div class="image-container-control">'
-                                    + '<div class="image-zoom" ng-click="onZoom({url: image})" title="放大圖片"><span class="glyphicon glyphicon-zoom-in"></span></div>'
+                                    //+ '<div class="image-zoom" ng-click="onZoom({url: image})" title="放大圖片"><span class="glyphicon glyphicon-zoom-in"></span></div>'
                                     + '<div class="image-remove" ng-click="onRemove({url: image})" title="刪除圖片"><span class="glyphicon glyphicon-trash"></span></div>'
                                 + '</div>'
                                 + '<img ng-src="{{image}}">'
@@ -112,7 +112,7 @@ angular.module('directives', ['services'])
         replace: true,
         template: '<div class="label-plain-text-container">'
                     + '<label class="control-label">{{label}}</label>'
-                    + '<textarea ng-model="model" class="form-control" rows="4"></textarea>'
+                    + '<textarea ng-model="model" class="form-control" rows="7"></textarea>'
                 +'</div>',
         scope: {
             model: '=',
@@ -174,9 +174,13 @@ angular.module('directives', ['services'])
 		template: '<div class="label-address">'
 					+ '<label class="control-label">{{::label}}</label>'
 					+ '<div class="address-container">'
-						+ '<input type="text" ng-model="city" class="form-control" placeholder="市" required>'
-						+ '<input type="text" ng-model="district" class="form-control" placeholder="區" required>'
-						+ '<input type="text" ng-model="street" class="form-control" placeholder="街道" required>'
+						+ '<div class="city-and-district-wrapper">'
+							+ '<input type="text" ng-model="city" class="form-control" placeholder="市" required>'
+							+ '<input type="text" ng-model="district" class="form-control" placeholder="區" required>'
+						+ '</div>'
+						+ '<div class="street-wrapper">'
+							+ '<input type="text" ng-model="street" class="form-control" placeholder="街道" required>'
+						+ '</div>'
 					+ '</div>'
                 + '</div>',
         scope: {
@@ -215,6 +219,20 @@ angular.module('directives', ['services'])
 		}
 	}
 })
+.directive('labelInputEmail', function() {
+    return {
+        restrict: 'AE',
+        replace: true,
+        template:  '<div class="label-input-text-container">'
+                        + '<label class="control-label">{{label}}</label>'
+                        + '<input ng-model="model" type="email" class="form-control" required/>'
+                   +'</div>',
+        scope: {
+            model: "=",
+            label: '@'
+        }
+    }
+})
 .directive('editableList', function() {
 	return {
 		restrict: 'AE',
@@ -223,7 +241,7 @@ angular.module('directives', ['services'])
 					+ '<label class="control-label">{{::label}}</label>'
 					+ '<div class="editable-list-container">'
 						+ '<ul>'
-							+ '<li class="editable-list-item btn btn-warning" ng-repeat="info in infos track by $index">{{::info}}<span title="刪除" ng-click="infos.splice($index, 1)">&times</span></li>'
+							+ '<li class="editable-list-item btn btn-warning" ng-repeat="info in infos track by $index">{{info}}<span title="刪除" ng-click="infos.splice($index, 1)">&times</span></li>'
 							+ '<li>'
 								+ '<span class="glyphicon glyphicon-plus btn" style="padding: 6px 9px;" ng-click="editMode()" ng-class="{\'hidden\': mode === 1}" title="添加"></span>'
 								+ '<input id="editableList" type="text" ng-model="candidateInfo" class="form-control" ng-class="{\'hidden\': mode === 0}"/>'
