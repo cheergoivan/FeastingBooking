@@ -10,6 +10,7 @@
 @table-padding: 10px 20px;
 @checkbox-width: 18px;
 @nav-panel-width: 300px;
+@nav-menu-switch-width: 30px;
 /*user agent*/
 body {
     height: 100vh;
@@ -36,6 +37,19 @@ h2 {
 }
 h3 {
     font-size: 20px;
+}
+li, input, tr, button {
+    transition: background-color 0.2s;
+}
+button.btn {
+    min-width: 100px;
+    outline-color: @light-theme-gray!important;
+}
+input {
+    letter-spacing: 1px;
+    &.ng-invalid.ng-dirty {
+        border-color: red;
+    }
 }
 /*bootstrap*/
 .navbar {
@@ -116,7 +130,36 @@ main.main {
     right: 0;
     overflow-x: hidden;
     .nav-panel {
+        width: @nav-panel-width;
+        min-width: @nav-panel-width;
+        height: 100%;
+        overflow-y: scroll;
         background-color: white;
+        transition: width 0.2s;
+        &.nav-panel-collapse {
+            transition: width 0.2s;
+            width: @nav-menu-switch-width;
+            min-width: @nav-menu-switch-width;
+            overflow: hidden;
+            background-color: @light-theme-gray;
+            .nav-menu, .nav-info-container {
+                visibility: hidden;
+            }
+        }
+        .nav-menu-switch-container {
+            text-align: right;
+            padding: 6px 0;
+            >.nav-menu-switch {
+                width: @nav-menu-switch-width;
+                height: @nav-menu-switch-width;
+                color: #333;
+                text-align: center;
+                &:hover {
+                    cursor: pointer;
+                    color: @primary-color;
+                }
+            }
+        }
         .nav-menu {
             padding: 0;
             .nav-menu-item {
@@ -159,6 +202,12 @@ main.main {
                     background-color: @dark-theme-gray;
                 }
             }
+        }
+        @media (max-width: 768px){
+            position: fixed;
+            left: 0;
+            top: @nav-height;
+            z-index: 9999;
         }
     }
 }
@@ -303,21 +352,37 @@ main.main {
                 background-color: @light-theme-gray;
                 text-align: center;
                 .image-container-control {
+                    width: 100%;
+                    height: 100%;
                     background-color: transparent;
                     text-align: right;
                     position: absolute;
                     top: 0;
                     right: 0;
+                    /*
                     >.image-zoom {
                         display: inline-block;
-                    }
+                    }*/
                     >.image-remove {
-                        display: inline-block;
+                        width: 100%;
+                        height: 100%;      
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: @light-theme-gray;
+                        opacity: 0;
+                        font-size: 80px;
+                        transition: opacity 0.2s;
+                        &:hover {
+                            opacity: 0.9;
+                            transition: opacity 0.2s;
+                        }
                     }
                 }
                 img {
                     max-width: 100%;
                     max-height: 100%;
+                    margin: 0 auto;
                 }
                 span {
                     max-width: 100%;
@@ -343,13 +408,16 @@ main.main {
     }
 }
 .address-container {
-    display: flex;
-    justify-content: space-between;
+    width: 100%;
     input {
         margin-right: 20px;
         &:last-child {
             margin-right: 0;
         }
+    }
+    .city-and-district-wrapper {
+        display: flex;
+        margin-bottom: 20px;
     }
 }
 .number-range-container {
@@ -370,6 +438,7 @@ main.main {
         margin: 0;
         >.editable-list-item {
             margin-right: 10px;        
+            margin-bottom: 5px;
         }
     }
 }
@@ -382,21 +451,19 @@ main.main {
     width: 100%;
     height: 100%;
     display: flex;
-    >.nav-panel {
-        width: @nav-panel-width;
-        height: 100%;
-        overflow-y: scroll;
-    }
     >.content-panel {
-        width: calc(~'100% - '@nav-panel-width);
+        flex: 1 1 auto;
         height: 100%;
         overflow-x: hidden;
         overflow-y: scroll;
+        @media (max-width: 768px) {
+            margin-left: @nav-menu-switch-width;
+        }
     }
 }
 
 /*hotel_list*/
-.create-hotel-container, .create-banquet-container, .hotel-info-container, .banquet-container, .create-feast-container, .feast-container {
+.create-hotel-container, .create-banquet-container, .hotel-info-container, .banquet-container, .create-feast-container, .feast-container, .table-container {
     max-width: 1000px;
     margin: 0 auto;
     padding: 20px 10px;

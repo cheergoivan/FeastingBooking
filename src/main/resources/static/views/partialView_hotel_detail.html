@@ -1,6 +1,7 @@
 <div class="content-container">
-	<div class="nav-panel">
-		<div class="hotel-basic-info-container">
+	<div class="nav-panel" ng-class="{'nav-panel-collapse': data.collapse}">
+		<div collapse-switch model="data.collapse"></div>
+		<div class="nav-info-container hotel-basic-info-container">
 			<div><h1>{{::data.hotelDetail.name}}</h1></div>
 			<div><label>聯係電話:</label><span>{{data.hotelDetail.telephone}}</span></div>
 			<div><label>地址:</label><span>{{data.hotelDetail.address.city + ' ' + data.hotelDetail.address.district + ' ' + data.hotelDetail.address.street}}</span></div>

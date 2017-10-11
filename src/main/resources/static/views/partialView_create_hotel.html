@@ -1,20 +1,18 @@
 <div class="create-hotel-container">
 	<div><h1>創建新的酒店</h1></div>
 	<div>
-		<form class="form">
+		<form class="form" name="createHotelForm" role="form" novalidate>
 			<div class="row">
 				<label-input-text class="col col-md-6" model="data.name" label="酒店名"></label-input-text>
                 <label-input-text class="col col-md-6" model="data.contact" label="聯係人"></label-input-text>
                 <label-input-text class="col col-md-6" model="data.telephone" label="聯係電話"></label-input-text>
-              	<label-input-text class="col col-md-6" model="data.email" label="郵箱"></label-input-text>
-				<!--<label-input-text class="col col-md-6" model="data.address" label="地址"></label-input-text>-->
+              	<label-input-email class="col col-md-6" model="data.email" label="郵箱"></label-input-email>
 				<label-address class="col col-md-6" city="data.city" district="data.district" street="data.street" label="地址"></label-address>
-                <!--<label-range class="col col-md-6" from="data.tableRangeFrom" to="data.tableRangeTo" label="桌數範圍"></label-range>
-                <label-range class="col col-md-6" from="data.priceRangeFrom" to="data.priceRangeTo" label="價格範圍"></label-range>-->
-                <label-textarea class="col col-md-6" model="data.description" label="描述"></label-textarea>
+                <label-range class="col col-md-6" from="data.priceRangeFrom" to="data.priceRangeTo" label="價格範圍"></label-range>
+                <label-textarea class="col col-md-12" model="data.description" label="描述"></label-textarea>
 			</div>
 			<div class="row btn-row">
-				<button class="btn btn-primary" ng-click="data.createHotel()">保存</button>
+				<button class="btn btn-primary" ng-click="data.createHotel()" ng-disabled="createHotelForm.$invalid || !(data.priceRangeFrom < data.priceRangeTo)">保存</button>
 			</div>
 		</form>
 	</div>

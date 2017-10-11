@@ -1,9 +1,14 @@
 <div class="content-container">
-	<div class="nav-panel">
+	<div class="nav-panel" ng-class="{'nav-panel-collapse': data.collapse}">
+		<div collapse-switch model="data.collapse"></div>
+		<!--  
+		<div class="nav-menu-switch-container">
+			<span class="glyphicon glyphicon-menu-hamburger nav-menu-switch" ng-click="data.toggleNavMenu()"></span>
+		</div>-->
 		<ul class="nav-menu hotels-menu">
-			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.hotelsListState)}" ng-click="data.goto(constants.hotelsListState)"><a class="nav-link" ui-sref="{{constants.hotelsStatePrefix + '.' + constants.hotelsListState}}">酒店列表</a></li>
-			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.hotelsRecommondationState)}" ng-click="data.goto(constants.hotelsRecommondationState)"><a class="nav-link" ui-sref="{{constants.hotelsStatePrefix + '.' + constants.hotelsRecommondationState}}">酒店推薦</a></li>
-			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.createHotelState)}" ng-click="data.goto(constants.createHotelState)"><a class="nav-link" ui-sref="{{constants.hotelsStatePrefix + '.' + constants.constants.createHotelState}}">創建酒店</a></li>
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.hotelsListState)}" ng-click="data.goto(constants.hotelsListState)"><a class="nav-link">酒店列表</a></li>
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.hotelsRecommondationState)}" ng-click="data.goto(constants.hotelsRecommondationState)"><a class="nav-link">酒店推薦</a></li>
+			<li class="nav-menu-item" ng-class="{'active': state.name === (constants.hotelsStatePrefix + '.' + constants.createHotelState)}" ng-click="data.goto(constants.createHotelState)"><a class="nav-link">創建酒店</a></li>
 		</ul>
 	</div>
 	<div class="content-panel" ui-view="hotelsMain"></div>

@@ -4,7 +4,7 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
 		$rootScope.state = $state.current;
 		$scope.data.goto = function goto(state) {
 			$state.go(constants.hotelsStatePrefix + "." + state);
-		}
+		};
 	}])
     .controller('hotelListCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'modals', function ($scope, $state, apiService, alertManager, modals) {
         function initHotelList() {
@@ -14,7 +14,7 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
         		$scope.data.hotelList = [];
         		alertManager.addAlert('danger', response);
         	});
-        }
+        };
         initHotelList();
         $scope.data = {
             countPerPage: 10,
@@ -37,12 +37,16 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
         $scope.data.addHotel = function() {
         	$state.go('FeastBooking.hotels.newHotel');
         };
-        $scope.data.deleteHotels = function(ids) {
+        $scope.data.deleteHotels = function() {
         	var ids = $scope.data.hotelList.filter(function(hotel) {
         		return hotel.$$selected;
         	}).map(function(selected) {
         		return selected.id;
         	});
+        	if(!ids || ids.length === 0) {
+        		alertManager.addAlert("warning", "請選擇要刪除的酒店");
+        		return;
+        	};
         	apiService.deleteHotels({ ids: ids}).then(function() {
         		alertManager.addAlert("success", "成功刪除酒店");
         		$scope.data.hotelList = $scope.data.hotelList.filter(function(hotel) {
@@ -50,7 +54,7 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
         		});
         	}, function(response) {
         		alertManager.addAlert("error", response);
-        	})
+        	});
         };
     }])
     .controller("hotelDetailCtrl", ["$state", "$scope", "apiService", "hotelDetail", "alertManager", "constants", "modals", function($state, $scope, apiService, hotelDetail, alertManager, constants, modals) {
