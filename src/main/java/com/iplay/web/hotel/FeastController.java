@@ -32,7 +32,7 @@ public class FeastController {
 	
 	@ApiOperation(notes="根据宴席Id获得宴席详细信息",value="")
     @GetMapping("/{id}")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
+	//@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
 	public FeastDTO findFeastById(@ApiParam("宴席id")@PathVariable int id){
 		FeastDTO feast = feastService.findFeastById(id);
 		if(feast==null)

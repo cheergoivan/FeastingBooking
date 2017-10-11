@@ -99,7 +99,7 @@ public class HotelController {
 	
 	@ApiOperation(notes="根据酒店Id获得酒店详细信息",value="")
     @GetMapping("/{id}")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
+	//@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
 	public HotelDTO  findHotelById(@ApiParam("酒店id")@PathVariable int id){
 		HotelDTO hotel = hotelService.findHotelById(id);
 		if(hotel==null)

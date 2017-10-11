@@ -32,7 +32,7 @@ public class BanquetHallController {
 	
 	@ApiOperation(notes="根据宴会厅Id获得宴会厅详细信息",value="")
     @GetMapping("/{id}")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
+	//@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'MANAGER')")
 	public BanquetHallDTO findBanquetHallById(@ApiParam("宴席id")@PathVariable int id){
 		BanquetHallDTO banquetHall = banquetHallService.findBanquetHallById(id);
 		if(banquetHall==null)
