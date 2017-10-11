@@ -292,3 +292,15 @@ angular.module('directives', ['services'])
 		}
 	}
 })
+.directive('collapseSwitch', function() {
+	return {
+		restrict: 'AE',
+		replace: true,
+		template: '<div class="nav-menu-switch-container">'
+					+ '<span class="glyphicon glyphicon-menu-hamburger nav-menu-switch" ng-click="model = !model" title="摺叠/展開導航欄"></span>'
+				+ '</div>',
+		scope: {
+			model: '='
+		}
+	}
+})

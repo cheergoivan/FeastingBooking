@@ -116,22 +116,36 @@ main.main {
 }
 main.main .nav-panel {
   width: 300px;
+  min-width: 300px;
   height: 100%;
   overflow-y: scroll;
   background-color: white;
+  transition: width 0.2s;
 }
-main.main .nav-panel.shrink {
-  width: 42px;
+main.main .nav-panel.nav-panel-collapse {
+  transition: width 0.2s;
+  width: 30px;
+  min-width: 30px;
+  overflow: hidden;
+  background-color: #fbfbfb;
+}
+main.main .nav-panel.nav-panel-collapse .nav-menu,
+main.main .nav-panel.nav-panel-collapse .nav-info-container {
+  visibility: hidden;
 }
 main.main .nav-panel .nav-menu-switch-container {
   text-align: right;
-  padding: 6px;
+  padding: 6px 0;
 }
 main.main .nav-panel .nav-menu-switch-container > .nav-menu-switch {
   width: 30px;
   height: 30px;
-  line-height: 30px;
   color: #333;
+  text-align: center;
+}
+main.main .nav-panel .nav-menu-switch-container > .nav-menu-switch:hover {
+  cursor: pointer;
+  color: #175199;
 }
 main.main .nav-panel .nav-menu {
   padding: 0;
@@ -173,6 +187,14 @@ main.main .nav-panel .nav-menu .nav-menu-item.active:hover > a {
 main.main .nav-panel .nav-menu .nav-menu-item:hover {
   cursor: pointer;
   background-color: #ebebeb;
+}
+@media (max-width: 768px) {
+  main.main .nav-panel {
+    position: fixed;
+    left: 0;
+    top: 50px;
+    z-index: 9999;
+  }
 }
 .table-container > .table-control {
   display: flex;
@@ -356,6 +378,9 @@ main.main .nav-panel .nav-menu .nav-menu-item:hover {
   padding-left: 15px;
   padding-right: 15px;
 }
+.address-container {
+  width: 100%;
+}
 .address-container input {
   margin-right: 20px;
 }
@@ -404,13 +429,19 @@ main.main .nav-panel .nav-menu .nav-menu-item:hover {
   overflow-x: hidden;
   overflow-y: scroll;
 }
+@media (max-width: 768px) {
+  .content-container > .content-panel {
+    margin-left: 30px;
+  }
+}
 /*hotel_list*/
 .create-hotel-container,
 .create-banquet-container,
 .hotel-info-container,
 .banquet-container,
 .create-feast-container,
-.feast-container {
+.feast-container,
+.table-container {
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px 10px;
