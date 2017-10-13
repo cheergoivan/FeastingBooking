@@ -297,10 +297,26 @@ angular.module('directives', ['services'])
 		restrict: 'AE',
 		replace: true,
 		template: '<div class="nav-menu-switch-container">'
-					+ '<span class="glyphicon glyphicon-menu-hamburger nav-menu-switch" ng-click="model = !model" title="摺叠/展開導航欄"></span>'
+					+ '<span class="glyphicon glyphicon-menu-hamburger nav-menu-switch" ng-click="cSwitch = !cSwitch" title="摺叠/展開導航欄"></span>'
 				+ '</div>',
 		scope: {
-			model: '='
+			cSwitch: '=',
+			cSize: '='
+		},
+		link: function(scope, elem) {
+			if(scope.cSize)
+				scope.cSize = 768;
+			var width = $('body').width();
+			if(parseInt(width) < scope.cSize) {
+				scope.cSwitch = true;
+			}
+			window.onresize = function() {
+				if(parseInt(width) < scope.cSize) {
+					scope.$apply(function() {
+						scope.cSwitch = true;
+					});
+				}
+			} 
 		}
 	}
 })

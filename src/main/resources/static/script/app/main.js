@@ -134,8 +134,3 @@ angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router",
 		$stateProvider.state(state);
 	});
 }])
-.run(['$window', function($window) {
-	$window.onresize = function() {
-		//TODO
-	}
-}])
