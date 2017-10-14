@@ -4,6 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -11,7 +12,10 @@ import javax.persistence.Table;
 import com.iplay.entity.hotel.BanquetHallDO;
 
 @Entity
-@Table(name = "feast_order")
+@Table(name = "feast_order",indexes={@Index(name="IDX_CUSTOMER",columnList="customerId"),
+		@Index(name="IDX_RECOMMENDER",columnList="recommenderId"),
+		@Index(name="IDX_MANAGER",columnList="managerId"),
+		@Index(name="IDX_TIME",columnList="orderTime")})
 public class OrderDO {
 	@Id
 	@GeneratedValue

@@ -2,6 +2,8 @@ package com.iplay.dao.order;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -21,5 +23,9 @@ public interface OrderDAO extends CrudRepository<OrderDO, Integer>{
 	@Query("update OrderDO h set h.orderStatus = ?2 where h.id = ?1")
 	int updateStatus(int id, OrderStatus status);
 	
+	Page<OrderDO> findByCustomerId(int customerId, Pageable pageable);
 	
+	Page<OrderDO> findByRecommenderId(int recommenderId, Pageable pageable);
+	
+	Page<OrderDO> findByManagerId(int managerId, Pageable pageable);
 }
