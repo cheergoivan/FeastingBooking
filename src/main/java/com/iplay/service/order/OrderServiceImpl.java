@@ -28,7 +28,7 @@ import com.iplay.service.user.UserService;
 import com.iplay.vo.common.PostFilesVO;
 import com.iplay.vo.order.PostPaymentVO;
 import com.iplay.vo.order.PostReservationVO;
-import com.mysql.jdbc.StringUtils;
+import com.iplay.component.util.StringUtils;
 
 @Service
 public class OrderServiceImpl implements OrderService {
