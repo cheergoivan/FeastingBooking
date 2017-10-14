@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iplay.dto.hotel.BanquetHallDTO;
+import com.iplay.service.exception.ResourceNotFoundException;
 import com.iplay.service.hotel.BanquetHallService;
 import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.common.FileDeletionVO;
 import com.iplay.vo.common.PostFilesVO;
 import com.iplay.vo.hotel.PostBanquetHallVO;
-import com.iplay.web.exception.ResourceNotFoundException;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

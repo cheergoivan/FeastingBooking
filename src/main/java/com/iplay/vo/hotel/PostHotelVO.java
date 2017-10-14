@@ -1,24 +1,34 @@
 package com.iplay.vo.hotel;
 
+import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 public class PostHotelVO {
 	private int id = -1;
 	@NotBlank(message="hotel name can't be blank")
+	@Size(max = 255)
 	private String name;
 	@NotBlank(message="city of address can't be blank")
+	@Size(max = 255)
 	private String cityOfAddress;
 	@NotBlank(message="district of address can't be blank")
+	@Size(max = 255)
 	private String districtOfAddress;
 	@NotBlank(message="street of address can't be blank")
+	@Size(max = 255)
 	private String streetOfAddress;
 	@NotBlank(message="hotel description can't be blank")
+	@Size(max = 1000)
 	private String description;
 	@NotBlank(message="hotel contact can't be blank")
+	@Size(max = 255)
 	private String contact;
 	@NotBlank(message="hotel telephone can't be blank")
+	@Size(max = 255)
 	private String telephone;
 	@NotBlank(message="hotel email can't be blank")
+	@Size(max = 255)
 	private String email;
 	
 	public String getName() {

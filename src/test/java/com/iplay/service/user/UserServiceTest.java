@@ -16,6 +16,8 @@ public class UserServiceTest {
 	
 	private static final String[] ADMINISTRATORS = {"admin"}; 
 	
+	private static final String[] MANAGERS = {"manager"}; 
+	
 	private static final String PASSWORD = "123456";
 	
 	@Test
@@ -30,6 +32,10 @@ public class UserServiceTest {
 				userService.createAdministrator(admin, PASSWORD);
 			}
 		}
-		
+		for(String manager:MANAGERS){
+			if(!userService.isUsernameOccupied(manager)){
+				userService.createManager(manager, PASSWORD);
+			}
+		}
 	}
 }

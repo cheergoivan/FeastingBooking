@@ -1,5 +1,7 @@
 package com.iplay.service.order;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,21 +9,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iplay.component.naming.UUIDNamingStrategy;
 import com.iplay.component.util.DelimiterUtils;
+import com.iplay.dao.hotel.BanquetHallDAO;
+import com.iplay.dao.order.OrderContractDAO;
 import com.iplay.dao.order.OrderDAO;
-import com.iplay.dto.ApiResponse;
-import com.iplay.dto.ApiResponseMessage;
+import com.iplay.dao.order.OrderPaymentDAO;
 import com.iplay.entity.hotel.BanquetHallDO;
-import com.iplay.entity.order.BHReservationDO;
+import com.iplay.entity.order.ApprovalStatus;
+import com.iplay.entity.order.OrderContractDO;
 import com.iplay.entity.order.OrderDO;
+import com.iplay.entity.order.OrderPaymentDO;
 import com.iplay.entity.order.OrderStatus;
 import com.iplay.entity.user.Role;
+import com.iplay.service.exception.ResourceForbiddenException;
+import com.iplay.service.exception.ResourceNotFoundException;
 import com.iplay.service.storage.StorageService;
 import com.iplay.service.user.SimplifiedUser;
 import com.iplay.service.user.UserService;
 import com.iplay.vo.common.PostFilesVO;
+import com.iplay.vo.order.PostPaymentVO;
 import com.iplay.vo.order.PostReservationVO;
-import com.iplay.web.exception.ResourceNotFoundException;
-import com.iplay.web.resource.ResourcesUriBuilder;
+import com.mysql.jdbc.StringUtils;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -33,84 +40,105 @@ public class OrderServiceImpl implements OrderService {
 	private OrderDAO orderDAO;
 	
 	@Autowired
+	private OrderContractDAO orderContractDAO;
+	
+	@Autowired
+	private OrderPaymentDAO orderPaymentDAO;
+	
+	@Autowired
+	private BanquetHallDAO banquetHallDAO;
+	
+	@Autowired
 	private StorageService storageService;
 
 	@Override
-	public int addReservation(SimplifiedUser user, PostReservationVO vo) {
-		int[] result = new int[] { -1 };
-		userService.findSimplifiedUserByUsername(vo.getRecommender()).ifPresent(recommender -> {
-			OrderDO order = new OrderDO();
-			BHReservationDO bhReservationDO = new BHReservationDO();
-			BeanUtils.copyProperties(vo, bhReservationDO);
-			bhReservationDO.setBanquetHallDO(new BanquetHallDO(vo.getBanquetHallId()));
-			bhReservationDO.setCustomerId(user.getUserId());
-			bhReservationDO.setCustomer(user.getUsername());
-			bhReservationDO.setRecommender(recommender.getUsername());
-			bhReservationDO.setRecommenderId(recommender.getId());
-			order.setBhReservation(bhReservationDO);
-			order.setOrderStatus(OrderStatus.CONSULTING);
-			order.setOrderTime(System.currentTimeMillis());
-			OrderDO savedOrder = orderDAO.save(order);
-			result[0] = savedOrder.getId();
-		});
-		return result[0];
+	@Transactional
+	public int addReservation(SimplifiedUser authenticatedUser, PostReservationVO vo) {
+		BanquetHallDO banquetHall = banquetHallDAO.findOne(vo.getBanquetHallId());
+		if(banquetHall == null)
+			throw new ResourceNotFoundException("Banquet hall with id: "+vo.getBanquetHallId()+" doesn't exist");
+		OrderDO order = new OrderDO();
+		if(!StringUtils.isNullOrEmpty(vo.getRecommender())){
+			boolean[] recommenderExists = {false};
+			userService.findSimplifiedUserByUsername(vo.getRecommender()).filter(recommender -> recommender.getRole() !=Role.ADMIN)
+			.ifPresent(recommender -> {
+				order.setRecommender(recommender.getUsername());
+				order.setRecommenderId(recommender.getId());
+				recommenderExists[0] = true;
+			});
+			if(!recommenderExists[0])
+				return -1;
+		}
+		BeanUtils.copyProperties(vo, order);
+		order.setBanquetHallDO(banquetHall);
+		order.setCustomerId(authenticatedUser.getUserId());
+		order.setCustomer(authenticatedUser.getUsername());
+		order.setOrderStatus(OrderStatus.CONSULTING);
+		order.setOrderTime(System.currentTimeMillis());
+		OrderDO savedOrder = orderDAO.save(order);
+		return savedOrder.getId();
 	}
 
 	@Override
-	public ApiResponse<String> fillManager(int orderId, String manager) {
+	public boolean fillManager(SimplifiedUser authenticatedUser, int orderId, String manager) {
 		boolean[] rs = {false};
 		OrderDO order = findOrderById(orderId);
-		userService.findSimplifiedUserByUsername(manager).filter(user -> user.getRole() == Role.MANAGER)
-		.ifPresent(user->{
-			order.setManager(user.getUsername());
-			order.setManagerId(user.getId());
-			orderDAO.save(order);
+		if(order.getOrderStatus()!=OrderStatus.CONSULTING||authenticatedUser.getUserId()!=order.getCustomerId())
+			throw new ResourceForbiddenException("Order status must be "+OrderStatus.CONSULTING+" or you don't have authority!");
+		userService.findSimplifiedUserByUsername(manager).filter(u -> u.getRole() == Role.MANAGER)
+		.ifPresent(u->{
+			orderDAO.updateManager(order.getId(), u.getId(), u.getUsername());
 			rs[0] = true;
 		});
-		if(rs[0])
-			return ApiResponse.SUCCESSFUL_RESPONSE_WITHOUT_MESSAGE;
-		return ApiResponse.createFailApiResponse(ApiResponseMessage.MANAGER_NOT_FOUND);
+		return rs[0];
 	}
 
 	@Override
-	public boolean nextStatus(int orderId) {
+	public OrderStatus moveToNextStatus(int orderId) {
 		OrderDO order = findOrderById(orderId);
 		OrderStatus next = order.getOrderStatus().next();
 		if(next == null)
-			return false;
-		order.setOrderStatus(next);
-		orderDAO.save(order);
-		return true;
-	}
-
-	@Override
-	public boolean fillAmountPaid(int orderId, double amountPaid) {
-		OrderDO order = findOrderById(orderId);
-		order.setAmountPaid(amountPaid);
-		orderDAO.save(order);
-		return true;
-	}
-
-	@Override
-	public String[] uploadContract(int orderId, PostFilesVO vo) {
-		OrderDO order = findOrderById(orderId);
-		String[] files = uploadFiles(vo);
-		order.setContract(DelimiterUtils.joinArray(files, DelimiterUtils.PICTURE_DELIMITER));
-		orderDAO.save(order);
-		return ResourcesUriBuilder.buildUris(files);
-	}
-
-	@Override
-	public String[] uploadPayment(int orderId, PostFilesVO vo) {
-		OrderDO order = findOrderById(orderId);
-		String[] files = uploadFiles(vo);
-		order.setPayment(DelimiterUtils.joinArray(files, DelimiterUtils.PICTURE_DELIMITER));
-		orderDAO.save(order);
-		return ResourcesUriBuilder.buildUris(files);
+			throw new ResourceForbiddenException("Order in status CANCELED or DONE can't move to next!");
+		orderDAO.updateStatus(orderId, next);
+		return next;
 	}
 	
-	private String[] uploadFiles(PostFilesVO vo){
-		MultipartFile[] files = vo.getFiles();
+	@Override
+	public OrderStatus updateStatus(int orderId, OrderStatus newOrderStatus) {
+		findOrderById(orderId);
+		orderDAO.updateStatus(orderId, newOrderStatus);
+		return newOrderStatus;
+	}
+	
+	@Override
+	public boolean fillPayment(SimplifiedUser authenticatedUser, int orderId, PostPaymentVO postPaymentVO) {
+		OrderDO order = findOrderById(orderId);
+		if(order.getOrderStatus()!=OrderStatus.RESERVED||authenticatedUser.getUserId()!=order.getCustomerId())
+			throw new ResourceForbiddenException("Order status must be "+OrderStatus.RESERVED+" or you don't have authority!");
+		OrderPaymentDO payment = order.getOrderPaymentDO();
+		if(payment!=null)
+			storageService.delete(DelimiterUtils.split(payment.getPayment(), DelimiterUtils.PICTURE_DELIMITER));
+		String[] files = uploadFiles(postPaymentVO.getFiles());
+		orderPaymentDAO.save(new OrderPaymentDO(order.getId(), postPaymentVO.getAmountPaid(), DelimiterUtils.joinArray(files, DelimiterUtils.PICTURE_DELIMITER), 
+				System.currentTimeMillis(), ApprovalStatus.PENDING));
+		return true;
+	}
+
+	@Override
+	public boolean uploadContract(SimplifiedUser authenticatedUser, int orderId, PostFilesVO vo) {
+		OrderDO order = findOrderById(orderId);
+		if(order.getOrderStatus()!=OrderStatus.NEGOTIATING||authenticatedUser.getUserId()!=order.getCustomerId())
+			throw new ResourceForbiddenException("Order status must be "+OrderStatus.NEGOTIATING+" or you don't have authority!");
+		OrderContractDO contract = order.getOrderContractDO();
+		if(contract!=null)
+			storageService.delete(DelimiterUtils.split(contract.getContract(),DelimiterUtils.PICTURE_DELIMITER));
+		String[] files = uploadFiles(vo.getFiles());
+		orderContractDAO.save(new OrderContractDO(order.getId(), DelimiterUtils.joinArray(files, DelimiterUtils.PICTURE_DELIMITER), 
+				System.currentTimeMillis(), ApprovalStatus.PENDING));
+		return true;
+	}
+	
+	private String[] uploadFiles(MultipartFile[] files){
 		String[] filenames = new String[files.length];
 		for(int i=0;i<files.length;i++){
 			String filename = storageService.store(files[i], UUIDNamingStrategy.generateUUID());
@@ -125,5 +153,4 @@ public class OrderServiceImpl implements OrderService {
 			throw new ResourceNotFoundException("Order with id:"+orderId+" doesn't exist");
 		return order;
 	}
-
 }

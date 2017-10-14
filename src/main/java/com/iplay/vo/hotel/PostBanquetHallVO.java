@@ -1,12 +1,14 @@
 package com.iplay.vo.hotel;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 public class PostBanquetHallVO {
 	private int id = -1;
 	@NotBlank(message="The name of the banquet hall can't be blank")
+	@Size(max = 255)
 	private String name;
 	@NotNull(message="The area of the banquet hall can't be blank")
 	private double area;
@@ -19,14 +21,18 @@ public class PostBanquetHallVO {
 	@NotNull(message="The height of the banquet hall can't be blank")
 	private double height;
 	@NotBlank(message="The columns of the banquet hall can't be blank")
+	@Size(max = 255)
 	private String columns;
 	@NotBlank(message="The shape of the banquet hall can't be blank")
+	@Size(max = 255)
 	private String shape;
 	@NotBlank(message="The actualArea of the banquet hall can't be blank")
+	@Size(max = 255)
 	private String actualArea;
 	@NotBlank(message="The colorOfTablecloth of the banquet hall can't be blank")
+	@Size(max = 255)
 	private String colorOfTablecloth;
-
+	
 	private String extraInfo = "";
 	
 	public String getName() {

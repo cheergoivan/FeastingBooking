@@ -1,12 +1,14 @@
 package com.iplay.vo.hotel;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 public class PostFeastVO {
 	private int id = -1;
 	@NotBlank(message="The name of the feast can't be blank")
+	@Size(max = 255)
 	private String name;
 	@NotNull(message="The price of the feast can't be blank")
 	private double price;

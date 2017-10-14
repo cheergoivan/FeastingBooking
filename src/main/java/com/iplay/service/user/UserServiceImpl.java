@@ -59,4 +59,15 @@ public class UserServiceImpl implements UserService{
 	public Optional<SimplifiedUserDO> findSimplifiedUserByUsername(String username) {
 		return Optional.ofNullable(userDAO.findOneByUsername(username));
 	}
+
+	@Override
+	public Optional<UserDO> createManager(String username, String password) {
+		UserDO user = null;
+		try{
+			user = userDAO.save(new UserDO(username, encoder.encode(password), username+"@FeastBooking.com", Role.MANAGER));
+		}catch(DataIntegrityViolationException e){
+			LOGGER.error(e.getMessage());
+		}
+		return Optional.ofNullable(user);
+	}
 }

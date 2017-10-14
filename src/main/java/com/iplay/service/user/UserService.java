@@ -11,6 +11,8 @@ public interface UserService {
 	
 	Optional<UserDO> createAdministrator(String username, String password);
 	
+	Optional<UserDO> createManager(String username, String password);
+	
 	boolean isUsernameOccupied(String username);
 	
 	boolean isEmailOccupied(String email);

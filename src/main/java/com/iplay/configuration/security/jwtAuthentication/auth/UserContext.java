@@ -3,6 +3,7 @@ package com.iplay.configuration.security.jwtAuthentication.auth;
 import com.iplay.entity.user.Role;
 
 public class UserContext {
+	
 	private int userId;
 	
 	private String username;

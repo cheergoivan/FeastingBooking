@@ -1,12 +1,39 @@
 package com.iplay.vo.order;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class PostReservationVO {
+	@NotNull
 	private int banquetHallId;
+	@NotNull
 	private int tables;
+	@NotEmpty
+	@Size(max = 255)
 	private String candidateDates;
-	private String recommender;
+	@Size(max = 255)
+	private String recommender = "";
+	@NotEmpty
+	@Size(max = 255)
 	private String contact;
+	@NotEmpty
+	@Size(max = 255)
 	private String phone;
+	
+	public PostReservationVO(){}
+	
+	public PostReservationVO(int banquetHallId, int tables, String candidateDates, String recommender, String contact,
+			String phone) {
+		super();
+		this.banquetHallId = banquetHallId;
+		this.tables = tables;
+		this.candidateDates = candidateDates;
+		this.recommender = recommender;
+		this.contact = contact;
+		this.phone = phone;
+	}
 	
 	public int getBanquetHallId() {
 		return banquetHallId;

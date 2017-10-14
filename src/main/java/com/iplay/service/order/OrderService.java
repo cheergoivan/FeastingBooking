@@ -1,21 +1,28 @@
 package com.iplay.service.order;
 
-import com.iplay.dto.ApiResponse;
+import com.iplay.entity.order.OrderStatus;
 import com.iplay.service.user.SimplifiedUser;
 import com.iplay.vo.common.PostFilesVO;
+import com.iplay.vo.order.PostPaymentVO;
 import com.iplay.vo.order.PostReservationVO;
 
 public interface OrderService {
-	int addReservation(SimplifiedUser user, PostReservationVO vo);
+	/**
+	 * 
+	 * @param user
+	 * @param vo
+	 * @return the created order id
+	 */
+	int addReservation(SimplifiedUser authenticatedUser, PostReservationVO vo);
 	
-	ApiResponse<String> fillManager(int orderId, String manager);
+	boolean fillManager(SimplifiedUser authenticatedUser, int orderId, String manager);
 	
-	boolean nextStatus(int orderId);
+	OrderStatus moveToNextStatus(int orderId);
 	
-	boolean fillAmountPaid(int orderId, double amountPaid);
+	OrderStatus updateStatus(int orderId, OrderStatus newOrderStatus);
 	
-	String[] uploadContract(int orderId, PostFilesVO vo);
+	boolean fillPayment(SimplifiedUser authenticatedUser, int orderId, PostPaymentVO postPaymentVO);
 	
-	String[] uploadPayment(int orderId, PostFilesVO vo);
+	boolean uploadContract(SimplifiedUser authenticatedUser, int orderId, PostFilesVO vo);
 	
 }

@@ -21,6 +21,7 @@ import com.iplay.configuration.security.jwtAuthentication.auth.UserContext;
 import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
 import com.iplay.dto.hotel.SimplifiedHotelDTO;
+import com.iplay.service.exception.ResourceNotFoundException;
 import com.iplay.service.hotel.HotelService;
 import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.common.FileDeletionVO;
@@ -29,7 +30,6 @@ import com.iplay.vo.hotel.PostBanquetHallVO;
 import com.iplay.vo.hotel.PostFeastVO;
 import com.iplay.vo.hotel.PostHotelVO;
 import com.iplay.web.configuration.PaginationConfig;
-import com.iplay.web.exception.ResourceNotFoundException;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

@@ -1,5 +1,7 @@
 package com.iplay.component.util;
 
+import org.springframework.util.StringUtils;
+
 public class DelimiterUtils {
 	
 	public static final String PICTURE_DELIMITER = ";";
@@ -11,5 +13,11 @@ public class DelimiterUtils {
 			sb.append(delimiter);
 		}
 		return sb.toString();
+	}
+	
+	public static String[] split(String src, String delimiter){
+		if(StringUtils.isEmpty(src))
+			return new String[0];
+		return src.split(delimiter);
 	}
 }
