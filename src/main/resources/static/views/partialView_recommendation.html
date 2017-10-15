@@ -1,0 +1,15 @@
+<div class="recommendation-hotel-container">
+	<div class="recommendation-candidate-container">
+		<h2>酒店列表</h2>
+		<input type="text" class="recommendation-filter" ng-model="data.filter"/>
+		<ul class="recommendation-candidate-wrapper" dnd-list="data.candidateList">
+			<li dnd-draggable="hotel" dnd-effect-allowed="move" dnd-moved="data.candidateList.splice($index, 1)" ng-repeat="hotel in data.candidateList | filter: data.filter" class="recommendation-item">{{hotel.name}}</li>	
+		</ul>
+	</div>
+	<div class="recommendation-list-container">
+		<h2>推薦列表</h2>
+		<ul class="recommendation-wrapper" dnd-list="data.recommendationList" dnd-drop="data.addRecommendation(event, index)">
+			<li dnd-draggable="hotel" dnd-effect-allowed="move" dnd-moved="data.recommendationList.splice($index, 1)" ng-repeat="hotel in data.recommendationList" class="recommendation-item">{{hotel.name}}</li>	
+		</ul>
+	</div>
+</div>

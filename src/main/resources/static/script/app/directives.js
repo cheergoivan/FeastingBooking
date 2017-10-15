@@ -50,7 +50,6 @@ angular.module('directives', ['services'])
                         + '<div class="image-container">'
                             + '<div class="image-container-content">'
                                 + '<div class="image-container-control">'
-                                    //+ '<div class="image-zoom" ng-click="onZoom({url: image})" title="放大圖片"><span class="glyphicon glyphicon-zoom-in"></span></div>'
                                     + '<div class="image-remove" ng-click="onRemove({url: image})" title="刪除圖片"><span class="glyphicon glyphicon-trash"></span></div>'
                                 + '</div>'
                                 + '<img ng-src="{{image}}">'
@@ -59,7 +58,7 @@ angular.module('directives', ['services'])
                     + '</div>'
                     + '<div class="image-container-wrapper">'
                         + '<div class="image-container">'
-                            + '<div class="image-container-content" title="添加圖片" ngf-select ngf-multiple="true" ngf-change="onAdd({files: $files})">' 
+                            + '<div class="image-container-content" title="添加圖片" ngf-select ngf-multiple="true" ngf-change="$files.length> 0 && onAdd({files: $files})">' 
                                 + '<div class="image-plus-wrapper"><span class="glyphicon glyphicon-plus"></span></div>'
                             + '</div>'
                         + '</div>'
@@ -68,7 +67,6 @@ angular.module('directives', ['services'])
         scope: {    
             images: '=',
             onRemove: '&',
-            onZoom: '&',
             onAdd: '&'
         },
         link: function(elem, scope) {
@@ -306,11 +304,12 @@ angular.module('directives', ['services'])
 		link: function(scope, elem) {
 			if(scope.cSize)
 				scope.cSize = 768;
-			var width = $('body').width();
+			var width = window.outerWidth;
 			if(parseInt(width) < scope.cSize) {
 				scope.cSwitch = true;
 			}
 			window.onresize = function() {
+				var width = window.outerWidth;
 				if(parseInt(width) < scope.cSize) {
 					scope.$apply(function() {
 						scope.cSwitch = true;

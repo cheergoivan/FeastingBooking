@@ -33,9 +33,6 @@ button.btn {
   min-width: 100px;
   outline-color: #fbfbfb !important;
 }
-input {
-  letter-spacing: 1px;
-}
 input.ng-invalid.ng-dirty {
   border-color: red;
 }
@@ -562,4 +559,68 @@ main.main .nav-panel .nav-menu .nav-menu-item:hover {
 }
 .signin-board > .btn-row > .btn {
   width: 100%;
+}
+/*ads*/
+.full-content-container {
+  max-width: 1000px;
+  margin: 10px auto;
+}
+/*recommendation*/
+.recommendation-hotel-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.recommendation-hotel-container .dndPlaceholder {
+  height: 34px;
+  background-color: #175199;
+}
+.recommendation-hotel-container .dndDraggingSource {
+  display: none;
+}
+.recommendation-hotel-container .recommendation-item {
+  padding: 6px 20px;
+  height: 34px;
+  line-height: 22px;
+}
+.recommendation-hotel-container .recommendation-item:nth-child(odd) {
+  background-color: #fbfbfb;
+}
+.recommendation-hotel-container .recommendation-item:nth-child(even) {
+  background-color: #eee;
+}
+.recommendation-hotel-container > .recommendation-candidate-container {
+  width: 400px;
+  min-width: 400px;
+  max-width: 400px;
+  height: 500px;
+}
+.recommendation-hotel-container > .recommendation-candidate-container > .recommendation-filter {
+  width: 100%;
+  height: 34px;
+  padding: 6px;
+}
+.recommendation-hotel-container > .recommendation-candidate-container > .recommendation-filter:focus {
+  outline-color: #175199;
+}
+.recommendation-hotel-container > .recommendation-candidate-container > .recommendation-candidate-wrapper {
+  padding: 0;
+  height: 442px;
+  border: 1px solid #ebebeb;
+  border-top: 0;
+  overflow-y: scroll;
+}
+.recommendation-hotel-container > .recommendation-list-container {
+  flex: 1 0 400px;
+  margin-left: 20px;
+  height: 500px;
+}
+.recommendation-hotel-container > .recommendation-list-container > .recommendation-wrapper {
+  padding: 0;
+  height: 476px;
+  border: 1px solid #ebebeb;
+  overflow-y: scroll;
 }

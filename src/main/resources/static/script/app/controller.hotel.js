@@ -293,8 +293,56 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
         				return src !== url;
         			});
         		}, function(response) {
-        			alertManager.addAlert(response);
+        			alertManager.addAlert("danger", "無法刪除圖片");
         		});
     		});
     	}
+    }])
+    .controller("hotelRecommondationCtrl", ["$scope", "hotelList", "apiService", "alertManager", "modals", function($scope, hotelList, apiService, alertManager, modals) {
+    	$scope.data = {};
+    	$scope.data.hotelList = hotelList;
+    	$scope.data.recommendationList = [];
+    	$scope.data.candidateList = [];
+    	function getRecommendationList() {
+    		apiService.getRecommendationList().then(function(response) {
+    			$scope.data.recommendationList = response;
+    			$scope.data.hotelList.forEach(function(hotel) {
+    				var foundHotel = $scope.data.recommendationList.find(function(recommendation) { 
+    					return recommendation.id === hotel.id}
+    				);
+    				if(foundHotel) {
+    					angular.extend(foundHotel, hotel);
+    				} else {
+    					$scope.data.candidateList.push(hotel);
+    				}
+    			});
+    		}, function(response) {
+    			alertManager.addAlert("danger", "無法獲取推薦列表");
+    		});
+    	}
+    	getRecommendationList();
+    	$scope.data.addRecommendation = function(event, index) {
+    		var hotel = JSON.parse(event.dataTransfer.getData("Text"));
+    		modals.addRecommendationModal(hotel).then(function(recommendation) {
+    			apiService.addRecommendation(recommendation).then(function(response) {
+    				alertManager.addAlert("success", "成功添加推薦酒店");
+    				var foundRecommend = $scope.data.recommendationList.find(function(recommend) {
+    					return recommend.id === hotel.id;
+    				});
+    				hotel.pictureUrl = response.pictureUrl;
+    			}, function() {
+    				alertManager.addAlert("danger", "添加推薦酒店失敗");
+    				$scope.data.recommendationList = $scope.data.recommendationList.filter(function(recommend) {
+    					return recommend.id !== hotel.id;
+    				});
+    				$scope.data.candidateList.push(hotel);
+    			})
+    		}, function() {
+				$scope.data.recommendationList = $scope.data.recommendationList.filter(function(recommend) {
+					return recommend.id !== hotel.id;
+				});
+				$scope.data.candidateList.push(hotel);
+    		});
+    		return true;
+    	};
     }])
