@@ -127,8 +127,8 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public boolean uploadContract(SimplifiedUser authenticatedUser, int orderId, PostFilesVO vo) {
 		OrderDO order = findOrderById(orderId);
-		if(order.getOrderStatus()!=OrderStatus.NEGOTIATING||authenticatedUser.getUserId()!=order.getCustomerId())
-			throw new ResourceForbiddenException("Order status must be "+OrderStatus.NEGOTIATING+" or you don't have authority!");
+		if(order.getOrderStatus()!=OrderStatus.CONSULTING||authenticatedUser.getUserId()!=order.getCustomerId())
+			throw new ResourceForbiddenException("Order status must be "+OrderStatus.CONSULTING+" or you don't have authority!");
 		OrderContractDO contract = order.getOrderContractDO();
 		if(contract!=null)
 			storageService.delete(DelimiterUtils.split(contract.getContract(),DelimiterUtils.PICTURE_DELIMITER));

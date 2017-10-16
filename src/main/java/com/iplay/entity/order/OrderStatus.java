@@ -1,7 +1,7 @@
 package com.iplay.entity.order;
 
 public enum OrderStatus {
-	CANCELED, CONSULTING, NEGOTIATING, RESERVED, FEASTING, CASHBACK, DONE;
+	CANCELED, CONSULTING, RESERVED, FEASTING, CASHBACK, DONE;
 	
 	public OrderStatus next(){
 		OrderStatus[] status = OrderStatus.values();
