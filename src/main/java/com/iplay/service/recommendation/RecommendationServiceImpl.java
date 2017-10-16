@@ -17,27 +17,29 @@ import com.iplay.vo.recommendation.RecommendationVO;
 import com.iplay.web.resource.ResourcesUriBuilder;
 
 @Service
-public class RecommendationServiceImpl implements RecommendationService{
-	
+public class RecommendationServiceImpl implements RecommendationService {
+
 	@Autowired
 	private StorageService storageService;
-	
+
 	@Autowired
 	private RecommendationDAO recommendationDAO;
 
 	@Override
-	public int addRecommendation(RecommendationVO vo) {
+	public RecommendationDTO addRecommendation(RecommendationVO vo) {
 		MultipartFile file = vo.getFile();
 		String filename = storageService.store(file, UUIDNamingStrategy.generateUUID());
 		RecommendationDO rec = new RecommendationDO(vo.getHotelId(), filename);
-		return recommendationDAO.save(rec).getId();
+		RecommendationDO savedRec = recommendationDAO.save(rec);
+		return new RecommendationDTO(savedRec.getId(), savedRec.getHotelId(),
+				ResourcesUriBuilder.buildUri(savedRec.getPicture()));
 	}
 
 	@Override
 	public boolean deleteRecommendations(EntityDeletionVO vo) {
 		List<RecommendationDO> recs = new LinkedList<>();
 		List<String> pictures = new LinkedList<>();
-		recommendationDAO.findAll(vo.getIds()).forEach(rec->{
+		recommendationDAO.findAll(vo.getIds()).forEach(rec -> {
 			recs.add(rec);
 			pictures.add(rec.getPicture());
 		});
@@ -49,7 +51,7 @@ public class RecommendationServiceImpl implements RecommendationService{
 	@Override
 	public boolean deleteRecommendation(int id) {
 		RecommendationDO rec = recommendationDAO.findOne(id);
-		if(rec!=null){
+		if (rec != null) {
 			storageService.delete(rec.getPicture());
 			recommendationDAO.delete(rec);
 		}
@@ -59,10 +61,11 @@ public class RecommendationServiceImpl implements RecommendationService{
 	@Override
 	public List<RecommendationDTO> listRecommendations() {
 		List<RecommendationDTO> recs = new LinkedList<>();
-		recommendationDAO.findAll().forEach(rec->{
-			recs.add(new RecommendationDTO(rec.getId(), rec.getHotelId(), ResourcesUriBuilder.buildUri(rec.getPicture())));
+		recommendationDAO.findAll().forEach(rec -> {
+			recs.add(new RecommendationDTO(rec.getId(), rec.getHotelId(),
+					ResourcesUriBuilder.buildUri(rec.getPicture())));
 		});
 		return recs;
 	}
-	
+
 }

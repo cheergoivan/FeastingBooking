@@ -86,6 +86,19 @@ public class HotelController {
 					+ PaginationConfig.HOTELS_PER_PAGE_FOR_ORDINARY_USER)@Min(1) int per_page) {
 		return hotelService.listHotel(page, per_page);
 	}
+	
+	/*
+	@ApiOperation(notes = "分页展示酒店,返回酒店的List，默认每页展示10条数据", value = "")
+	@GetMapping
+	public Page<SimplifiedHotelDTO> listHotelsForUser(@PageableDefault(value = 1, sort = { "id" }, 
+		direction = Sort.Direction.DESC) Pageable pageable) {
+		pageable.getSort().forEach(o->{
+			o.getProperty();
+		});
+		return hotelService.listHotelsByPage(pageable);
+	}
+	*/
+	
 
 	/*
 	 * @ApiOperation(notes="分页展示酒店， 返回page对象",value="")

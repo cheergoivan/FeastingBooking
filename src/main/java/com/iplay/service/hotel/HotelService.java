@@ -3,6 +3,7 @@ package com.iplay.service.hotel;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedHotelAdminDTO;
@@ -62,4 +63,6 @@ public interface HotelService {
 	 * @return
 	 */
 	Page<SimplifiedHotelDTO> listHotelsByPage(int page, int size);
+	
+	Page<SimplifiedHotelDTO> listHotelsByPage(Pageable pageable);
 }

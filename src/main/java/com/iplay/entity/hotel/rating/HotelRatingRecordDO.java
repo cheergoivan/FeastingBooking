@@ -15,6 +15,7 @@ public class HotelRatingRecordDO {
 	private int userId;
 	private int hotelId;
 	
+	
 	public HotelRatingRecordDO(){}
 
 	public HotelRatingRecordDO(int userId, int hotelId) {

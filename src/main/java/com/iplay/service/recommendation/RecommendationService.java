@@ -7,7 +7,7 @@ import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.recommendation.RecommendationVO;
 
 public interface RecommendationService {
-	int addRecommendation(RecommendationVO vo);
+	RecommendationDTO addRecommendation(RecommendationVO vo);
 	
 	boolean deleteRecommendations(EntityDeletionVO vo);
 	

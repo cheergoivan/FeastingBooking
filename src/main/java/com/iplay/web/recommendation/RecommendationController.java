@@ -29,10 +29,10 @@ public class RecommendationController {
 	@Autowired
 	private RecommendationService recommendationService;
 	
-	@ApiOperation(notes="管理员添加一个推荐, 返回推荐id",value="")
+	@ApiOperation(notes="管理员添加一个推荐, 返回推荐被添加的推荐对象",value="")
     @PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public int addRecommendations(@ApiParam("推荐酒店实体")@Valid RecommendationVO vo){
+	public RecommendationDTO addRecommendations(@ApiParam("推荐酒店实体")@Valid RecommendationVO vo){
 		return recommendationService.addRecommendation(vo);
 	}
 	

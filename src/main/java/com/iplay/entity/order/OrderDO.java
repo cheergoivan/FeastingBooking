@@ -46,6 +46,8 @@ public class OrderDO {
 	private OrderPaymentDO orderPaymentDO;
 	
 	private OrderStatus orderStatus;
+	
+	private boolean reviewed;
 
 	public int getId() {
 		return id;
@@ -173,5 +175,13 @@ public class OrderDO {
 
 	public void setOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
+	}
+
+	public boolean isReviewed() {
+		return reviewed;
+	}
+
+	public void setReviewed(boolean reviewed) {
+		this.reviewed = reviewed;
 	}
 }

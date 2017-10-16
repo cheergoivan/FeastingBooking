@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -84,6 +85,18 @@ public class HotelServiceImpl implements HotelService {
 	public Page<SimplifiedHotelDTO> listHotelsByPage(int page, int size) {
 		PageRequest pageRequest = new PageRequest(page, size, null);
 		Page<HotelDO> hotelPages = hotelDAO.findAll(pageRequest);
+		return hotelPages.map(hotelDO -> {
+			return new SimplifiedHotelDTO(hotelDO.getId(), hotelDO.getName(),
+					new double[] { hotelDO.getMinimumPrice(), hotelDO.getMaximumPrice() },
+					new int[] { hotelDO.getMinimumTables(), hotelDO.getMaximunTables() }, hotelDO.getAddress().getDistrict(), 0,
+					hotelDO.getPicturesAsArray().length>0?ResourcesUriBuilder.buildUri(hotelDO.getPicturesAsArray()[0]):"");
+		});
+	}
+	
+
+	@Override
+	public Page<SimplifiedHotelDTO> listHotelsByPage(Pageable pageable) {
+		Page<HotelDO> hotelPages = hotelDAO.findAll(pageable);
 		return hotelPages.map(hotelDO -> {
 			return new SimplifiedHotelDTO(hotelDO.getId(), hotelDO.getName(),
 					new double[] { hotelDO.getMinimumPrice(), hotelDO.getMaximumPrice() },
@@ -363,4 +376,5 @@ public class HotelServiceImpl implements HotelService {
 			hotelDAO.save(hotel);
 		}
 	}
+
 }
