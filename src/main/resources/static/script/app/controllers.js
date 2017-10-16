@@ -1,1 +1,1 @@
-angular.module('controllers', ['controller.main', 'controller.hotel', 'controller.account'])
+angular.module("controllers", ["controller.main", "controller.hotel", "controller.account", "controller.advertisement"])

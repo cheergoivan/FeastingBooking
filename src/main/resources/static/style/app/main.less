@@ -11,6 +11,8 @@
 @checkbox-width: 18px;
 @nav-panel-width: 300px;
 @nav-menu-switch-width: 30px;
+@input-height: 34px;
+@recommendation-candidate-height: 500px;
 /*user agent*/
 body {
     height: 100vh;
@@ -46,7 +48,6 @@ button.btn {
     outline-color: @light-theme-gray!important;
 }
 input {
-    letter-spacing: 1px;
     &.ng-invalid.ng-dirty {
         border-color: red;
     }
@@ -587,6 +588,71 @@ main.main {
         padding-right: 10px;
         >.btn {
             width: 100%;
+        }
+    }
+}
+/*ads*/
+.full-content-container {
+    max-width: 1000px;
+    margin: 10px auto;
+}
+/*recommendation*/
+.recommendation-hotel-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    .dndPlaceholder {
+        height: @input-height;
+        background-color: @primary-color;
+    }
+    .dndDraggingSource {
+        //visibility: hidden;
+        display: none;
+    }
+    .recommendation-item {
+        padding: 6px 20px;
+        height: @input-height;
+        line-height: 22px;
+        &:nth-child(odd) {
+            background-color: @light-theme-gray;
+        }
+        &:nth-child(even) {
+            background-color: @theme-gray;
+        }
+    }
+    >.recommendation-candidate-container {
+        width: 400px;
+        min-width: 400px;
+        max-width: 400px;
+        height: @recommendation-candidate-height;
+        >.recommendation-filter {
+            width: 100%;
+            height: @input-height;
+            padding: 6px;
+            &:focus {
+                outline-color: @primary-color;
+            }
+        }
+        >.recommendation-candidate-wrapper {
+            padding: 0;
+            height: @recommendation-candidate-height - @input-height - 24px;
+            border: 1px solid @dark-theme-gray;
+            border-top: 0;
+            overflow-y: scroll; 
+        }
+    }
+    >.recommendation-list-container {
+        flex: 1 0 400px;
+        margin-left: 20px;
+        height: @recommendation-candidate-height;
+        >.recommendation-wrapper {
+            padding: 0;
+            height: @recommendation-candidate-height - 24px;
+            border: 1px solid @dark-theme-gray;
+            overflow-y: scroll;
         }
     }
 }

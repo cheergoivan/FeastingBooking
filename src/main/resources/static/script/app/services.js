@@ -2,6 +2,7 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 .constant("constants", {
 	apiPrefix: "/api",
 	authTokenName: "FeastBookingAuthToken",
+	feastBookingPrefix: "FeastBooking",
 	hotelsStatePrefix: "FeastBooking.hotels",
 	hotelsListState: "list",
 	hotelsRecommondationState: "recommendation",
@@ -14,7 +15,8 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 	hotelCommentState: "commont",
 	hotelCreateBanquetState: "newBanquet",
 	hotelFeastState: "feast",
-	hotelCreateFeastState: "newFeast"
+	hotelCreateFeastState: "newFeast",
+	advertisementState: "advertisement"
 })
 .service("alertManager", ["$rootScope", "$timeout", function($rootScope, $timeout) {
 	var timeout = 5000;
@@ -161,6 +163,22 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 		var headers = {"Content-Type": "application/json"};
 		return promiseFactory("DELETE", `${urlPrefix}/feasts/${feastId}`, headers);
 	}
+	function getAdsList() {
+		return promiseFactory("GET", `${urlPrefix}/advertisements`);
+	}
+	function addAds(images) {
+		return fileUploadFactory(`${urlPrefix}/advertisements`, images);
+	}
+	function deleteAds(id) {
+		var headers = {"Content-Type": "application/json"};
+		return promiseFactory("DELETE", `${urlPrefix}/advertisements/${id}`, headers);
+	}
+	function getRecommendationList() {
+		return promiseFactory("GET", `${urlPrefix}/recommendations`);
+	}
+	function addRecommendation(recommendation) {
+		return fileUploadFactory(`${urlPrefix}/recommendations`, recommendation);
+	}
     return {
     	signin: signin,
         getHotelList: getHotelList,
@@ -181,7 +199,12 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
         addFeastImages: addFeastImages,
         removeFeastImage: removeFeastImage,
         removeBanquet: removeBanquet,
-        removeFeast: removeFeast
+        removeFeast: removeFeast,
+        getAdsList: getAdsList,
+        addAds: addAds,
+        deleteAds: deleteAds,
+        getRecommendationList: getRecommendationList,
+        addRecommendation: addRecommendation
     };
 }])
 .service("modals", ["$uibModal", function($uibModal) {
@@ -213,7 +236,36 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 		});
 		return modalInstance.result;
 	}
+	function addRecommendationModal(hotel) {
+		var modalInstance = $uibModal.open({
+			template: '<div class="modal-container">'
+						+ '<div class="modal-header">'
+							+ '<h3>添加圖片<span class="modal-cross" ng-click="cancel()"><span></h3>'
+						+ '</div>'
+						+ '<div class="modal-body">'
+							+ '<div>{{hotel.name}}</div>'
+							+ '<div ngf-select ngf-multiple="false" ngf-change="addRecommendation($files)" class="btn btn-primary">添加圖片</div>'
+						+ '</div>'
+					+ '</div>',
+			controller: ['$scope', '$uibModalInstance', 'alertManager', function($scope, $uibModalInstance, alertManager) {
+				$scope.addRecommendation = function(file) {
+					if(!file || file.length !== 1) {
+						alertManager.addAlert('warning', '請添加一張圖片');
+						$scope.cancel();
+						return;
+					}
+					$uibModalInstance.close({ hotelId: hotel.id, file: file[0] });
+				}
+				$scope.cancel = function() {
+					$uibModalInstance.dismiss();
+				}
+			}],
+			wondowClass: "modal-window"
+		});
+		return modalInstance.result;
+	}
 	return {
-		messageModal: messageModal
+		messageModal: messageModal,
+		addRecommendationModal: addRecommendationModal
 	}
 }])

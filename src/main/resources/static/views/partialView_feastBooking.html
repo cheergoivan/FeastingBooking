@@ -14,7 +14,7 @@
 				<li role="presentation" ng-class="{'active': state.name.startsWith(constants.hotelsStatePrefix) || state.name.startsWith(constants.hotelStatePrefix)}"><a ui-sref="{{constants.hotelsStatePrefix + '.' + constants.hotelsListState}}">酒店</a></li>
 				<li role="presentation"><a>訂單</a></li>
 				<li role="presentation"><a>消息</a></li>
-				<li role="presentation"><a>廣告</a></li>
+				<li role="presentation" ng-class="{'active': state.name.endsWith(constants.advertisementState)}"><a  ui-sref="{{constants.feastBookingPrefix + '.' + constants.advertisementState}}">廣告</a></li>
 				<li role="presentation"><a>注冊</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">

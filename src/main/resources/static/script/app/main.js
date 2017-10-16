@@ -1,4 +1,4 @@
-angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router", "services", "blockUI"])
+angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router", "services", "blockUI", "dndLists"])
 .config(["$stateProvider", "$locationProvider", "$urlRouterProvider", "constants", function($stateProvider, $locationProvider, $urlRouterProvider, constants) {
 	$locationProvider.html5Mode(true).hashPrefix("!");
 	var states = [{
@@ -44,8 +44,15 @@ angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router",
 		url: "/recommendation",
 		views: {
 			"hotelsMain@FeastBooking.hotels": {
-				template: "TODO"
+				templateUrl: "partialView/hotel_recommendation",
+				controller: "hotelRecommondationCtrl"
 			}
+		},
+		resolve: {
+			"apiService": "apiService",
+			"hotelList": ["apiService", function(apiService) {
+				return apiService.getHotelList();
+			}]
 		}
 	}, {
 		name: constants.hotelStatePrefix,
@@ -127,6 +134,15 @@ angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router",
 			"hotelDetailMain@FeastBooking.hotel": {
 				templateUrl: "partialView/newFeast",
 				controller: "feastCreateCtrl"
+			}
+		},
+	}, {
+		name: constants.feastBookingPrefix + "." + constants.advertisementState,
+		url: "/advertisement",
+		views: {
+			"main@FeastBooking": {
+				templateUrl: "partialView/advertisement",
+				controller: "advertisementCtrl"
 			}
 		},
 	}];
