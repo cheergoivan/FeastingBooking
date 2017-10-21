@@ -25,6 +25,4 @@ public interface OrderService {
 	
 	boolean uploadContract(SimplifiedUser authenticatedUser, int orderId, PostFilesVO vo);
 	
-	
-	
 }

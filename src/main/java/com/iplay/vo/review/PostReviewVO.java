@@ -1,11 +1,15 @@
 package com.iplay.vo.review;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class PostReviewVO {
 	@NotNull
+	@DecimalMin("0.0")
+	@DecimalMax("5.0")
 	private double rating;
 	@NotEmpty
 	private String review;

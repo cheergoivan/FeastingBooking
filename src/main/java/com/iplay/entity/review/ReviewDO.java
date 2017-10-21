@@ -18,7 +18,20 @@ public class ReviewDO {
 	private String author;
 	private double rating;
 	private String review;
+	private long reviewTime;
 	
+	public ReviewDO(){}
+	
+	public ReviewDO(int hotelId, String banquetHall, int authorId, String author, double rating, String review) {
+		super();
+		this.hotelId = hotelId;
+		this.banquetHall = banquetHall;
+		this.authorId = authorId;
+		this.author = author;
+		this.rating = rating;
+		this.review = review;
+		this.reviewTime = System.currentTimeMillis();
+	}
 	public int getHotelId() {
 		return hotelId;
 	}
@@ -60,5 +73,13 @@ public class ReviewDO {
 	}
 	public void setReview(String review) {
 		this.review = review;
+	}
+
+	public long getReviewTime() {
+		return reviewTime;
+	}
+
+	public void setReviewTime(long reviewTime) {
+		this.reviewTime = reviewTime;
 	}
 }

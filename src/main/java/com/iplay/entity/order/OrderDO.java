@@ -2,6 +2,7 @@ package com.iplay.entity.order;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Index;
@@ -22,7 +23,7 @@ public class OrderDO {
 	private int id;
 	private long orderTime;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "bh_id")
 	private BanquetHallDO banquetHallDO;
 	private int customerId;
@@ -37,17 +38,26 @@ public class OrderDO {
 	private int managerId;
 	private String manager;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id")
 	private OrderContractDO orderContractDO;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id")
 	private OrderPaymentDO orderPaymentDO;
 	
 	private OrderStatus orderStatus;
 	
 	private boolean reviewed;
+	
+	public OrderDO(){}
+
+	public OrderDO(int id, int customerId, OrderStatus orderStatus) {
+		super();
+		this.id = id;
+		this.customerId = customerId;
+		this.orderStatus = orderStatus;
+	}
 
 	public int getId() {
 		return id;

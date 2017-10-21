@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import com.iplay.entity.order.OrderBHReviewedCustomerIdDO;
 import com.iplay.entity.order.OrderDO;
+import com.iplay.entity.order.OrderIdCustomerIdStatusDO;
 import com.iplay.entity.order.OrderStatus;
 
 public interface OrderDAO extends CrudRepository<OrderDO, Integer>{
@@ -22,6 +24,15 @@ public interface OrderDAO extends CrudRepository<OrderDO, Integer>{
 	@Modifying
 	@Query("update OrderDO h set h.orderStatus = ?2 where h.id = ?1")
 	int updateStatus(int id, OrderStatus status);
+	
+	@Transactional
+	@Modifying
+	@Query("update OrderDO h set h.reviewed = ?2 where h.id = ?1")
+	int updateReviewed(int id, boolean reviewed);
+	
+	OrderBHReviewedCustomerIdDO findBHReviewedCustomerIdById(int id);
+	
+	OrderIdCustomerIdStatusDO findIdCustomerIdStatusById(int id);
 	
 	Page<OrderDO> findByCustomerId(int customerId, Pageable pageable);
 	

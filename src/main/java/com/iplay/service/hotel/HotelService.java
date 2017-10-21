@@ -38,10 +38,6 @@ public interface HotelService {
 	
 	double getHotelRating(int id);
 	
-	double updateHotelRating(int userId, int hotelId, double score);
-	
-	boolean hasUserRatedHotel(int userId, int hotelId);
-	
 	String[] savePictures(int hotelId, PostFilesVO files);
 	
 	boolean[] deletePictures(int hotelId, FileDeletionVO fileDeletionVO);

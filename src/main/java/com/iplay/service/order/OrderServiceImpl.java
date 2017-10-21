@@ -17,6 +17,7 @@ import com.iplay.entity.hotel.BanquetHallDO;
 import com.iplay.entity.order.ApprovalStatus;
 import com.iplay.entity.order.OrderContractDO;
 import com.iplay.entity.order.OrderDO;
+import com.iplay.entity.order.OrderIdCustomerIdStatusDO;
 import com.iplay.entity.order.OrderPaymentDO;
 import com.iplay.entity.order.OrderStatus;
 import com.iplay.entity.user.Role;
@@ -82,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public boolean fillManager(SimplifiedUser authenticatedUser, int orderId, String manager) {
 		boolean[] rs = {false};
-		OrderDO order = findOrderById(orderId);
+		OrderDO order = findSimplifiedOrderById(orderId);
 		if(order.getOrderStatus()!=OrderStatus.CONSULTING||authenticatedUser.getUserId()!=order.getCustomerId())
 			throw new ResourceForbiddenException("Order status must be "+OrderStatus.CONSULTING+" or you don't have authority!");
 		userService.findSimplifiedUserByUsername(manager).filter(u -> u.getRole() == Role.MANAGER)
@@ -95,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public OrderStatus moveToNextStatus(int orderId) {
-		OrderDO order = findOrderById(orderId);
+		OrderDO order = findSimplifiedOrderById(orderId);
 		OrderStatus next = order.getOrderStatus().next();
 		if(next == null)
 			throw new ResourceForbiddenException("Order in status CANCELED or DONE can't move to next!");
@@ -105,17 +106,17 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Override
 	public OrderStatus updateStatus(int orderId, OrderStatus newOrderStatus) {
-		findOrderById(orderId);
+		findSimplifiedOrderById(orderId);
 		orderDAO.updateStatus(orderId, newOrderStatus);
 		return newOrderStatus;
 	}
 	
 	@Override
 	public boolean fillPayment(SimplifiedUser authenticatedUser, int orderId, PostPaymentVO postPaymentVO) {
-		OrderDO order = findOrderById(orderId);
+		OrderDO order = findSimplifiedOrderById(orderId);
 		if(order.getOrderStatus()!=OrderStatus.RESERVED||authenticatedUser.getUserId()!=order.getCustomerId())
 			throw new ResourceForbiddenException("Order status must be "+OrderStatus.RESERVED+" or you don't have authority!");
-		OrderPaymentDO payment = order.getOrderPaymentDO();
+		OrderPaymentDO payment = orderPaymentDAO.findOne(order.getId());
 		if(payment!=null)
 			storageService.delete(DelimiterUtils.split(payment.getPayment(), DelimiterUtils.PICTURE_DELIMITER));
 		String[] files = uploadFiles(postPaymentVO.getFiles());
@@ -126,10 +127,10 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public boolean uploadContract(SimplifiedUser authenticatedUser, int orderId, PostFilesVO vo) {
-		OrderDO order = findOrderById(orderId);
+		OrderDO order = findSimplifiedOrderById(orderId);
 		if(order.getOrderStatus()!=OrderStatus.CONSULTING||authenticatedUser.getUserId()!=order.getCustomerId())
 			throw new ResourceForbiddenException("Order status must be "+OrderStatus.CONSULTING+" or you don't have authority!");
-		OrderContractDO contract = order.getOrderContractDO();
+		OrderContractDO contract = orderContractDAO.findOne(order.getId());
 		if(contract!=null)
 			storageService.delete(DelimiterUtils.split(contract.getContract(),DelimiterUtils.PICTURE_DELIMITER));
 		String[] files = uploadFiles(vo.getFiles());
@@ -147,12 +148,11 @@ public class OrderServiceImpl implements OrderService {
 		return filenames;
 	}
 	
-	private OrderDO findOrderById(int orderId){
-		OrderDO order = orderDAO.findOne(orderId);
-		if(order == null)
-			throw new ResourceNotFoundException("Order with id:"+orderId+" doesn't exist");
-		return order;
+	private OrderDO findSimplifiedOrderById(int orderId){
+		OrderIdCustomerIdStatusDO simplifiedOrder = orderDAO.findIdCustomerIdStatusById(orderId);
+		if(simplifiedOrder == null)
+			throw new ResourceNotFoundException("Order with id:"+orderId+" doesn't exist!");
+		return new OrderDO(simplifiedOrder.getId(), simplifiedOrder.getCustomerId(), simplifiedOrder.getOrderStatus());
 	}
-	
 	
 }

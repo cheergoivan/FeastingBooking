@@ -23,7 +23,6 @@ import com.iplay.dao.hotel.BanquetHallDAO;
 import com.iplay.dao.hotel.FeastDAO;
 import com.iplay.dao.hotel.HotelDAO;
 import com.iplay.dao.hotel.rating.HotelRatingDAO;
-import com.iplay.dao.hotel.rating.HotelRatingRecordDAO;
 import com.iplay.dto.hotel.AddressDTO;
 import com.iplay.dto.hotel.HotelDTO;
 import com.iplay.dto.hotel.SimplifiedBanquetHallDTO;
@@ -35,7 +34,6 @@ import com.iplay.entity.hotel.BanquetHallDO;
 import com.iplay.entity.hotel.FeastDO;
 import com.iplay.entity.hotel.HotelDO;
 import com.iplay.entity.hotel.rating.HotelRatingDO;
-import com.iplay.entity.hotel.rating.HotelRatingRecordDO;
 import com.iplay.service.storage.StorageService;
 import com.iplay.vo.common.EntityDeletionVO;
 import com.iplay.vo.common.FileDeletionVO;
@@ -56,9 +54,6 @@ public class HotelServiceImpl implements HotelService {
 
 	@Autowired
 	private HotelRatingDAO hotelRatingDAO;
-	
-	@Autowired
-	private HotelRatingRecordDAO hotelRatingRecordDAO;
 	
 	@Autowired
 	private BanquetHallDAO banquetHallDAO;
@@ -219,34 +214,6 @@ public class HotelServiceImpl implements HotelService {
 		return true;
 	}
 	
-	@Override
-	@Transactional
-	public double updateHotelRating(int userId, int hotelId, double score) {
-		if(hotelDAO.findOne(hotelId) == null){
-			return -1;
-		}
-		if(hasUserRatedHotel(userId, hotelId)){
-			return hotelRatingDAO.findOne(hotelId).getRating();
-		}
-		hotelRatingRecordDAO.save(new HotelRatingRecordDO(userId, hotelId));
-		HotelRatingDO rating = hotelRatingDAO.findOne(hotelId);
-		if(rating==null){
-			rating = hotelRatingDAO.save(new HotelRatingDO(hotelId, 0, 0, 5.0));
-		}
-		rating.setRating((rating.getTotalScore()+score)/(rating.getTimes()+1));
-		rating.setTimes(rating.getTimes()+1);
-		rating.setTotalScore(rating.getTotalScore()+score);
-		hotelRatingDAO.save(rating);
-		return rating.getRating();
-	}
-
-	@Override
-	public boolean hasUserRatedHotel(int userId, int hotelId) {
-		if(hotelRatingRecordDAO.findByUserIdAndHotelId(userId, hotelId)!=null){
-			return false;
-		}
-		return true;
-	}
 
 	@Override
 	public String[] savePictures(int hotelId, PostFilesVO files) {

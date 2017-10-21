@@ -1,5 +1,7 @@
 package com.iplay.dto.review;
 
+import java.time.LocalDate;
+
 public class ReviewDTO {
 	private int id;
 	private int hotelId;
@@ -8,6 +10,7 @@ public class ReviewDTO {
 	private String author;
 	private double rating;
 	private String review;
+	private LocalDate reviewTime;
 	
 	public int getId() {
 		return id;
@@ -50,5 +53,11 @@ public class ReviewDTO {
 	}
 	public void setReview(String review) {
 		this.review = review;
+	}
+	public LocalDate getReviewTime() {
+		return reviewTime;
+	}
+	public void setReviewTime(LocalDate reviewTime) {
+		this.reviewTime = reviewTime;
 	}
 }

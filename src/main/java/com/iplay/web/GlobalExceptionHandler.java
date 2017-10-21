@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.iplay.service.exception.InvalidRequestParametersException;
 import com.iplay.service.exception.ResourceForbiddenException;
 import com.iplay.service.exception.ResourceNotFoundException;
 
@@ -28,6 +29,13 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public String handleResourceForbidden(ResourceForbiddenException e) {
+		return e.getMessage();
+	}
+	
+	@ExceptionHandler
+	@ResponseBody
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public String handleResourceForbidden(InvalidRequestParametersException e) {
 		return e.getMessage();
 	}
 
