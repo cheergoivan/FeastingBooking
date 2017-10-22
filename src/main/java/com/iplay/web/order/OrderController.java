@@ -1,13 +1,11 @@
 package com.iplay.web.order;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iplay.component.dateFormat.FeastBookingDateFormatter;
 import com.iplay.configuration.security.jwtAuthentication.auth.UserContext;
 import com.iplay.dto.ApiResponse;
 import com.iplay.dto.ApiResponseMessage;
@@ -38,9 +37,9 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 	
-	@Value("${feast-booking.date.format}")
-	private String defaultDateFormat;
-
+	@Autowired
+	private FeastBookingDateFormatter dateFormatter;
+	
 	@ApiOperation(notes = "用户新建一个咨询单，返回包含订单id的ApiResponse。如果ApiResponse为false则表示该推介人用户不存在。", value = "")
 	@PostMapping
 	@PreAuthorize("hasAnyRole('USER', 'MANAGER')")
@@ -74,10 +73,10 @@ public class OrderController {
 			@ApiParam("确定的酒席日期") @RequestParam String value, @AuthenticationPrincipal UserContext context) {
 		SimplifiedUser authenticatedUser = new SimplifiedUser(context.getUserId(), context.getUsername());
 		try {
-			Date feastingDate = new SimpleDateFormat(defaultDateFormat).parse(value);
+			Date feastingDate = dateFormatter.parse(value);
 			return orderService.fillFeastingDate(authenticatedUser, id, feastingDate);
 		} catch (ParseException e) {
-			throw new InvalidRequestParametersException("The date format must be "+defaultDateFormat+"!");
+			throw new InvalidRequestParametersException("The date format must be "+dateFormatter.getDefaultDateFormat()+"!");
 		}
 	}
 

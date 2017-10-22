@@ -1,6 +1,5 @@
 package com.iplay.service.order;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -10,7 +9,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mapping.PropertyReferenceException;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dangdang.ddframe.rdb.sharding.id.generator.IdGenerator;
+import com.iplay.component.dateFormat.FeastBookingDateFormatter;
 import com.iplay.component.naming.UUIDNamingStrategy;
 import com.iplay.component.util.DelimiterUtils;
 import com.iplay.dao.hotel.BanquetHallDAO;
@@ -50,9 +49,6 @@ import com.iplay.component.util.StringUtils;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-	@Value("${feast-booking.date.format}")
-	private String defaultDateFormat;
-
 	@Autowired
 	private UserService userService;
 
@@ -73,6 +69,9 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private IdGenerator idGenerator;
+	
+	@Autowired
+	private FeastBookingDateFormatter dateFormatter;
 
 	@Override
 	@Transactional
@@ -210,7 +209,7 @@ public class OrderServiceImpl implements OrderService {
 					getOrderStatusCollection(vo), currUser, currUser, currUser, pageable);
 			return page.map(o -> {
 				return new SimplifiedOrderDTO(o.getId(), o.getBanquetHallName(), o.getHotelName(),
-						formatDate(o.getFeastingDate()), o.getTables(), o.getOrderStatus(),
+						dateFormatter.toDefaultFormattedDate(o.getFeastingDate()), o.getTables(), o.getOrderStatus(),
 						getRoleInOrder(currUser, o.getCustomerId(), o.getRecommenderId(), o.getManagerId()));
 			});
 		} catch (PropertyReferenceException e) {
@@ -229,10 +228,6 @@ public class OrderServiceImpl implements OrderService {
 		return roles;
 	}
 
-	private String formatDate(long date) {
-		Date d = new Date(1292083200000L);
-		return new SimpleDateFormat(defaultDateFormat).format(d);
-	}
 	
 	private List<OrderStatus> getOrderStatusCollection(OrderStatusVO vo){
 		switch(vo){
