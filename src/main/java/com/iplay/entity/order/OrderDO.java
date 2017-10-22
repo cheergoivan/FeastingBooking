@@ -15,13 +15,15 @@ import com.iplay.entity.hotel.BanquetHallDO;
 @Entity
 @Table(name = "feast_order",indexes={@Index(name="IDX_CUSTOMER",columnList="customerId"),
 		@Index(name="IDX_RECOMMENDER",columnList="recommenderId"),
-		@Index(name="IDX_MANAGER",columnList="managerId"),
-		@Index(name="IDX_TIME",columnList="orderTime")})
+		@Index(name="IDX_MANAGER",columnList="managerId")
+		})
 public class OrderDO {
 	@Id
 	@GeneratedValue
 	private int id;
 	private long orderTime;
+	
+	private long orderNumber;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "bh_id")
@@ -37,6 +39,8 @@ public class OrderDO {
 	
 	private int managerId;
 	private String manager;
+	
+	private long feastingDate;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id")
@@ -66,15 +70,6 @@ public class OrderDO {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public long getOrderTime() {
-		return orderTime;
-	}
-
-	public void setOrderTime(long orderTime) {
-		this.orderTime = orderTime;
-	}
-
 	public BanquetHallDO getBanquetHallDO() {
 		return banquetHallDO;
 	}
@@ -193,5 +188,29 @@ public class OrderDO {
 
 	public void setReviewed(boolean reviewed) {
 		this.reviewed = reviewed;
+	}
+
+	public long getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(long orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public long getOrderTime() {
+		return orderTime;
+	}
+
+	public void setOrderTime(long orderTime) {
+		this.orderTime = orderTime;
+	}
+
+	public long getFeastingDate() {
+		return feastingDate;
+	}
+
+	public void setFeastingDate(long feastingDate) {
+		this.feastingDate = feastingDate;
 	}
 }

@@ -10,6 +10,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.dangdang.ddframe.rdb.sharding.id.generator.IdGenerator;
+import com.dangdang.ddframe.rdb.sharding.id.generator.self.CommonSelfIdGenerator;
+
 @SpringBootApplication
 @EnableCaching
 @ServletComponentScan
@@ -26,4 +29,10 @@ public class FeastBookingApplication {
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	@Bean
+    public IdGenerator getIdGenerator() {
+        return new CommonSelfIdGenerator();
+    }
+	
 }

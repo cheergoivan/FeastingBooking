@@ -2,6 +2,7 @@ package com.iplay.entity.hotel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -31,7 +32,7 @@ public class BanquetHallDO {
 	@Column(length=1000)
 	private String pictures = "";
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "hotel_id")
 	private HotelDO hotelDO;
 	
