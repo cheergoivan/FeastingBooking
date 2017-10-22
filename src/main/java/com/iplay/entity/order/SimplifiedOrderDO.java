@@ -1,11 +1,11 @@
 package com.iplay.entity.order;
 
-import com.iplay.entity.hotel.BanquetHallDO;
-
 public interface SimplifiedOrderDO {
 	int getId();
 
-	BanquetHallDO getBanquetHallDO();
+	String getBanquetHallName();
+	
+	String getHotelName();
 
 	int getTables();
 	

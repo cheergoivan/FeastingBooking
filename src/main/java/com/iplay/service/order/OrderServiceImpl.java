@@ -26,6 +26,7 @@ import com.iplay.dao.order.OrderDAO;
 import com.iplay.dao.order.OrderPaymentDAO;
 import com.iplay.dto.order.SimplifiedOrderDTO;
 import com.iplay.entity.hotel.BanquetHallDO;
+import com.iplay.entity.hotel.HotelDO;
 import com.iplay.entity.order.ApprovalStatus;
 import com.iplay.entity.order.OrderContractDO;
 import com.iplay.entity.order.OrderDO;
@@ -92,7 +93,11 @@ public class OrderServiceImpl implements OrderService {
 				return -1;
 		}
 		BeanUtils.copyProperties(vo, order);
-		order.setBanquetHallDO(banquetHall);
+		order.setBanquetHallId(banquetHall.getId());
+		order.setBanquetHallName(banquetHall.getName());
+		HotelDO hotel = banquetHall.getHotelDO();
+		order.setHotelId(hotel.getId());
+		order.setHotelName(hotel.getName());
 		order.setCustomerId(authenticatedUser.getUserId());
 		order.setCustomer(authenticatedUser.getUsername());
 		order.setOrderStatus(OrderStatus.CONSULTING);
@@ -204,8 +209,7 @@ public class OrderServiceImpl implements OrderService {
 			Page<SimplifiedOrderDO> page = orderDAO.findByOrderStatusInAndCustomerIdOrRecommenderIdOrManagerId(
 					getOrderStatusCollection(vo), currUser, currUser, currUser, pageable);
 			return page.map(o -> {
-				BanquetHallDO bh = o.getBanquetHallDO();
-				return new SimplifiedOrderDTO(o.getId(), bh.getName(), bh.getHotelDO().getName(),
+				return new SimplifiedOrderDTO(o.getId(), o.getBanquetHallName(), o.getHotelName(),
 						formatDate(o.getFeastingDate()), o.getTables(), o.getOrderStatus(),
 						getRoleInOrder(currUser, o.getCustomerId(), o.getRecommenderId(), o.getManagerId()));
 			});

@@ -10,8 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.iplay.entity.hotel.BanquetHallDO;
-
 @Entity
 @Table(name = "feast_order",indexes={@Index(name="IDX_CUSTOMER",columnList="customerId"),
 		@Index(name="IDX_RECOMMENDER",columnList="recommenderId"),
@@ -24,10 +22,11 @@ public class OrderDO {
 	private long orderTime;
 	
 	private long orderNumber;
-	
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "bh_id")
-	private BanquetHallDO banquetHallDO;
+
+	private int banquetHallId;
+	private String banquetHallName;
+	private int hotelId;
+	private String hotelName;
 	private int customerId;
 	private String customer;
 	private int tables;
@@ -69,13 +68,6 @@ public class OrderDO {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-	public BanquetHallDO getBanquetHallDO() {
-		return banquetHallDO;
-	}
-
-	public void setBanquetHallDO(BanquetHallDO banquetHallDO) {
-		this.banquetHallDO = banquetHallDO;
 	}
 
 	public int getCustomerId() {
@@ -212,5 +204,37 @@ public class OrderDO {
 
 	public void setFeastingDate(long feastingDate) {
 		this.feastingDate = feastingDate;
+	}
+
+	public int getBanquetHallId() {
+		return banquetHallId;
+	}
+
+	public void setBanquetHallId(int banquetHallId) {
+		this.banquetHallId = banquetHallId;
+	}
+
+	public String getBanquetHallName() {
+		return banquetHallName;
+	}
+
+	public void setBanquetHallName(String banquetHallName) {
+		this.banquetHallName = banquetHallName;
+	}
+
+	public int getHotelId() {
+		return hotelId;
+	}
+
+	public void setHotelId(int hotelId) {
+		this.hotelId = hotelId;
+	}
+
+	public String getHotelName() {
+		return hotelName;
+	}
+
+	public void setHotelName(String hotelName) {
+		this.hotelName = hotelName;
 	}
 }

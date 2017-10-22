@@ -1,9 +1,9 @@
 package com.iplay.entity.order;
 
-import com.iplay.entity.hotel.BanquetHallDO;
-
 public interface OrderBHReviewedCustomerIdDO {
-	BanquetHallDO getBanquetHallDO();
+	int getHotelId();
+	
+	String getBanquetHallName();
 	
 	boolean isReviewed();
 	

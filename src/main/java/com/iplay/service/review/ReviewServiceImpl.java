@@ -15,7 +15,6 @@ import com.iplay.dao.review.ReviewDAO;
 //import org.springframework.data.domain.Sort;
 
 import com.iplay.dto.review.ReviewDTO;
-import com.iplay.entity.hotel.BanquetHallDO;
 import com.iplay.entity.hotel.rating.HotelRatingDO;
 import com.iplay.entity.order.OrderBHReviewedCustomerIdDO;
 import com.iplay.entity.review.ReviewDO;
@@ -44,9 +43,8 @@ public class ReviewServiceImpl implements ReviewService{
 			throw new ResourceNotFoundException("Order with id:"+orderId+" doesn't exist!");
 		if(order.isReviewed()||order.getCustomerId()!=author.getUserId())
 			throw new ResourceForbiddenException("Order with id:"+orderId+" already has been reviewed or you don't have authority!");
-		BanquetHallDO bh = order.getBanquetHallDO();
-		String banquetHall = bh.getName();
-		int hotelId = bh.getHotelDO().getId();
+		String banquetHall = order.getBanquetHallName();
+		int hotelId = order.getHotelId();
 		double score = vo.getRating();
 		ReviewDO savedReview = reviewDAO.save(new ReviewDO(hotelId, banquetHall, author.getUserId(), author.getUsername(), score, vo.getReview()));
 		//update hotel rating
