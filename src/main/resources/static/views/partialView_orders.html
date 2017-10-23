@@ -1,0 +1,34 @@
+<div class="orders-container">
+	<div class="facet-group-container">
+		<div ng-repeat="group in data.facetGroups" class="facet-group-wrapper">
+			<div class="facet-group-name-wrapper" ng-click="group.$$isOpen = !group.$$isOpen">
+				<span class="facet-group-name">{{::group.name}}</span>
+			</div>
+			<ul class="facet-group-dropdown-menu" uib-collapse="!group.$$isOpen">
+				<li ng-repeat="filter in group.filters" class="facet-filter-wrapper"><nice-checkbox></nice-checkbox><span class="filter-name">{{::filter.name}}</span></li>
+			</ul>
+		</div>
+	</div>
+	<div class="search-result-container">
+		<div class="search-wrapper">
+			<input type="text" ng-model="data.search" class="search-input"/>
+			<button class="btn btn-primary search-button"><span class="glyphicon glyphicon-search"></span></button>
+		</div>
+		<div class="search-result-wrapper">
+			<ul>
+				<li ng-repeat="result in data.searchResults" class="search-result">
+					<div class="row">
+						<label-link class="col-md-6" label="訂單號" text="result.orderId"></label-link>
+						<label-plain-text class="col-md-6" label="狀態" model="result.status"></label-plain-text>
+						<label-link class="col-md-6" label="酒店" text="result.hotel"></label-link>
+						<label-link class="col-md-6" label="聯係人" text="result.contact"></label-link>
+						<label-link class="col-md-6" label="用戶" text="result.user"></label-link>
+						<label-link class="col-md-6" label="中介人" text="result.agent"></label-link>
+						<label-plain-text class="col-md-6" label="訂單開始時間" model="result.startDate"></label-plain-text>
+						<label-plain-text class="col-md-6" label="最後更新時間" model="result.lastModefied"></label-plain-text>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

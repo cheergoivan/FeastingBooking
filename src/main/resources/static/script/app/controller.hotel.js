@@ -6,10 +6,17 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
 			$state.go(constants.hotelsStatePrefix + "." + state);
 		};
 	}])
-    .controller('hotelListCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'modals', function ($scope, $state, apiService, alertManager, modals) {
+    .controller("hotelListCtrl", ["$scope", "$state", "apiService", "alertManager", "modals", "recommendList", function ($scope, $state, apiService, alertManager, modals, recommendList) {
         function initHotelList() {
         	apiService.getHotelList().then(function(response) {
         		$scope.data.hotelList = response;
+        		$scope.data.hotelList.forEach(function(hotel) {
+        			if(recommendList.find(function(recommend) {
+        				return recommend.hotelId === hotel.id;
+        			})) {
+        				hotel.$$recommend = true;
+        			}
+        		});
         	}, function(response) {
         		$scope.data.hotelList = [];
         		alertManager.addAlert('danger', response);
@@ -57,7 +64,7 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
         	});
         };
     }])
-    .controller("hotelDetailCtrl", ["$state", "$scope", "apiService", "hotelDetail", "alertManager", "constants", "modals", function($state, $scope, apiService, hotelDetail, alertManager, constants, modals) {
+    .controller("hotelDetailCtrl", ["$state", "$scope", "apiService", "hotelDetail", "alertManager", "constants", "modals", function($state, $scope, apiService, hotelDetail, alertManager, constants, modals, recommendList) {
     	$scope.data = {};
     	$scope.data.hotelDetail = hotelDetail;
     	$scope.data.goto = function(state) {
@@ -112,8 +119,21 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
     		});
     	}
     }])
-    .controller('hotelInfoCtrl', ['$scope', 'apiService', 'hotelDetail', 'alertManager', 'Upload', 'modals', function($scope, apiService, hotelDetail, alertManager, Upload, modals) {
+    .controller("hotelInfoCtrl", ["$scope", "apiService", "hotelDetail", "alertManager", "Upload", "modals", "recommendList", function($scope, apiService, hotelDetail, alertManager, Upload, modals, recommendList) {
     	$scope.data = { hotelDetail : angular.copy(hotelDetail) };
+    	$scope.data.recommendInfo = {};
+    	$scope.data.hotelName = hotelDetail.name;
+    	var recommend = recommendList.find(function(recommend) {
+			return recommend.hotelId === hotelDetail.id;
+		});
+    	if(recommend) {
+    		$scope.data.recommendInfo.isRecommend = true;
+    		$scope.data.recommendInfo.recommendDetail = recommend;
+    		$scope.data.recommendInfo.title = "取消推薦";
+    	} else {
+    		$scope.data.recommendInfo.isRecommend = false;
+    		$scope.data.recommendInfo.title = "設爲推薦";
+    	}
     	function hotelDTO2hotelPO(dto) {
     		var po = angular.copy(dto);
     		po.cityOfAddress = dto.address.city;
@@ -127,6 +147,7 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
     		apiService.updateHotelDetail(detail).then(function() {
     			alertManager.addAlert("success", "成功更新酒店信息。");
     			hotelDetail = $scope.data.hotelDetail;
+    			$scope.data.hotelName = hotelDetail.name;
     		}, function(response) {
     			alertManager.addAlert('danger', response);
     		});
@@ -160,6 +181,34 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
     	$scope.data.revertChange = function() {
     		$scope.data.hotelDetail = hotelDetail;
     	};
+    	$scope.data.toggleRecommend = function() {
+    		if($scope.data.recommendInfo.isRecommend) {
+    			apiService.removeReccomndation($scope.data.recommendInfo.recommendDetail.id).then(function() {
+    				$scope.data.recommendInfo = {
+    					isRecommend: false,
+    					title: "設爲推薦"
+    				}
+    				alertManager.addAlert("success", "成功取消推薦");
+    			}, function(response) {
+    				console.log(response);
+    				alertManager.addAlert("danger", "取消推薦失敗");
+    			});
+    		} else {
+    			modals.addRecommendationModal(hotelDetail).then(function(recommendation) {
+    				apiService.addRecommendation(recommendation).then(function(response) {
+    					$scope.data.recommendInfo = {
+    	    				isRecommend: true,
+    	    				recommendDetail: response.data,
+    	    				title: "取消推薦"
+    					}
+    					alertManager.addAlert("success", "成功設置推薦");
+    				}, function(response) {
+    					console.log(response);
+    					alertManager.addAlert("danger", "設置推薦失敗");
+    				})
+    			});
+    		}
+    	}
     }])
     .controller('hotelBanquetCtrl', ['$scope', '$state', 'apiService', 'alertManager', 'hotelDetail', 'banquet', 'modals', function($scope, $state, apiService, alertManager, hotelDetail, banquet, modals) {
     	$scope.data = {};
@@ -297,52 +346,4 @@ angular.module("controller.hotel", ["services", "ui.router", "ngFileUpload"])
         		});
     		});
     	}
-    }])
-    .controller("hotelRecommondationCtrl", ["$scope", "hotelList", "apiService", "alertManager", "modals", function($scope, hotelList, apiService, alertManager, modals) {
-    	$scope.data = {};
-    	$scope.data.hotelList = hotelList;
-    	$scope.data.recommendationList = [];
-    	$scope.data.candidateList = [];
-    	function getRecommendationList() {
-    		apiService.getRecommendationList().then(function(response) {
-    			$scope.data.recommendationList = response;
-    			$scope.data.hotelList.forEach(function(hotel) {
-    				var foundHotel = $scope.data.recommendationList.find(function(recommendation) { 
-    					return recommendation.id === hotel.id}
-    				);
-    				if(foundHotel) {
-    					angular.extend(foundHotel, hotel);
-    				} else {
-    					$scope.data.candidateList.push(hotel);
-    				}
-    			});
-    		}, function(response) {
-    			alertManager.addAlert("danger", "無法獲取推薦列表");
-    		});
-    	}
-    	getRecommendationList();
-    	$scope.data.addRecommendation = function(event, index) {
-    		var hotel = JSON.parse(event.dataTransfer.getData("Text"));
-    		modals.addRecommendationModal(hotel).then(function(recommendation) {
-    			apiService.addRecommendation(recommendation).then(function(response) {
-    				alertManager.addAlert("success", "成功添加推薦酒店");
-    				var foundRecommend = $scope.data.recommendationList.find(function(recommend) {
-    					return recommend.id === hotel.id;
-    				});
-    				hotel.pictureUrl = response.pictureUrl;
-    			}, function() {
-    				alertManager.addAlert("danger", "添加推薦酒店失敗");
-    				$scope.data.recommendationList = $scope.data.recommendationList.filter(function(recommend) {
-    					return recommend.id !== hotel.id;
-    				});
-    				$scope.data.candidateList.push(hotel);
-    			})
-    		}, function() {
-				$scope.data.recommendationList = $scope.data.recommendationList.filter(function(recommend) {
-					return recommend.id !== hotel.id;
-				});
-				$scope.data.candidateList.push(hotel);
-    		});
-    		return true;
-    	};
     }])

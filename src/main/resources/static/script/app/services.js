@@ -16,7 +16,8 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 	hotelCreateBanquetState: "newBanquet",
 	hotelFeastState: "feast",
 	hotelCreateFeastState: "newFeast",
-	advertisementState: "advertisement"
+	advertisementState: "advertisement",
+	ordersState: "orders"
 })
 .service("alertManager", ["$rootScope", "$timeout", function($rootScope, $timeout) {
 	var timeout = 5000;
@@ -179,6 +180,10 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 	function addRecommendation(recommendation) {
 		return fileUploadFactory(`${urlPrefix}/recommendations`, recommendation);
 	}
+	function removeReccomndation(recommendationId) {
+		var headers = {"Content-Type": "application/json"};
+		return promiseFactory("DELETE", `${urlPrefix}/recommendations/${recommendationId}`, headers);
+	}
     return {
     	signin: signin,
         getHotelList: getHotelList,
@@ -204,7 +209,8 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
         addAds: addAds,
         deleteAds: deleteAds,
         getRecommendationList: getRecommendationList,
-        addRecommendation: addRecommendation
+        addRecommendation: addRecommendation,
+        removeReccomndation: removeReccomndation
     };
 }])
 .service("modals", ["$uibModal", function($uibModal) {
@@ -240,7 +246,7 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 		var modalInstance = $uibModal.open({
 			template: '<div class="modal-container">'
 						+ '<div class="modal-header">'
-							+ '<h3>添加圖片<span class="modal-cross" ng-click="cancel()"><span></h3>'
+							+ '<h3>設置推薦圖片<span class="modal-cross" ng-click="cancel()"><span></h3>'
 						+ '</div>'
 						+ '<div class="modal-body">'
 							+ '<div>{{hotel.name}}</div>'
@@ -269,3 +275,35 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 		addRecommendationModal: addRecommendationModal
 	}
 }])
+.service('orderState', function() {
+	function stateFactory(name, index) {
+		return {
+			name: name,
+			index: index
+		}
+	}
+	return {
+		cancelState: stateFactory("已取消", "CANCELED"),
+		consultState: stateFactory("咨詢中", "CONSULTING"),
+		reservedState: stateFactory("已預訂", "RESERVED"),
+		feastedState: stateFactory("已擺酒", "FEASTED"),
+		cashBackState: stateFactory("等待返現", "CASHBACK"),
+		toBeReviewedState: stateFactory("待評價", "TO_BE_REVIEWD"),
+		doneState: stateFactory("結束", "DONE")
+	}
+})
+.service('orderDateState', function() {
+	function stateFactory(name, index) {
+		return {
+			name: name,
+			index: index
+		}
+	}
+	return {
+		last1Day: stateFactory("最近一天", 0),
+		last1Week: stateFactory("最近一個禮拜", 1),
+		last1Month: stateFactory("最近一個月", 2),
+		last1Year: stateFactory("最近一年", 3),
+		custom: stateFactory("自定義時間段", 4)
+	}
+})

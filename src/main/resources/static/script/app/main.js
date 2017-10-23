@@ -1,4 +1,4 @@
-angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router", "services", "blockUI", "dndLists"])
+angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router", "services", "blockUI"])
 .config(["$stateProvider", "$locationProvider", "$urlRouterProvider", "constants", function($stateProvider, $locationProvider, $urlRouterProvider, constants) {
 	$locationProvider.html5Mode(true).hashPrefix("!");
 	var states = [{
@@ -38,8 +38,14 @@ angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router",
 				templateUrl:"partialView/hotel_list",
 				controller: "hotelListCtrl"
 			}
+		},
+		resolve: {
+			apiService: "apiService",
+			recommendList: ["apiService", function(apiService) {
+				return apiService.getRecommendationList();
+			}]
 		}
-	}, {
+	},/* {
 		name: constants.hotelsStatePrefix + "." + constants.hotelsRecommondationState,
 		url: "/recommendation",
 		views: {
@@ -54,7 +60,7 @@ angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router",
 				return apiService.getHotelList();
 			}]
 		}
-	}, {
+	},*/ {
 		name: constants.hotelStatePrefix,
 		url: "/hotel/:hotelId",
 		abstract: true,
@@ -87,6 +93,12 @@ angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router",
 				templateUrl: "partialView/hotelDetailInfo",
 				controller: "hotelInfoCtrl"
 			}
+		},
+		resolve: {
+			apiService: "apiService",
+			recommendList: ["apiService", function(apiService) {
+				return apiService.getRecommendationList();
+			}]
 		}
 	}, {
 		name: constants.hotelStatePrefix + "." + constants.hotelBanquetState,
@@ -145,6 +157,15 @@ angular.module("app", ["controllers", "ui.bootstrap", "directives", "ui.router",
 				controller: "advertisementCtrl"
 			}
 		},
+	}, {
+		name: constants.feastBookingPrefix + "." + constants.ordersState,
+		url: "/orders",
+		views: {
+			"main@FeastBooking": {
+				templateUrl: "partialView/orders",
+				controller: "ordersCtrl"
+			}
+		}
 	}];
 	states.forEach(function(state) {
 		$stateProvider.state(state);

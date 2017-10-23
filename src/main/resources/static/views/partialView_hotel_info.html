@@ -1,4 +1,7 @@
 <div class="hotel-info-container">
+	<div>
+		<h1>{{data.hotelName}}<span class="glyphicon glyphicon-thumbs-up" ng-class="{'inactive': !data.recommendInfo.isRecommend}" title="{{data.recommendInfo.title}}" ng-click="data.toggleRecommend()"></span></h1>
+	</div>
 	<form class="form" role="form" name="editInfoForm" novalidate>
 		<div class="row">
 			<label-plain-text class="col col-md-6" model="data.hotelDetail.id" label="ID"></label-plain-text>
@@ -23,6 +26,14 @@
 		</div>
 		<div>
 			<image-list images="data.hotelDetail.pictureUrls" on-add="data.addHotelImage(files)" on-remove="data.deleteImage(url)"></image-list>
+		</div>
+	</div>
+	<div class="hotel-recommen-container" ng-if="data.recommendInfo.isRecommend">
+		<div>
+			<h3>推薦圖片</h3>
+		</div>
+		<div>
+			<img ng-src="{{data.recommendInfo.recommendDetail.pictureUrl}}"/>
 		</div>
 	</div>
 </div>

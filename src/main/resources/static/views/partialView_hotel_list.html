@@ -29,7 +29,7 @@
 						ng-click="data.enterHotelDetail(hotel.id)">
 						<td><nice-checkbox nice-model="hotel.$$selected"></nice-checkbox></td>
 						<td>{{::hotel.id}}</td>
-						<td><a ng-click="data.goDetail(hotel.id)">{{::hotel.name}}</a></td>
+						<td><a ng-click="data.goDetail(hotel.id)">{{::hotel.name}}</a><span class="glyphicon glyphicon-thumbs-up" ng-if="hotel.$$recommend"></span></td>
 						<td>{{::hotel.contact}}</td>
 						<td>{{::hotel.telephone}}</td>
 						<td>{{::hotel.email}}</td>

@@ -319,3 +319,17 @@ angular.module('directives', ['services'])
 		}
 	}
 })
+.directive('labelLink', function() {
+	return {
+		restrict: 'AE',
+		template: '<div>'
+					+ '<label class="control-label">{{::label}}</label>'
+					+ '<span><a>{{::text}}</a></span>'
+				+ '</div>',
+		replace: true,
+		scope: {
+			label: '@',
+			text: '=',
+		}
+	}
+})
