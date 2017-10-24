@@ -307,3 +307,18 @@ angular.module("services", ["ui.bootstrap", "ngFileUpload"])
 		custom: stateFactory("自定義時間段", 4)
 	}
 })
+.service('orderSelect', function() {
+	function selectFactory(name, index) {
+		return {
+			name: name,
+			index: index
+		}
+	}
+	return {
+		allOrder: selectFactory("全部訂單", 0),
+		hotelOrder: selectFactory("酒店名", 1),
+		contactOrder: selectFactory("聯係人", 2),
+		usreOrder: selectFactory("用戶名", 3),
+		agentOrder: selectFactory("中介人", 4)
+	}
+})

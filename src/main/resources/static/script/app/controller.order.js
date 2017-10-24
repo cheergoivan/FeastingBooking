@@ -1,5 +1,5 @@
 angular.module("controller.order", ["services"])
-    .controller("ordersCtrl", ["$scope", "orderState", "orderDateState", function($scope, orderState, orderDateState) {
+    .controller("ordersCtrl", ["$scope", "orderState", "orderDateState", "orderSelect", function($scope, orderState, orderDateState, orderSelect) {
     	$scope.data = {};
     	$scope.data.facetGroups = [{
     		name: "訂單狀態",
@@ -30,4 +30,11 @@ angular.module("controller.order", ["services"])
     		startDate: "2016-12-31",
     		lastModefied: "2017-01-01"
     	}];
+    	$scope.data.orderSelectList = orderSelect;
+    	$scope.data.select = $scope.data.orderSelectList.allOrder;
+    	$scope.data.changeSelect = function(index) {
+    		$scope.data.select = $scope.data.orderSelectList.find(function(s) {
+    			return s.index === index;
+    		});
+    	}
     }])
