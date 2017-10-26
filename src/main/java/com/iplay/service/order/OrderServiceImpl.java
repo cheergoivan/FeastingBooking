@@ -2,7 +2,6 @@ package com.iplay.service.order;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -23,6 +22,7 @@ import com.iplay.dao.hotel.BanquetHallDAO;
 import com.iplay.dao.order.OrderContractDAO;
 import com.iplay.dao.order.OrderDAO;
 import com.iplay.dao.order.OrderPaymentDAO;
+import com.iplay.dto.order.OrderDTO;
 import com.iplay.dto.order.SimplifiedOrderDTO;
 import com.iplay.entity.hotel.BanquetHallDO;
 import com.iplay.entity.hotel.HotelDO;
@@ -93,15 +93,16 @@ public class OrderServiceImpl implements OrderService {
 		}
 		BeanUtils.copyProperties(vo, order);
 		order.setBanquetHallId(banquetHall.getId());
-		order.setBanquetHallName(banquetHall.getName());
+		order.setBanquetHall(banquetHall.getName());
 		HotelDO hotel = banquetHall.getHotelDO();
 		order.setHotelId(hotel.getId());
-		order.setHotelName(hotel.getName());
+		order.setHotel(hotel.getName());
 		order.setCustomerId(authenticatedUser.getUserId());
 		order.setCustomer(authenticatedUser.getUsername());
 		order.setOrderStatus(OrderStatus.CONSULTING);
-		order.setOrderTime(System.currentTimeMillis());
+		order.setCreationTime(System.currentTimeMillis());
 		order.setOrderNumber(generateOrderNumber());
+		order.setLastUpdated(order.getCreationTime());
 		OrderDO savedOrder = orderDAO.save(order);
 		return savedOrder.getId();
 	}
@@ -114,19 +115,19 @@ public class OrderServiceImpl implements OrderService {
 			throw new ResourceForbiddenException(
 					"Order status must be " + OrderStatus.CONSULTING + " or you don't have authority!");
 		userService.findSimplifiedUserByUsername(manager).filter(u -> u.getRole() == Role.MANAGER).ifPresent(u -> {
-			orderDAO.updateManager(order.getId(), u.getId(), u.getUsername());
+			orderDAO.updateManager(order.getId(), u.getId(), u.getUsername(), System.currentTimeMillis());
 			rs[0] = true;
 		});
 		return rs[0];
 	}
 
 	@Override
-	public boolean fillFeastingDate(SimplifiedUser authenticatedUser, int orderId, Date date) {
+	public boolean fillFeastingDate(SimplifiedUser authenticatedUser, int orderId, String date) {
 		OrderDO order = findSimplifiedOrderById(orderId);
 		if (order.getOrderStatus() != OrderStatus.CONSULTING || authenticatedUser.getUserId() != order.getCustomerId())
 			throw new ResourceForbiddenException(
 					"Order status must be " + OrderStatus.CONSULTING + " or you don't have authority!");
-		orderDAO.updateFeastingDate(orderId, date.getTime());
+		orderDAO.updateFeastingDate(orderId, date, System.currentTimeMillis());
 		return true;
 	}
 
@@ -136,18 +137,19 @@ public class OrderServiceImpl implements OrderService {
 		OrderStatus next = order.getOrderStatus().next();
 		if (next == null)
 			throw new ResourceForbiddenException("Order in status CANCELED or DONE can't move to next!");
-		orderDAO.updateStatus(orderId, next);
+		orderDAO.updateStatus(orderId, next, System.currentTimeMillis());
 		return next;
 	}
 
 	@Override
 	public OrderStatus updateStatus(int orderId, OrderStatus newOrderStatus) {
 		findSimplifiedOrderById(orderId);
-		orderDAO.updateStatus(orderId, newOrderStatus);
+		orderDAO.updateStatus(orderId, newOrderStatus, System.currentTimeMillis());
 		return newOrderStatus;
 	}
 
 	@Override
+	@Transactional
 	public boolean fillPayment(SimplifiedUser authenticatedUser, int orderId, PostPaymentVO postPaymentVO) {
 		OrderDO order = findSimplifiedOrderById(orderId);
 		if (order.getOrderStatus() != OrderStatus.RESERVED || authenticatedUser.getUserId() != order.getCustomerId())
@@ -155,15 +157,17 @@ public class OrderServiceImpl implements OrderService {
 					"Order status must be " + OrderStatus.RESERVED + " or you don't have authority!");
 		OrderPaymentDO payment = orderPaymentDAO.findOne(order.getId());
 		if (payment != null)
-			storageService.delete(DelimiterUtils.split(payment.getPayment(), DelimiterUtils.PICTURE_DELIMITER));
+			storageService.delete(DelimiterUtils.split(payment.getPayment(), DelimiterUtils.GLOBAL_DEFAULT_DELIMITER));
 		String[] files = uploadFiles(postPaymentVO.getFiles());
 		orderPaymentDAO.save(new OrderPaymentDO(order.getId(), postPaymentVO.getAmountPaid(),
-				DelimiterUtils.joinArray(files, DelimiterUtils.PICTURE_DELIMITER), System.currentTimeMillis(),
+				DelimiterUtils.joinArray(files, DelimiterUtils.GLOBAL_DEFAULT_DELIMITER), System.currentTimeMillis(),
 				ApprovalStatus.PENDING));
+		orderDAO.updateOrder(order.getId(), System.currentTimeMillis());
 		return true;
 	}
 
 	@Override
+	@Transactional
 	public boolean uploadContract(SimplifiedUser authenticatedUser, int orderId, PostFilesVO vo) {
 		OrderDO order = findSimplifiedOrderById(orderId);
 		if (order.getOrderStatus() != OrderStatus.CONSULTING || authenticatedUser.getUserId() != order.getCustomerId())
@@ -171,11 +175,12 @@ public class OrderServiceImpl implements OrderService {
 					"Order status must be " + OrderStatus.CONSULTING + " or you don't have authority!");
 		OrderContractDO contract = orderContractDAO.findOne(order.getId());
 		if (contract != null)
-			storageService.delete(DelimiterUtils.split(contract.getContract(), DelimiterUtils.PICTURE_DELIMITER));
+			storageService.delete(DelimiterUtils.split(contract.getContract(), DelimiterUtils.GLOBAL_DEFAULT_DELIMITER));
 		String[] files = uploadFiles(vo.getFiles());
 		orderContractDAO.save(
-				new OrderContractDO(order.getId(), DelimiterUtils.joinArray(files, DelimiterUtils.PICTURE_DELIMITER),
+				new OrderContractDO(order.getId(), DelimiterUtils.joinArray(files, DelimiterUtils.GLOBAL_DEFAULT_DELIMITER),
 						System.currentTimeMillis(), ApprovalStatus.PENDING));
+		orderDAO.updateOrder(order.getId(), System.currentTimeMillis());
 		return true;
 	}
 
@@ -237,5 +242,18 @@ public class OrderServiceImpl implements OrderService {
 			return OrderStatus.unfinishedStatus();
 		}
 		return new ArrayList<>();
+	}
+
+	@Override
+	public OrderDTO findOrderById(int id) {
+		OrderDO orderDO = orderDAO.findOne(id);
+		if(orderDO == null)
+			return null;
+		OrderDTO orderDTO = new OrderDTO();
+		BeanUtils.copyProperties(orderDO, orderDTO);
+		orderDTO.setCreationTime(dateFormatter.toOrderCreationTime(orderDO.getCreationTime()));
+		orderDTO.setLastUpdated(dateFormatter.toOrderLastUpdated(orderDO.getLastUpdated()));
+		orderDTO.setCandidateDates(DelimiterUtils.split(orderDO.getCandidateDates(), DelimiterUtils.GLOBAL_DEFAULT_DELIMITER));
+		return orderDTO;
 	}
 }

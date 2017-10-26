@@ -85,7 +85,7 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 		boolean[] rs = new boolean[files.length];
 		for(int i=0;i<files.length;i++){
 			rs[i] = storageService.delete(files[i]);
-			pictures = pictures.replace(files[i]+DelimiterUtils.PICTURE_DELIMITER, "");
+			pictures = pictures.replace(files[i]+DelimiterUtils.GLOBAL_DEFAULT_DELIMITER, "");
 		}
 		findedBanquetHallDO.setPictures(pictures);
 		banquetHallDAO.save(findedBanquetHallDO);
@@ -102,7 +102,7 @@ public class BanquetHallServiceImpl implements BanquetHallService{
 		for(int i=0;i<mfs.length;i++){
 			savedFilenames[i] = storageService.store(mfs[i], UUIDNamingStrategy.generateUUID());
 		}
-		String pictures = DelimiterUtils.joinArray(savedFilenames, DelimiterUtils.PICTURE_DELIMITER);
+		String pictures = DelimiterUtils.joinArray(savedFilenames, DelimiterUtils.GLOBAL_DEFAULT_DELIMITER);
 		banquetHallDAO.addPictures(id, pictures);
 		return ResourcesUriBuilder.buildUris(savedFilenames);
 	}

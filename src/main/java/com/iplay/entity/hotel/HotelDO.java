@@ -134,7 +134,7 @@ public class HotelDO {
 	public String[] getPicturesAsArray(){
 		if(pictures.equals(""))
 			return new String[0];
-		return pictures.split(DelimiterUtils.PICTURE_DELIMITER);
+		return pictures.split(DelimiterUtils.GLOBAL_DEFAULT_DELIMITER);
 	}
 
 	public List<BanquetHallDO> getBanquetHalls() {

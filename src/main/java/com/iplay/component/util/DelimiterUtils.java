@@ -4,7 +4,7 @@ import org.springframework.util.StringUtils;
 
 public class DelimiterUtils {
 	
-	public static final String PICTURE_DELIMITER = ";";
+	public static final String GLOBAL_DEFAULT_DELIMITER = ";";
 	
 	public static String joinArray(String[] src, String delimiter){
 		StringBuilder sb = new StringBuilder();

@@ -119,13 +119,13 @@ public class BanquetHallDO {
 	public String[] getPicturesAsArray(){
 		if(pictures.equals(""))
 			return new String[0];
-		return pictures.split(DelimiterUtils.PICTURE_DELIMITER);
+		return pictures.split(DelimiterUtils.GLOBAL_DEFAULT_DELIMITER);
 	}
 	
 	public String[] getExtraInfoAsArray(){
 		if(extraInfo.equals(""))
 			return new String[0];
-		return extraInfo.split(DelimiterUtils.PICTURE_DELIMITER);
+		return extraInfo.split(DelimiterUtils.GLOBAL_DEFAULT_DELIMITER);
 	}
 	
 

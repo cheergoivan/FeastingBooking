@@ -21,23 +21,28 @@ public interface OrderDAO extends CrudRepository<OrderDO, Integer>, JpaSpecifica
 	
 	@Transactional
 	@Modifying
-	@Query("update OrderDO h set h.managerId = ?2, h.manager = ?3 where h.id = ?1")
-	int updateManager(int id, int managerId, String manager);
+	@Query("update OrderDO h set h.managerId = ?2, h.manager = ?3, h.lastUpdated = ?4 where h.id = ?1")
+	int updateManager(int id, int managerId, String manager, long lastUpdated);
 	
 	@Transactional
 	@Modifying
-	@Query("update OrderDO h set h.feastingDate = ?2 where h.id = ?1")
-	int updateFeastingDate(int id, long date);
+	@Query("update OrderDO h set h.feastingDate = ?2, h.lastUpdated = ?3 where h.id = ?1")
+	int updateFeastingDate(int id, String date, long lastUpdated);
 	
 	@Transactional
 	@Modifying
-	@Query("update OrderDO h set h.orderStatus = ?2 where h.id = ?1")
-	int updateStatus(int id, OrderStatus status);
+	@Query("update OrderDO h set h.orderStatus = ?2, h.lastUpdated = ?3 where h.id = ?1")
+	int updateStatus(int id, OrderStatus status, long lastUpdated);
 	
 	@Transactional
 	@Modifying
-	@Query("update OrderDO h set h.reviewed = ?2 where h.id = ?1")
-	int updateReviewed(int id, boolean reviewed);
+	@Query("update OrderDO h set h.reviewed = ?2, h.lastUpdated = ?3 where h.id = ?1")
+	int updateReviewed(int id, boolean reviewed, long lastUpdated);
+	
+	@Transactional
+	@Modifying
+	@Query("update OrderDO h set h.lastUpdated = ?2 where h.id = ?1")
+	int updateOrder(int id, long lastUpdated);
 	
 	OrderBHReviewedCustomerIdDO findBHReviewedCustomerIdById(int id);
 	

@@ -66,13 +66,13 @@ public class FeastDO {
 	public String[] getPicturesAsArray(){
 		if(pictures.equals(""))
 			return new String[0];
-		return pictures.split(DelimiterUtils.PICTURE_DELIMITER);
+		return pictures.split(DelimiterUtils.GLOBAL_DEFAULT_DELIMITER);
 	}
 	
 	public String[] getCoursesAsArray(){
 		if(courses.equals(""))
 			return new String[0];
-		return courses.split(DelimiterUtils.PICTURE_DELIMITER);
+		return courses.split(DelimiterUtils.GLOBAL_DEFAULT_DELIMITER);
 	}
 	
 	public String getName() {

@@ -43,7 +43,7 @@ public class ReviewServiceImpl implements ReviewService{
 			throw new ResourceNotFoundException("Order with id:"+orderId+" doesn't exist!");
 		if(order.isReviewed()||order.getCustomerId()!=author.getUserId())
 			throw new ResourceForbiddenException("Order with id:"+orderId+" already has been reviewed or you don't have authority!");
-		String banquetHall = order.getBanquetHallName();
+		String banquetHall = order.getBanquetHall();
 		int hotelId = order.getHotelId();
 		double score = vo.getRating();
 		ReviewDO savedReview = reviewDAO.save(new ReviewDO(hotelId, banquetHall, author.getUserId(), author.getUsername(), score, vo.getReview()));

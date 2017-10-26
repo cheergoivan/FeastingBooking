@@ -1,13 +1,9 @@
 package com.iplay.entity.order;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,14 +15,14 @@ public class OrderDO {
 	@Id
 	@GeneratedValue
 	private int id;
-	private long orderTime;
+	private long creationTime;
 	
 	private long orderNumber;
 
 	private int banquetHallId;
-	private String banquetHallName;
+	private String banquetHall;
 	private int hotelId;
-	private String hotelName;
+	private String hotel;
 	private int customerId;
 	private String customer;
 	private int tables;
@@ -39,19 +35,13 @@ public class OrderDO {
 	private int managerId;
 	private String manager;
 	
-	private long feastingDate;
-	
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	private OrderContractDO orderContractDO;
-	
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	private OrderPaymentDO orderPaymentDO;
+	private String feastingDate;
 	
 	private OrderStatus orderStatus;
 	
 	private boolean reviewed;
+	
+	private long lastUpdated;
 	
 	public OrderDO(){}
 
@@ -150,22 +140,6 @@ public class OrderDO {
 		this.manager = manager;
 	}
 
-	public OrderContractDO getOrderContractDO() {
-		return orderContractDO;
-	}
-
-	public void setOrderContractDO(OrderContractDO orderContractDO) {
-		this.orderContractDO = orderContractDO;
-	}
-
-	public OrderPaymentDO getOrderPaymentDO() {
-		return orderPaymentDO;
-	}
-
-	public void setOrderPaymentDO(OrderPaymentDO orderPaymentDO) {
-		this.orderPaymentDO = orderPaymentDO;
-	}
-
 	public OrderStatus getOrderStatus() {
 		return orderStatus;
 	}
@@ -189,20 +163,20 @@ public class OrderDO {
 	public void setOrderNumber(long orderNumber) {
 		this.orderNumber = orderNumber;
 	}
-
-	public long getOrderTime() {
-		return orderTime;
+	
+	public long getCreationTime() {
+		return creationTime;
 	}
 
-	public void setOrderTime(long orderTime) {
-		this.orderTime = orderTime;
+	public void setCreationTime(long creationTime) {
+		this.creationTime = creationTime;
 	}
-
-	public long getFeastingDate() {
+	
+	public String getFeastingDate() {
 		return feastingDate;
 	}
 
-	public void setFeastingDate(long feastingDate) {
+	public void setFeastingDate(String feastingDate) {
 		this.feastingDate = feastingDate;
 	}
 
@@ -214,14 +188,6 @@ public class OrderDO {
 		this.banquetHallId = banquetHallId;
 	}
 
-	public String getBanquetHallName() {
-		return banquetHallName;
-	}
-
-	public void setBanquetHallName(String banquetHallName) {
-		this.banquetHallName = banquetHallName;
-	}
-
 	public int getHotelId() {
 		return hotelId;
 	}
@@ -229,12 +195,28 @@ public class OrderDO {
 	public void setHotelId(int hotelId) {
 		this.hotelId = hotelId;
 	}
-
-	public String getHotelName() {
-		return hotelName;
+	
+	public String getBanquetHall() {
+		return banquetHall;
 	}
 
-	public void setHotelName(String hotelName) {
-		this.hotelName = hotelName;
+	public void setBanquetHall(String banquetHall) {
+		this.banquetHall = banquetHall;
+	}
+
+	public String getHotel() {
+		return hotel;
+	}
+
+	public void setHotel(String hotel) {
+		this.hotel = hotel;
+	}
+
+	public long getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated(long lastUpdated) {
+		this.lastUpdated = lastUpdated;
 	}
 }

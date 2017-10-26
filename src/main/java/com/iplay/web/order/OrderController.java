@@ -1,7 +1,6 @@
 package com.iplay.web.order;
 
 import java.text.ParseException;
-import java.util.Date;
 
 import javax.validation.Valid;
 
@@ -20,6 +19,7 @@ import com.iplay.component.dateFormat.FeastBookingDateFormatter;
 import com.iplay.configuration.security.jwtAuthentication.auth.UserContext;
 import com.iplay.dto.ApiResponse;
 import com.iplay.dto.ApiResponseMessage;
+import com.iplay.dto.order.OrderDTO;
 import com.iplay.entity.order.OrderStatus;
 import com.iplay.service.exception.InvalidRequestParametersException;
 import com.iplay.service.order.OrderService;
@@ -73,11 +73,17 @@ public class OrderController {
 			@ApiParam("确定的酒席日期") @RequestParam String value, @AuthenticationPrincipal UserContext context) {
 		SimplifiedUser authenticatedUser = new SimplifiedUser(context.getUserId(), context.getUsername());
 		try {
-			Date feastingDate = dateFormatter.parse(value);
-			return orderService.fillFeastingDate(authenticatedUser, id, feastingDate);
+			if(value.indexOf("-")==-1) {
+				dateFormatter.parseToDateWithDefaultDateFormat(value);
+			}else {
+				for(String date: value.split("-")) {
+					dateFormatter.parseToDateWithDefaultDateFormat(date);
+				}
+			}
 		} catch (ParseException e) {
 			throw new InvalidRequestParametersException("The date format must be "+dateFormatter.getDefaultDateFormat()+"!");
 		}
+		return orderService.fillFeastingDate(authenticatedUser, id, value);
 	}
 
 	@ApiOperation(notes = "管理员修改订单状态，返回修改后的OrderStatus。无参数表示使订单进入下一个状态（状态集合：CANCELED, CONSULTING, RESERVED, FEASTED, CASHBACK, TO_BE_REVIEWD, DONE;）。"
@@ -110,5 +116,17 @@ public class OrderController {
 		SimplifiedUser authenticatedUser = new SimplifiedUser(context.getUserId(), context.getUsername());
 		return orderService.fillPayment(authenticatedUser, id, postPaymentVO);
 	}
+	
+	@ApiOperation(notes = "用户根據訂單ID獲得訂單詳細信息，詳細信息不包括合同文件和支付憑證文件", value = "")
+	@PostMapping("/{id}")
+	@PreAuthorize("hasAnyRole('USER', 'MANAGER', 'ADMIN')")
+	public OrderDTO findById(@ApiParam("订单id") @PathVariable int id,
+			@AuthenticationPrincipal UserContext context) {
+		//SimplifiedUser authenticatedUser = new SimplifiedUser(context.getUserId(), context.getUsername());
+		return null;
+	}
+	
+	
+	
 
 }

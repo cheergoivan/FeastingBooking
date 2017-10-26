@@ -1,10 +1,9 @@
 package com.iplay.service.order;
 
-import java.util.Date;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.iplay.dto.order.OrderDTO;
 import com.iplay.dto.order.SimplifiedOrderDTO;
 import com.iplay.entity.order.OrderStatus;
 import com.iplay.service.user.SimplifiedUser;
@@ -24,7 +23,7 @@ public interface OrderService {
 	
 	boolean fillManager(SimplifiedUser authenticatedUser, int orderId, String manager);
 	
-	boolean fillFeastingDate(SimplifiedUser authenticatedUser, int orderId, Date date);
+	boolean fillFeastingDate(SimplifiedUser authenticatedUser, int orderId, String date);
 	
 	OrderStatus moveToNextStatus(int orderId);
 	
@@ -37,4 +36,6 @@ public interface OrderService {
 	long generateOrderNumber();
 	
 	Page<SimplifiedOrderDTO> listOrders(SimplifiedUser authenticatedUser, OrderStatusVO vo , Pageable pageable);
+	
+	OrderDTO findOrderById(int id);
 }

@@ -3,7 +3,7 @@ package com.iplay.entity.order;
 public interface OrderBHReviewedCustomerIdDO {
 	int getHotelId();
 	
-	String getBanquetHallName();
+	String getBanquetHall();
 	
 	boolean isReviewed();
 	
