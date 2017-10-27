@@ -1,10 +1,13 @@
 package com.iplay.service.order;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.iplay.dto.order.OrderDTO;
 import com.iplay.dto.order.SimplifiedOrderDTO;
+import com.iplay.entity.order.ApprovalStatus.ModifiableApprovalStatus;
 import com.iplay.entity.order.OrderStatus;
 import com.iplay.service.user.SimplifiedUser;
 import com.iplay.vo.common.PostFilesVO;
@@ -37,5 +40,9 @@ public interface OrderService {
 	
 	Page<SimplifiedOrderDTO> listOrders(SimplifiedUser authenticatedUser, OrderStatusVO vo , Pageable pageable);
 	
-	OrderDTO findOrderById(int id);
+	Optional<OrderDTO> findOrderById(SimplifiedUser authenticatedUser, int id);
+	
+	boolean updateOrderContractApprovalStatus(int orderId, ModifiableApprovalStatus approvalStatus);
+	
+	boolean updateOrderPaymentApprovalStatus(int orderId, ModifiableApprovalStatus approvalStatus);
 }

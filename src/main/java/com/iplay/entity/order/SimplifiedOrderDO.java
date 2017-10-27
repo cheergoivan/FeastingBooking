@@ -3,9 +3,9 @@ package com.iplay.entity.order;
 public interface SimplifiedOrderDO {
 	int getId();
 
-	String getBanquetHallName();
+	String getBanquetHall();
 	
-	String getHotelName();
+	String getHotel();
 
 	int getTables();
 	

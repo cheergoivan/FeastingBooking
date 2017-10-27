@@ -31,8 +31,8 @@ public interface OrderDAO extends CrudRepository<OrderDO, Integer>, JpaSpecifica
 	
 	@Transactional
 	@Modifying
-	@Query("update OrderDO h set h.orderStatus = ?2, h.lastUpdated = ?3 where h.id = ?1")
-	int updateStatus(int id, OrderStatus status, long lastUpdated);
+	@Query("update OrderDO h set h.orderStatus = ?2 where h.id = ?1")
+	int updateStatus(int id, OrderStatus status);
 	
 	@Transactional
 	@Modifying

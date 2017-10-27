@@ -1,7 +1,6 @@
 package com.iplay.web.order;
 
 import java.text.ParseException;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import com.iplay.dto.ApiResponseMessage;
 import com.iplay.dto.order.OrderDTO;
 import com.iplay.entity.order.OrderStatus;
 import com.iplay.service.exception.InvalidRequestParametersException;
+import com.iplay.service.exception.ResourceNotFoundException;
 import com.iplay.service.order.OrderService;
 import com.iplay.service.user.SimplifiedUser;
 import com.iplay.vo.common.PostFilesVO;
@@ -36,10 +36,10 @@ import io.swagger.annotations.ApiParam;
 public class OrderController {
 	@Autowired
 	private OrderService orderService;
-	
+
 	@Autowired
 	private FeastBookingDateFormatter dateFormatter;
-	
+
 	@ApiOperation(notes = "用户新建一个咨询单，返回包含订单id的ApiResponse。如果ApiResponse为false则表示该推介人用户不存在。", value = "")
 	@PostMapping
 	@PreAuthorize("hasAnyRole('USER', 'MANAGER')")
@@ -64,7 +64,7 @@ public class OrderController {
 			return ApiResponse.SUCCESSFUL_RESPONSE_WITHOUT_MESSAGE;
 		return ApiResponse.createFailApiResponse(ApiResponseMessage.MANAGER_NOT_FOUND);
 	}
-	
+
 	@ApiOperation(notes = "用户在订单处于咨询状态时修改酒席日期，返回Boolean。日期格式：yyyy.MM.dd"
 			+ "返回404表示此订单不存在。返回403表示此时订单不处于咨询状态或者订单所有者与token代表的用户不相符。", value = "")
 	@PutMapping("/{id}/feasting_date")
@@ -73,15 +73,16 @@ public class OrderController {
 			@ApiParam("确定的酒席日期") @RequestParam String value, @AuthenticationPrincipal UserContext context) {
 		SimplifiedUser authenticatedUser = new SimplifiedUser(context.getUserId(), context.getUsername());
 		try {
-			if(value.indexOf("-")==-1) {
+			if (value.indexOf("-") == -1) {
 				dateFormatter.parseToDateWithDefaultDateFormat(value);
-			}else {
-				for(String date: value.split("-")) {
+			} else {
+				for (String date : value.split("-")) {
 					dateFormatter.parseToDateWithDefaultDateFormat(date);
 				}
 			}
 		} catch (ParseException e) {
-			throw new InvalidRequestParametersException("The date format must be "+dateFormatter.getDefaultDateFormat()+"!");
+			throw new InvalidRequestParametersException(
+					"The date format must be " + dateFormatter.getDefaultDateFormat() + "!");
 		}
 		return orderService.fillFeastingDate(authenticatedUser, id, value);
 	}
@@ -91,7 +92,7 @@ public class OrderController {
 	@PutMapping("/{id}/status")
 	@PreAuthorize("hasRole('ADMIN')")
 	public OrderStatus moveToNextStatus(@ApiParam("订单id") @PathVariable int id,
-			@ApiParam("可选参数，暂时值只能为CANCELED")@RequestParam(value = "value", required = false) OrderStatus.ModifiableOrderStatus status) {
+			@ApiParam("可选参数，暂时值只能为CANCELED") @RequestParam(value = "value", required = false) OrderStatus.ModifiableOrderStatus status) {
 		if (status != null) {
 			return orderService.updateStatus(id, status.toOrderStatus());
 		}
@@ -110,23 +111,20 @@ public class OrderController {
 	@ApiOperation(notes = "用户上传支付凭证，返回boolean。返回404表示此订单不存在。返回403表示此订单不处于已预订状态或者订单所有者与token代表的用户不相符。", value = "")
 	@PostMapping("/{id}/payment")
 	@PreAuthorize("hasAnyRole('USER', 'MANAGER')")
-	public boolean uploadPayment(@ApiParam("订单id") @PathVariable int id, 
-			@ApiParam("payment对象，包含两个属性：boolean amountPaid，File[] files")PostPaymentVO postPaymentVO,
+	public boolean uploadPayment(@ApiParam("订单id") @PathVariable int id,
+			@ApiParam("payment对象，包含两个属性：boolean amountPaid，File[] files") PostPaymentVO postPaymentVO,
 			@AuthenticationPrincipal UserContext context) {
 		SimplifiedUser authenticatedUser = new SimplifiedUser(context.getUserId(), context.getUsername());
 		return orderService.fillPayment(authenticatedUser, id, postPaymentVO);
 	}
-	
+
 	@ApiOperation(notes = "用户根據訂單ID獲得訂單詳細信息，詳細信息不包括合同文件和支付憑證文件", value = "")
 	@PostMapping("/{id}")
 	@PreAuthorize("hasAnyRole('USER', 'MANAGER', 'ADMIN')")
-	public OrderDTO findById(@ApiParam("订单id") @PathVariable int id,
-			@AuthenticationPrincipal UserContext context) {
-		//SimplifiedUser authenticatedUser = new SimplifiedUser(context.getUserId(), context.getUsername());
-		return null;
+	public OrderDTO findById(@ApiParam("订单id") @PathVariable int id, @AuthenticationPrincipal UserContext context) {
+		SimplifiedUser authenticatedUser = new SimplifiedUser(context.getUserId(), context.getUsername());
+		return orderService.findOrderById(authenticatedUser, id)
+				.orElseThrow(() -> new ResourceNotFoundException("Order with id: " + id + " doesn't exist"));
 	}
-	
-	
-	
 
 }
